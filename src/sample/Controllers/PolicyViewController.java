@@ -1,0 +1,58 @@
+package sample.Controllers;
+
+import com.sun.xml.internal.ws.policy.PolicyMap;
+import javafx.fxml.FXML;
+import javafx.scene.control.TableColumn;
+import sample.Mappers.PolicyMapper;
+
+
+/**
+ * Created by hassan on 7/6/17.
+ */
+public class PolicyViewController
+{
+
+    @FXML private TableColumn<PolicyMapper,String> policyNumberColumn;
+    @FXML private TableColumn<PolicyMapper,String> indoresmentNumberColumn;
+    @FXML private TableColumn<PolicyMapper,String> agentNameColumn;
+    @FXML private TableColumn<PolicyMapper,String> insuranceCompanyColumn;
+    @FXML private TableColumn<PolicyMapper,String> insuranceTypeColumn;
+    @FXML private TableColumn<PolicyMapper,String> beneficiaryColumn;
+    @FXML private TableColumn<PolicyMapper,String> clientNameColumn;
+    @FXML private TableColumn<PolicyMapper,String> clientPhoneNumberColumn;
+    @FXML private TableColumn<PolicyMapper,String> grossPremuimColumn;
+    @FXML private TableColumn<PolicyMapper,String> specialDiscountColumn;
+    @FXML private TableColumn<PolicyMapper,String> netPremuimColumn;
+    @FXML private TableColumn<PolicyMapper,String> expiryDateColumn;
+    @FXML private TableColumn<PolicyMapper,String> sumInssuredColumn;
+    @FXML private TableColumn<PolicyMapper,String> currencyColumn;
+    @FXML private TableColumn<PolicyMapper,String> collectiveColumn;
+    @FXML private TableColumn<PolicyMapper,String> policyStatusColumn;
+    @FXML private TableColumn<PolicyMapper,String> paidClaimsColumn;
+
+
+    @FXML private void initialize(){
+        policyNumberColumn.setCellValueFactory(cellData -> cellData.getValue().policyNumberProperty());
+        indoresmentNumberColumn.setCellValueFactory(cellData -> cellData.getValue().indoresmentNumberProperty());
+        agentNameColumn.setCellValueFactory(cellData -> cellData.getValue().agentNameProperty());
+        insuranceCompanyColumn.setCellValueFactory(cellData -> cellData.getValue().insuranceCompanyProperty());
+        insuranceTypeColumn.setCellValueFactory(cellData -> cellData.getValue().insuranceTypeProperty());
+        beneficiaryColumn.setCellValueFactory(cellData -> cellData.getValue().beneficiaryProperty());
+        clientNameColumn.setCellValueFactory(cellData -> cellData.getValue().clientNameProperty());
+        clientPhoneNumberColumn.setCellValueFactory(cellData -> cellData.getValue().clientNumberProperty());
+        grossPremuimColumn.setCellValueFactory(cellData -> cellData.getValue().specialDiscountProperty());
+        specialDiscountColumn.setCellValueFactory(cellData -> cellData.getValue().policyNumberProperty());
+        netPremuimColumn.setCellValueFactory(cellData -> cellData.getValue().netPremiumProperty());
+        expiryDateColumn.setCellValueFactory(cellData -> cellData.getValue().expiryDateProperty());
+        sumInssuredColumn.setCellValueFactory(cellData -> cellData.getValue().sumInsuredProperty());
+        currencyColumn.setCellValueFactory(cellData -> cellData.getValue().currencyProperty());
+        collectiveColumn.setCellValueFactory(cellData -> cellData.getValue().collectiveProperty());
+        policyStatusColumn.setCellValueFactory(cellData -> cellData.getValue().policyStatusProperty());
+        paidClaimsColumn.setCellValueFactory(cellData -> cellData.getValue().paidClaimsProperty());
+    }
+
+    public PolicyViewController(){
+
+    }
+
+}

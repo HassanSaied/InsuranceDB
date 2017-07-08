@@ -44,6 +44,6 @@ public class Client {
         this.clientName = clientName;
     }
     public void save(){
-        ClientConnector.saveClient(this);
+        ClientConnector.updateClient(this);
     }
 }
