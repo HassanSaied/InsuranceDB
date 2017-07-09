@@ -16,7 +16,6 @@ import java.io.IOException;
 public class rootLayoutController {
     @FXML private TabPane tabPane;
 
-    Main main;
     public rootLayoutController(){
 
     }
@@ -30,7 +29,12 @@ public class rootLayoutController {
         }
 
         Tab policyViewerTab = new Tab("Policy Viewer");
-        policyViewerTab.setContent(policyBorderPane);
+        AnchorPane.setTopAnchor(policyBorderPane,0.0);
+        AnchorPane.setRightAnchor(policyBorderPane,0.0);
+        AnchorPane.setLeftAnchor(policyBorderPane,0.0);
+        AnchorPane.setBottomAnchor(policyBorderPane,0.0);
+        AnchorPane policyAnchorPane = new AnchorPane(policyBorderPane);
+        policyViewerTab.setContent(policyAnchorPane);
         tabPane.getTabs().add(policyViewerTab);
     }
 }

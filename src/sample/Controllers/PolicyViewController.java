@@ -63,7 +63,7 @@ public class PolicyViewController {
     private void initialize() {
         setColumnContents();
         policyMapperTableView.setItems(policyMappers);
-        setCellWidth();
+        //setCellWidth();
     }
 
 

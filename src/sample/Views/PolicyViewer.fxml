@@ -14,34 +14,16 @@
          <children>
             <TableView fx:id="policyMapperTableView" prefHeight="360.0" prefWidth="600.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
               <columns>
-                <TableColumn fx:id="policyNumberColumn" editable="false" prefWidth="96.0">
+                <TableColumn fx:id="policyNumberColumn" editable="false">
                      <graphic>
-                        <Label prefHeight="45.0" prefWidth="90.0" text="Policy Number" textAlignment="CENTER" wrapText="true" />
+                        <Label text="Policy Number" textAlignment="CENTER" wrapText="true" />
                      </graphic></TableColumn>
-                  <TableColumn fx:id="indoresmentNumberColumn" minWidth="0.0" prefWidth="103.0">
-                     <graphic>
-                        <Label prefHeight="32.0" prefWidth="102.0" text="Indoresment Number" textAlignment="CENTER" wrapText="true" />
-                     </graphic></TableColumn>
-                <TableColumn fx:id="agentNameColumn" prefWidth="69.0">
-                     <graphic>
-                        <Label text="Agent Name" textAlignment="CENTER" wrapText="true" />
-                     </graphic></TableColumn>
-                  <TableColumn fx:id="insuranceCompanyColumn">
-                     <graphic>
-                        <Label prefHeight="32.0" prefWidth="82.0" text="Insurance Company" textAlignment="CENTER" wrapText="true" />
-                     </graphic></TableColumn>
-                  <TableColumn fx:id="insuranceTypeColumn">
-                     <graphic>
-                        <Label text="Insurance Type" textAlignment="CENTER" wrapText="true" />
-                     </graphic></TableColumn>
-                  <TableColumn fx:id="beneficiaryColumn" prefWidth="96.0">
-                     <graphic>
-                        <Label text="Beneficiary" textAlignment="CENTER" wrapText="true" />
-                     </graphic></TableColumn>
-                  <TableColumn fx:id="clientNameColumn" minWidth="7.0">
-                     <graphic>
-                        <Label text="Client Name" textAlignment="CENTER" wrapText="true" />
-                     </graphic></TableColumn>
+                  <TableColumn fx:id="indoresmentNumberColumn" minWidth="0.0" prefWidth="103.0" text="Indoresment Number" />
+                <TableColumn fx:id="agentNameColumn" prefWidth="69.0" text="Agent Name" />
+                  <TableColumn fx:id="insuranceCompanyColumn" text="Insurance Company" />
+                  <TableColumn fx:id="insuranceTypeColumn" text="Insurance Type" />
+                  <TableColumn fx:id="beneficiaryColumn" prefWidth="96.0" text="Beneficiary" />
+                  <TableColumn fx:id="clientNameColumn" minWidth="7.0" text="Client Name" />
                   <TableColumn fx:id="clientPhoneNumberColumn" minWidth="0.0" prefWidth="26.0" text="Client Phone Number" />
                   <TableColumn fx:id="grossPremuimColumn" prefWidth="75.0" text="Gross Premuim" />
                   <TableColumn fx:id="specialDiscountColumn" prefWidth="75.0" text="Special Discount" />
