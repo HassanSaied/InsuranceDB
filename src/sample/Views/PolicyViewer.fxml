@@ -2,35 +2,56 @@
 
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.ButtonBar?>
+<?import javafx.scene.control.Label?>
 <?import javafx.scene.control.TableColumn?>
 <?import javafx.scene.control.TableView?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.BorderPane?>
 
-
-<BorderPane fx:controller="sample.Controllers.PolicyViewController" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/8.0.111" xmlns:fx="http://javafx.com/fxml/1">
+<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/8.0.111" xmlns:fx="http://javafx.com/fxml/1" fx:controller="sample.Controllers.PolicyViewController">
    <center>
       <AnchorPane prefHeight="200.0" prefWidth="200.0" BorderPane.alignment="CENTER">
          <children>
-            <TableView prefHeight="360.0" prefWidth="600.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+            <TableView fx:id="policyMapperTableView" prefHeight="360.0" prefWidth="600.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
               <columns>
-                <TableColumn prefWidth="75.0" text="Policy Number" fx:id="policyNumberColumn" />
-                  <TableColumn prefWidth="75.0" text="Indoresment Number" fx:id="indoresmentNumberColumn" />
-                <TableColumn prefWidth="75.0" text="Agent Name" fx:id="agentNameColumn" />
-                  <TableColumn prefWidth="75.0" text="Insurance Company" fx:id="insuranceCompanyColumn" />
-                  <TableColumn prefWidth="75.0" text="Insurance Type" fx:id="insuranceTypeColumn" />
-                  <TableColumn prefWidth="75.0" text="Beneficiary" fx:id="beneficiaryColumn" />
-                  <TableColumn prefWidth="75.0" text="Client Name" fx:id="clientNameColumn" />
-                  <TableColumn prefWidth="75.0" text="Client Phone Number" fx:id="clientPhoneNumberColumn" />
-                  <TableColumn prefWidth="75.0" text="Gross Premuim" fx:id="grossPremuimColumn" />
-                  <TableColumn prefWidth="75.0" text="Special Discount" fx:id="specialDiscountColumn" />
-                  <TableColumn prefWidth="75.0" text="Net Premuim" fx:id="netPremuimColumn" />
-                  <TableColumn prefWidth="75.0" text="Expiry Date" fx:id="expiryDateColumn" />
-                  <TableColumn prefWidth="75.0" text="Sum Inssured" fx:id="sumInssuredColumn" />
-                  <TableColumn prefWidth="75.0" text="Currency" fx:id="currencyColumn" />
-                  <TableColumn prefWidth="75.0" text="Collective" fx:id="collectiveColumn" />
-                  <TableColumn prefWidth="75.0" text="Policy Status" fx:id="policyStatusColumn" />
-                  <TableColumn prefWidth="75.0" text="Paid Claims" fx:id="paidClaimsColumn" />
+                <TableColumn fx:id="policyNumberColumn" editable="false" prefWidth="96.0">
+                     <graphic>
+                        <Label prefHeight="45.0" prefWidth="90.0" text="Policy Number" textAlignment="CENTER" wrapText="true" />
+                     </graphic></TableColumn>
+                  <TableColumn fx:id="indoresmentNumberColumn" minWidth="0.0" prefWidth="103.0">
+                     <graphic>
+                        <Label prefHeight="32.0" prefWidth="102.0" text="Indoresment Number" textAlignment="CENTER" wrapText="true" />
+                     </graphic></TableColumn>
+                <TableColumn fx:id="agentNameColumn" prefWidth="69.0">
+                     <graphic>
+                        <Label text="Agent Name" textAlignment="CENTER" wrapText="true" />
+                     </graphic></TableColumn>
+                  <TableColumn fx:id="insuranceCompanyColumn">
+                     <graphic>
+                        <Label prefHeight="32.0" prefWidth="82.0" text="Insurance Company" textAlignment="CENTER" wrapText="true" />
+                     </graphic></TableColumn>
+                  <TableColumn fx:id="insuranceTypeColumn">
+                     <graphic>
+                        <Label text="Insurance Type" textAlignment="CENTER" wrapText="true" />
+                     </graphic></TableColumn>
+                  <TableColumn fx:id="beneficiaryColumn" prefWidth="96.0">
+                     <graphic>
+                        <Label text="Beneficiary" textAlignment="CENTER" wrapText="true" />
+                     </graphic></TableColumn>
+                  <TableColumn fx:id="clientNameColumn" minWidth="7.0">
+                     <graphic>
+                        <Label text="Client Name" textAlignment="CENTER" wrapText="true" />
+                     </graphic></TableColumn>
+                  <TableColumn fx:id="clientPhoneNumberColumn" minWidth="0.0" prefWidth="26.0" text="Client Phone Number" />
+                  <TableColumn fx:id="grossPremuimColumn" prefWidth="75.0" text="Gross Premuim" />
+                  <TableColumn fx:id="specialDiscountColumn" prefWidth="75.0" text="Special Discount" />
+                  <TableColumn fx:id="netPremuimColumn" prefWidth="75.0" text="Net Premuim" />
+                  <TableColumn fx:id="expiryDateColumn" prefWidth="75.0" text="Expiry Date" />
+                  <TableColumn fx:id="sumInssuredColumn" prefWidth="75.0" text="Sum Inssured" />
+                  <TableColumn fx:id="currencyColumn" prefWidth="75.0" text="Currency" />
+                  <TableColumn fx:id="collectiveColumn" prefWidth="75.0" text="Collective" />
+                  <TableColumn fx:id="policyStatusColumn" prefWidth="75.0" text="Policy Status" />
+                  <TableColumn fx:id="paidClaimsColumn" prefWidth="75.0" text="Paid Claims" />
               </columns>
             </TableView>
          </children>

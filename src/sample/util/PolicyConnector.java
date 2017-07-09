@@ -11,7 +11,7 @@ import java.util.Vector;
  * Created by hassan on 6/29/17.
  */
 public class PolicyConnector {
-    public List<Policy> getPolicies() {
+    public static List<Policy> getPolicies() {
         List<Policy> policies = new Vector<Policy>();
         try (
                 Statement statement = DatabaseConnector.getDatabaseConnection().createStatement();
@@ -54,7 +54,7 @@ public class PolicyConnector {
     }
 
 
-    private List<String> getClaimImagesPath(int policyNumber) {
+    private static List<String> getClaimImagesPath(int policyNumber) {
         List<String> claimImagesPath = new Vector<String>();
 
         try (PreparedStatement statement = DatabaseConnector.getDatabaseConnection().prepareStatement("SELECT claimImagePath FROM ClaimImagePath WHERE policyNumber = ? ;")) {
@@ -73,7 +73,7 @@ public class PolicyConnector {
     }
 
 
-    private List<String> getPolicyImagesPath(int policyNumber) {
+    private static List<String> getPolicyImagesPath(int policyNumber) {
 
         List<String> policyImagesPath = new Vector<String>();
         try (PreparedStatement statement = DatabaseConnector.getDatabaseConnection().prepareStatement("SELECT policyImagePath FROM PolicyImagePath WHERE policyNumber = ? ;");) {

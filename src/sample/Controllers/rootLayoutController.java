@@ -6,6 +6,7 @@ import javafx.scene.control.Tab;
 import javafx.scene.control.TabPane;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.BorderPane;
+import sample.Main;
 
 import java.io.IOException;
 
@@ -15,13 +16,14 @@ import java.io.IOException;
 public class rootLayoutController {
     @FXML private TabPane tabPane;
 
+    Main main;
     public rootLayoutController(){
 
     }
 
     @FXML private void initialize(){
         BorderPane policyBorderPane = null;
-        try{policyBorderPane = FXMLLoader.load(getClass().getResource("Views/PolicyViewer.fxml"));
+        try{policyBorderPane = FXMLLoader.load(Main.class.getResource("Views/PolicyViewer.fxml"));
         }
         catch (IOException exception){
             System.err.println("Can't Load Policy View");
@@ -29,5 +31,6 @@ public class rootLayoutController {
 
         Tab policyViewerTab = new Tab("Policy Viewer");
         policyViewerTab.setContent(policyBorderPane);
+        tabPane.getTabs().add(policyViewerTab);
     }
 }
