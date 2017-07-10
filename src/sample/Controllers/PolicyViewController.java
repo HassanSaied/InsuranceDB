@@ -91,8 +91,8 @@ public class PolicyViewController {
         beneficiaryColumn.setCellValueFactory(cellData -> cellData.getValue().beneficiaryProperty());
         clientNameColumn.setCellValueFactory(cellData -> cellData.getValue().clientNameProperty());
         clientPhoneNumberColumn.setCellValueFactory(cellData -> cellData.getValue().clientNumberProperty());
-        grossPremuimColumn.setCellValueFactory(cellData -> cellData.getValue().specialDiscountProperty());
-        specialDiscountColumn.setCellValueFactory(cellData -> cellData.getValue().policyNumberProperty());
+        grossPremuimColumn.setCellValueFactory(cellData -> cellData.getValue().grossPremuimProperty());
+        specialDiscountColumn.setCellValueFactory(cellData -> cellData.getValue().specialDiscountProperty());
         netPremuimColumn.setCellValueFactory(cellData -> cellData.getValue().netPremiumProperty());
         expiryDateColumn.setCellValueFactory(cellData -> cellData.getValue().expiryDateProperty());
         sumInssuredColumn.setCellValueFactory(cellData -> cellData.getValue().sumInsuredProperty());
@@ -102,14 +102,5 @@ public class PolicyViewController {
         paidClaimsColumn.setCellValueFactory(cellData -> cellData.getValue().paidClaimsProperty());
     }
 
-    private void setCellWidth() {
-        FontMetrics fontMetrics = Toolkit.getToolkit().getFontLoader().getFontMetrics(new Font("Arial", 12));
-
-        for (int i = 0; i < 16; i++) {
-            String text = policyMapperTableView.getColumns().get(i).getText();
-            double textWidth = fontMetrics.computeStringWidth(text);
-            policyMapperTableView.getColumns().get(i).setPrefWidth(textWidth + 10);
-        }
-    }
 
 }

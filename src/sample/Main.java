@@ -18,12 +18,15 @@ public class Main extends Application {
 
         primaryStage.setTitle("Insurance Application");
         primaryStage.setScene(new Scene(root, 300, 275));
-        Screen screen = Screen.getPrimary();
+
+
+/*        Screen screen = Screen.getPrimary();
         Rectangle2D bounds = screen.getVisualBounds();
         primaryStage.setWidth(bounds.getWidth());
         primaryStage.setHeight(bounds.getHeight());
+        primaryStage.setMaximized(true);*/
 
-        primaryStage.setMaximized(true);
+
         primaryStage.show();
     }
 

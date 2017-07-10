@@ -1,5 +1,6 @@
 package sample.util;
 
+import org.jetbrains.annotations.Nullable;
 import sample.model.Client;
 
 import javax.xml.crypto.Data;
@@ -15,10 +16,11 @@ import java.util.Vector;
  */
 public class ClientConnector {
 
-    public static final int uninitializedClientID = -1;
 
     public static Client getClient(int clientID) {
 
+        if(clientID == 0)
+            return null;
         String selectSQL = "SELECT * FROM Clients WHERE clientID = ?;";
         Client client = new Client(clientID);
         try(PreparedStatement statement = DatabaseConnector.getDatabaseConnection().prepareStatement(selectSQL)){
@@ -42,6 +44,7 @@ public class ClientConnector {
         return client;
     }
 
+    @Nullable
     public static List<Client> getClients(){
 
         List<Client> clients = new Vector<Client>();

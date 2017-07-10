@@ -3,6 +3,7 @@ package sample.Mappers;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
 import sample.model.Policy;
+import sample.util.Utils;
 
 /**
  * Created by hassan on 7/8/17.
@@ -130,26 +131,26 @@ public class PolicyMapper {
 
     public PolicyMapper(Policy policy) {
         this.policy = policy;
-        agentName = new SimpleStringProperty(this.policy.getAgentName());
-        insuranceCompany = new SimpleStringProperty(this.policy.getInsuranceCompany());
-        insuranceType = new SimpleStringProperty(this.policy.getInsuranceType());
-        beneficiary = new SimpleStringProperty(this.policy.getBeneficiary());
-        clientName = new SimpleStringProperty(this.policy.getClient().getClientName());
-        clientNumber = new SimpleStringProperty(this.policy.getClient().getClientPhoneNumber());
-        this.policyNumber = new SimpleStringProperty(String.valueOf(this.policy.getPolicyNumber()));
-        grossPremuim = new SimpleStringProperty(String.valueOf(this.policy.getGrossPremium()));
-        specialDiscount = new SimpleStringProperty((this.policy.getSpecialDiscount().toString()));
-        netPremium = new SimpleStringProperty(this.policy.getNetPremium().toString());
-        grossCommission = new SimpleStringProperty(this.policy.getGrossCommission().toString());
-        taxes = new SimpleStringProperty(this.policy.getNetCommission().toString());
-        netCommission = new SimpleStringProperty(this.policy.getNetCommission().toString());
-        expiryDate = new SimpleStringProperty(this.policy.getExpiryDate().toString());
-        sumInsured = new SimpleStringProperty(this.policy.getSumInsured().toString());
-        currency = new SimpleStringProperty(this.policy.getCurrency().toString());
-        collective = new SimpleStringProperty(this.policy.getCollective().toString());
-        this.policyStatus = new SimpleStringProperty(this.policy.getPolicyStatus());
-        paidClaims = new SimpleStringProperty(this.policy.getPaidClaims().toString());
-        indoresmentNumber = new SimpleStringProperty(String.valueOf(this.policy.getIndoresmentNumber()));
+        agentName = new SimpleStringProperty(Utils.getMappedString(this.policy.getAgentName()));
+        insuranceCompany = new SimpleStringProperty(Utils.getMappedString(this.policy.getInsuranceCompany()));
+        insuranceType = new SimpleStringProperty(Utils.getMappedString(this.policy.getInsuranceType()));
+        beneficiary = new SimpleStringProperty(Utils.getMappedString(this.policy.getBeneficiary()));
+        clientName = new SimpleStringProperty(this.policy.getClient() == null ? "" : Utils.getMappedString(this.policy.getClient().getClientName()));
+        clientNumber = new SimpleStringProperty(this.policy.getClient() == null ? "" : Utils.getMappedString(this.policy.getClient().getClientPhoneNumber()));
+        this.policyNumber = new SimpleStringProperty(this.policy.getPolicyNumber());
+        grossPremuim = new SimpleStringProperty(String.valueOf(Utils.getMappedString(this.policy.getGrossPremium())));
+        specialDiscount = new SimpleStringProperty(String.valueOf(Utils.getMappedString(this.policy.getSpecialDiscount())));
+        netPremium = new SimpleStringProperty(Utils.getMappedString(this.policy.getNetPremium()));
+        grossCommission = new SimpleStringProperty(Utils.getMappedString(this.policy.getGrossCommission()));
+        taxes = new SimpleStringProperty(Utils.getMappedString(this.policy.getNetCommission()));
+        netCommission = new SimpleStringProperty(Utils.getMappedString(this.policy.getNetCommission()));
+        expiryDate = new SimpleStringProperty(Utils.getMappedString(this.policy.getExpiryDate()));//Need to Reformat It
+        sumInsured = new SimpleStringProperty(Utils.getMappedString(this.policy.getSumInsured()));
+        currency = new SimpleStringProperty(Utils.getMappedString(this.policy.getCurrency()));
+        collective = new SimpleStringProperty(Utils.getMappedString(this.policy.getCollective()));
+        policyStatus = new SimpleStringProperty(Utils.getMappedString(this.policy.getPolicyStatus()));
+        paidClaims = new SimpleStringProperty(Utils.getMappedString(this.policy.getPaidClaims()));
+        indoresmentNumber = new SimpleStringProperty(Utils.getMappedString(this.policy.getIndoresmentNumber()));
     }
 
 

@@ -57,7 +57,7 @@ public class Policy {
     private String insuranceType;
     private String beneficiary;
     private Client client;
-    private int policyNumber;
+    private String policyNumber;
     private BigDecimal grossPremium;
     private BigDecimal specialDiscount;
     private BigDecimal netPremium;
@@ -71,7 +71,7 @@ public class Policy {
     private String collectiveImagePath;
     private String policyStatus;
     private BigDecimal paidClaims;
-    private int indoresmentNumber;
+    private String indoresmentNumber;
     private List<String> policyImagePath;
     private List<String> claimImagePath;
 
@@ -115,11 +115,11 @@ public class Policy {
         this.client = client;
     }
 
-    public int getPolicyNumber() {
+    public String getPolicyNumber() {
         return policyNumber;
     }
 
-    public void setPolicyNumber(int policyNumber) {
+    public void setPolicyNumber(String policyNumber) {
         this.policyNumber = policyNumber;
     }
 
@@ -227,11 +227,11 @@ public class Policy {
         this.paidClaims = paidClaims;
     }
 
-    public int getIndoresmentNumber() {
+    public String getIndoresmentNumber() {
         return indoresmentNumber;
     }
 
-    public void setIndoresmentNumber(int indoresmentNumber) {
+    public void setIndoresmentNumber(String indoresmentNumber) {
         this.indoresmentNumber = indoresmentNumber;
     }
 

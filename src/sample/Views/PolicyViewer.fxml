@@ -16,24 +16,77 @@
               <columns>
                 <TableColumn fx:id="policyNumberColumn" editable="false">
                      <graphic>
-                        <Label text="Policy Number" textAlignment="CENTER" wrapText="true" />
+                        <Label prefHeight="39.0" prefWidth="74.0" text="Policy Number" textAlignment="CENTER" wrapText="true" />
                      </graphic></TableColumn>
-                  <TableColumn fx:id="indoresmentNumberColumn" minWidth="0.0" prefWidth="103.0" text="Indoresment Number" />
-                <TableColumn fx:id="agentNameColumn" prefWidth="69.0" text="Agent Name" />
-                  <TableColumn fx:id="insuranceCompanyColumn" text="Insurance Company" />
-                  <TableColumn fx:id="insuranceTypeColumn" text="Insurance Type" />
-                  <TableColumn fx:id="beneficiaryColumn" prefWidth="96.0" text="Beneficiary" />
-                  <TableColumn fx:id="clientNameColumn" minWidth="7.0" text="Client Name" />
-                  <TableColumn fx:id="clientPhoneNumberColumn" minWidth="0.0" prefWidth="26.0" text="Client Phone Number" />
-                  <TableColumn fx:id="grossPremuimColumn" prefWidth="75.0" text="Gross Premuim" />
-                  <TableColumn fx:id="specialDiscountColumn" prefWidth="75.0" text="Special Discount" />
-                  <TableColumn fx:id="netPremuimColumn" prefWidth="75.0" text="Net Premuim" />
-                  <TableColumn fx:id="expiryDateColumn" prefWidth="75.0" text="Expiry Date" />
-                  <TableColumn fx:id="sumInssuredColumn" prefWidth="75.0" text="Sum Inssured" />
-                  <TableColumn fx:id="currencyColumn" prefWidth="75.0" text="Currency" />
-                  <TableColumn fx:id="collectiveColumn" prefWidth="75.0" text="Collective" />
-                  <TableColumn fx:id="policyStatusColumn" prefWidth="75.0" text="Policy Status" />
-                  <TableColumn fx:id="paidClaimsColumn" prefWidth="75.0" text="Paid Claims" />
+                  <TableColumn fx:id="indoresmentNumberColumn" minWidth="0.0">
+                     <graphic>
+                        <Label prefWidth="100" text="Endoresment Number" textAlignment="CENTER" wrapText="true" />
+                     </graphic></TableColumn>
+                <TableColumn fx:id="agentNameColumn">
+                     <graphic>
+                        <Label prefWidth="70" text="Agent Name" textAlignment="CENTER" wrapText="true" />
+                     </graphic></TableColumn>
+                  <TableColumn fx:id="insuranceCompanyColumn">
+                     <graphic>
+                        <Label prefWidth="100" text="Insurance Company" textAlignment="CENTER" wrapText="true" />
+                     </graphic></TableColumn>
+                  <TableColumn fx:id="insuranceTypeColumn">
+                     <graphic>
+                        <Label prefWidth="100" text="Insurance Type" textAlignment="CENTER" wrapText="true" />
+                     </graphic></TableColumn>
+                  <TableColumn fx:id="beneficiaryColumn">
+                     <graphic>
+                        <Label prefWidth="100" text="Beneficiary" textAlignment="CENTER" wrapText="true" />
+                     </graphic></TableColumn>
+                  <TableColumn fx:id="clientNameColumn">
+                      <graphic>
+                          <Label prefWidth="70" text="Client Name" textAlignment="CENTER" wrapText="true" />
+                      </graphic>
+                  </TableColumn>
+                  <TableColumn fx:id="clientPhoneNumberColumn" minWidth="0.0">
+                      <graphic>
+                          <Label prefWidth="100" text="Client Phone Number" textAlignment="CENTER" wrapText="true" />
+                      </graphic>
+                  </TableColumn>
+                  <TableColumn fx:id="grossPremuimColumn" prefWidth="75.0" text="">
+                      <graphic>
+                          <Label prefWidth="70" text="Gross Premium" textAlignment="CENTER" wrapText="true" />
+                      </graphic>
+                  </TableColumn>
+                  <TableColumn fx:id="specialDiscountColumn" prefWidth="75.0" text="">
+                      <graphic>
+                          <Label prefWidth="80" text="Special Discount" textAlignment="CENTER" wrapText="true" />
+                      </graphic>
+                  </TableColumn>
+                  <TableColumn fx:id="netPremuimColumn">
+                      <graphic>
+                          <Label prefWidth="80" text="Net Premium" textAlignment="CENTER" wrapText="true" />
+                      </graphic>
+                  </TableColumn>
+                  <TableColumn fx:id="expiryDateColumn" prefWidth="75.0">
+                     <graphic>
+                        <Label prefWidth="80" text="Expiry Date" textAlignment="CENTER" wrapText="true" />
+                     </graphic></TableColumn>
+                  <TableColumn fx:id="sumInssuredColumn" prefWidth="75.0">
+                     <graphic>
+                        <Label text="Sum Insured" textAlignment="CENTER" wrapText="true" />
+                     </graphic></TableColumn>
+                  <TableColumn fx:id="currencyColumn" prefWidth="75.0">
+                     <graphic>
+                        <Label text="Currency" textAlignment="CENTER" wrapText="true" />
+                     </graphic></TableColumn>
+                  <TableColumn fx:id="collectiveColumn">
+                     <graphic>
+                        <Label text="Collective" textAlignment="CENTER" wrapText="true" prefWidth="80" />
+                     </graphic></TableColumn>
+                  <TableColumn fx:id="policyStatusColumn" prefWidth="75.0">
+                     <graphic>
+                        <Label text="Policy Status" textAlignment="CENTER" wrapText="true" />
+                     </graphic></TableColumn>
+                  <TableColumn fx:id="paidClaimsColumn" prefWidth="75.0">
+                     <graphic>
+                        <Label text="Paid Claims" textAlignment="CENTER" wrapText="true" />
+                     </graphic></TableColumn>
               </columns>
             </TableView>
          </children>

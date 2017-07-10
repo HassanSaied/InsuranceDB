@@ -1,5 +1,6 @@
 package sample.util;
 
+import org.intellij.lang.annotations.Language;
 import sample.model.Policy;
 
 import javax.xml.crypto.Data;
@@ -23,21 +24,21 @@ public class PolicyConnector {
                 currentPolicy.setInsuranceType(resultSet.getString(3));
                 currentPolicy.setBeneficiary(resultSet.getString(4));
                 currentPolicy.setClient(ClientConnector.getClient(resultSet.getInt(5)));
-                currentPolicy.setPolicyNumber(resultSet.getInt(6));
+                currentPolicy.setPolicyNumber(resultSet.getString(6));
                 currentPolicy.setGrossPremium(resultSet.getBigDecimal(7));
                 currentPolicy.setSpecialDiscount(resultSet.getBigDecimal(8));
                 currentPolicy.setNetPremium(resultSet.getBigDecimal(9));
                 currentPolicy.setGrossCommission(resultSet.getBigDecimal(10));
                 currentPolicy.setNetCommission(resultSet.getBigDecimal(11));
                 currentPolicy.setTaxes(resultSet.getBigDecimal(12));
-                currentPolicy.setExpiryDate(resultSet.getDate(13).toLocalDate());
+                currentPolicy.setExpiryDate(resultSet.getDate(13)==null?null:resultSet.getDate(13).toLocalDate());
                 currentPolicy.setSumInsured(resultSet.getBigDecimal(14));
                 currentPolicy.setCurrency(Utils.stringToCurrency(resultSet.getString(15)));
                 currentPolicy.setCollective(Utils.stringToCollective(resultSet.getString(16)));
                 currentPolicy.setCollectiveImagePath(resultSet.getString(17));
                 currentPolicy.setPolicyStatus(resultSet.getString(18));
                 currentPolicy.setPaidClaims(resultSet.getBigDecimal(19));
-                currentPolicy.setIndoresmentNumber(resultSet.getInt(20));
+                currentPolicy.setIndoresmentNumber(resultSet.getString(20));
                 currentPolicy.setClaimImagePath(getClaimImagesPath(currentPolicy.getPolicyNumber()));
                 currentPolicy.setPolicyImagePath(getPolicyImagesPath(currentPolicy.getPolicyNumber()));
                 policies.add(currentPolicy);
@@ -54,12 +55,15 @@ public class PolicyConnector {
     }
 
 
-    private static List<String> getClaimImagesPath(int policyNumber) {
+    private static List<String> getClaimImagesPath(String policyNumber) {
         List<String> claimImagesPath = new Vector<String>();
 
         try (PreparedStatement statement = DatabaseConnector.getDatabaseConnection().prepareStatement("SELECT claimImagePath FROM ClaimImagePath WHERE policyNumber = ? ;")) {
-            statement.setInt(1, policyNumber);
+            statement.setString(1, policyNumber);
             try (ResultSet resultSet = statement.executeQuery()) {
+                while (resultSet.next()){
+                    claimImagesPath.add(resultSet.getString(1));
+                }
 
             } catch (SQLException exception) {
                 System.err.println("Can't get result set containing the claim Images");
@@ -73,11 +77,11 @@ public class PolicyConnector {
     }
 
 
-    private static List<String> getPolicyImagesPath(int policyNumber) {
+    private static List<String> getPolicyImagesPath(String policyNumber) {
 
         List<String> policyImagesPath = new Vector<String>();
         try (PreparedStatement statement = DatabaseConnector.getDatabaseConnection().prepareStatement("SELECT policyImagePath FROM PolicyImagePath WHERE policyNumber = ? ;");) {
-            statement.setInt(1, policyNumber);
+            statement.setString(1, policyNumber);
 
 
             try (ResultSet resultSet = statement.executeQuery();) {
@@ -99,13 +103,13 @@ public class PolicyConnector {
     public static boolean updatePolicy(Policy policy) {
 
         String updateSQL = "UPDATE Policy " +
-                "SET agentName = '?' ," + "SET insuranceCompany = '?'," + "SET insuranceType = '?' ," + "SET beneficiary = '?' ," +
-                "SET clientID = ? ," + "SET grossPremuim = ? ," + "SET specialDiscount = ? ," + "SET netPremuim = ? ," +
-                "SET grossCommission = ? ," + "SET taxes = ? ," + "SET netCommission = ? ," + "SET expiryDate = '?' ," +
-                "SET sumInssured = ? ," + "SET currency = '?' ," + "SET collective = '?' ," + "SET collectiveImagePath = '?'," +
-                "SET policyStatus = '?'," + "SET paidClaims = ? ," + "SET indoresmentNumber = ?," + "WHERE policyNumber = ? ";
+                "SET agentName = ? ," + "insuranceCompany = ?," + " insuranceType = ? ," + " beneficiary = ? ," +
+                " clientID = ? ," + " grossPremuim = ? ," + " specialDiscount = ? ," + " netPremuim = ? ," +
+                " grossCommission = ? ," + " taxes = ? ," + " netCommission = ? ," + " expiryDate = ? ," +
+                " sumInssured = ? ," + " currency = ? ," + " collective = ? ," + " collectiveImagePath = ?," +
+                " policyStatus = ?," + " paidClaims = ? ," + " indoresmentNumber = ? " + "WHERE policyNumber = ?; ";
         try (PreparedStatement statement = DatabaseConnector.getDatabaseConnection().prepareStatement(updateSQL)) {
-            statement.setInt(fillStatement(statement, policy), policy.getPolicyNumber());
+            statement.setString(fillStatement(statement, policy), policy.getPolicyNumber());
             try {
                 statement.executeUpdate();
             } catch (SQLException exception) {
@@ -127,13 +131,13 @@ public class PolicyConnector {
     }
 
     private static boolean updatePolicyImagesPath(Policy policy) {
-        String updateSQL = "UPDATE PolicyImagePath SET  InsuranceDB.PolicyImagePath.policyImagePath = '?' WHERE InsuranceDB.PolicyImagePath.policyNumber = ?;";
+        String updateSQL = "UPDATE PolicyImagePath SET  InsuranceDB.PolicyImagePath.policyImagePath = ? WHERE InsuranceDB.PolicyImagePath.policyNumber = ?;";
 
         try (PreparedStatement statement = DatabaseConnector.getDatabaseConnection().prepareStatement(updateSQL)) {
             try {
                 for (String policyImagePath : policy.getPolicyImagePath()) {
                     statement.setString(1, policyImagePath);
-                    statement.setInt(2, policy.getPolicyNumber());
+                    statement.setString(2, policy.getPolicyNumber());
                     statement.executeUpdate();
                 }
             } catch (SQLException exception) {
@@ -154,12 +158,12 @@ public class PolicyConnector {
     }
 
     private static boolean updateClaimImagesPath(Policy policy) {
-        String updateSQL = "UPDATE ClaimImagePath SET InsuranceDB.ClaimImagePath.claimImagePath = '?' WHERE InsuranceDB.ClaimImagePath.policyNumber = ?;";
+        String updateSQL = "UPDATE ClaimImagePath SET InsuranceDB.ClaimImagePath.claimImagePath = ? WHERE InsuranceDB.ClaimImagePath.policyNumber = ?;";
         try (PreparedStatement statement = DatabaseConnector.getDatabaseConnection().prepareStatement(updateSQL)) {
             try {
                 for (String claimImagePath : policy.getPolicyImagePath()) {
                     statement.setString(1, claimImagePath);
-                    statement.setInt(2, policy.getPolicyNumber());
+                    statement.setString(2, policy.getPolicyNumber());
                     statement.executeUpdate();
                 }
             } catch (SQLException exception) {
@@ -181,15 +185,15 @@ public class PolicyConnector {
 
     public static boolean insertPolicy(Policy policy) {
 
-        String insertSQL = "INSERT INTO Policy (agentName,insuranceCompany,insuranceType,beneficiary" +
+        @Language("MySQL") String insertSQL = "INSERT INTO Policy (agentName,insuranceCompany,insuranceType,beneficiary" +
                 "  ,clientID,grossPremuim,specialDiscount,netPremuim" +
                 "  ,grossCommission,taxes,netCommission,expiryDate" +
                 "  ,sumInssured,currency,collective,collectiveImagePath" +
                 "  ,policyStatus,paidClaims,indoresmentNumber,policyNumber)" +
-                "VALUES ('?','?','?','?',?,?,?,?,?,?,?,'?',?,'?','?','?','?',?,?,?);";
+                "VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?);";
 
         try (PreparedStatement statement = DatabaseConnector.getDatabaseConnection().prepareStatement(insertSQL)) {
-            statement.setInt(fillStatement(statement, policy), policy.getPolicyNumber());
+            statement.setString(fillStatement(statement, policy), policy.getPolicyNumber());
             try {
                 statement.executeUpdate();
             } catch (SQLException exception) {
@@ -210,12 +214,12 @@ public class PolicyConnector {
     }
 
     private static boolean insertPolicyImagesPath(Policy policy) {
-        String insertSQL = "INSERT INTO PolicyImagePath (policyImagePath, policyNumber) VALUES  ('?',?);";
+        String insertSQL = "INSERT INTO PolicyImagePath (policyImagePath, policyNumber) VALUES  (?,?);";
         try (PreparedStatement statement = DatabaseConnector.getDatabaseConnection().prepareStatement(insertSQL)) {
             try {
                 for (String policyImagePath : policy.getPolicyImagePath()) {
                     statement.setString(1, policyImagePath);
-                    statement.setInt(2, policy.getPolicyNumber());
+                    statement.setString(2, policy.getPolicyNumber());
                     statement.executeUpdate();
                 }
             } catch (SQLException exception) {
@@ -233,12 +237,12 @@ public class PolicyConnector {
 
 
     private static boolean insertClaimImagesPath(Policy policy) {
-        String insertSQL = "INSERT INTO ClaimImagePath (claimImagePath, policyNumber) VALUES (?,'?');";
+        String insertSQL = "INSERT INTO ClaimImagePath (claimImagePath, policyNumber) VALUES (?,?);";
         try (PreparedStatement statement = DatabaseConnector.getDatabaseConnection().prepareStatement(insertSQL)) {
             try {
                 for (String policyImagePath : policy.getPolicyImagePath()) {
                     statement.setString(1, policyImagePath);
-                    statement.setInt(2, policy.getPolicyNumber());
+                    statement.setString(2, policy.getPolicyNumber());
                     statement.executeUpdate();
                 }
             } catch (SQLException exception) {
@@ -256,7 +260,7 @@ public class PolicyConnector {
 
     private static int fillStatement(PreparedStatement statement, Policy policy) throws SQLException {
         int columnCounter = 0;
-        statement.setString(++columnCounter, policy.getAgentName());
+        statement.setString(++columnCounter, "\""+policy.getAgentName()+"\"");
         statement.setString(++columnCounter, policy.getInsuranceCompany());
         statement.setString(++columnCounter, policy.getInsuranceType());
         statement.setString(++columnCounter, policy.getBeneficiary());
@@ -274,7 +278,7 @@ public class PolicyConnector {
         statement.setString(++columnCounter, policy.getCollectiveImagePath());
         statement.setString(++columnCounter, policy.getPolicyStatus());
         statement.setBigDecimal(++columnCounter, policy.getPaidClaims());
-        statement.setInt(++columnCounter, policy.getIndoresmentNumber());
+        statement.setString(++columnCounter, policy.getIndoresmentNumber());
         return columnCounter;
     }
 
@@ -284,7 +288,7 @@ public class PolicyConnector {
         //language=MySQL
         String deleteSQL = "DELETE FROM Policy WHERE policyNumber = ?;";
         try (PreparedStatement statement = DatabaseConnector.getDatabaseConnection().prepareStatement(deleteSQL)) {
-            statement.setInt(1, policy.getPolicyNumber());
+            statement.setString(1, policy.getPolicyNumber());
             try {
                 statement.executeUpdate();
             } catch (SQLException exception) {
