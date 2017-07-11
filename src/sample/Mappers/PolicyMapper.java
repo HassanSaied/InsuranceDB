@@ -10,6 +10,10 @@ import sample.util.Utils;
  */
 public class PolicyMapper {
 
+    public Policy getPolicy() {
+        return policy;
+    }
+
     private Policy policy;
     private final StringProperty agentName;
     private final StringProperty insuranceCompany;

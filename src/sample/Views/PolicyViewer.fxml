@@ -32,7 +32,7 @@
                      </graphic></TableColumn>
                   <TableColumn fx:id="insuranceTypeColumn">
                      <graphic>
-                        <Label prefWidth="100" text="Insurance Type" textAlignment="CENTER" wrapText="true" />
+                        <Label prefWidth="100" text="LOP" textAlignment="CENTER" wrapText="true" />
                      </graphic></TableColumn>
                   <TableColumn fx:id="beneficiaryColumn">
                      <graphic>
@@ -95,9 +95,9 @@
    <bottom>
       <ButtonBar prefHeight="40.0" prefWidth="200.0" BorderPane.alignment="CENTER">
         <buttons>
-          <Button mnemonicParsing="false" text="New" />
-            <Button mnemonicParsing="false" text="Edit" />
-            <Button mnemonicParsing="false" text="Delete" />
+          <Button mnemonicParsing="false" text="New" fx:id="newPolicyButton" onMousePressed="#handleNewButtonMoussePress"  />
+            <Button mnemonicParsing="false" text="Edit" fx:id="editPolicyButton" />
+            <Button mnemonicParsing="false" text="Delete" fx:id="deletePolicyButton" />
         </buttons>
       </ButtonBar>
    </bottom>
