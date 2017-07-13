@@ -2,7 +2,13 @@ package sample.Controllers;
 
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
+import javafx.stage.FileChooser;
+import sample.Main;
 import sample.Mappers.ClientMapper;
+
+import java.awt.event.MouseEvent;
+import java.io.File;
+import java.util.List;
 
 /**
  * Created by hassan on 7/13/17.
@@ -68,5 +74,26 @@ public class newPolicyController {
     @FXML
     private Button cancelButton;
 
+    newPolicyController(){
+
+    }
+
+    @FXML  private void initialize(){
+
+    }
+
+    private List<File> getImages (String title){
+        FileChooser fileChooser = new FileChooser();
+        fileChooser.setTitle(title);
+        fileChooser.setInitialDirectory(new File(System.getProperty("user.home")));
+        return fileChooser.showOpenMultipleDialog(Main.primaryStage);
+
+    }
+
+   /* @FXML protected void handlePolicyImageBrowseButton (MouseEvent event)
+    {
+        List<File> images = getImages("Policy Images");
+
+    }*/
 
 }
