@@ -1,18 +1,26 @@
 package sample.Controllers;
 
+import com.sun.xml.internal.ws.policy.privateutil.PolicyUtils;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.TableCell;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
+import javafx.scene.layout.BorderPane;
+import javafx.stage.Modality;
+import javafx.stage.Stage;
 import javafx.util.Callback;
+import sample.Main;
 import sample.Mappers.PolicyMapper;
 import sample.model.Policy;
 import sample.util.PolicyConnector;
 import javafx.scene.input.*;
 
+import java.io.IOException;
 import java.util.List;
 import java.util.function.Consumer;
 
@@ -144,7 +152,20 @@ public class PolicyViewController {
 
     }
     @FXML protected void handleNewButtonMoussePress(MouseEvent event){
-        System.out.println("xyz");
+        try{
+            BorderPane newPolicyBorderPane = FXMLLoader.load(Main.class.getResource("Views/newPolicyView.fxml"));
+            Stage newPolicyDialogStage = new Stage();
+            newPolicyDialogStage.setTitle("Add new policy");
+            newPolicyDialogStage.initModality(Modality.WINDOW_MODAL);
+            newPolicyDialogStage.initOwner(Main.primaryStage);
+            Scene dialog = new Scene(newPolicyBorderPane);
+            newPolicyDialogStage.setScene(dialog);
+            newPolicyDialogStage.showAndWait();
+            return;
+        }
+        catch (IOException exception){
+            System.err.println("Can't load new policy view");
+        }
 
     }
 

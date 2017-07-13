@@ -6,6 +6,7 @@
 <?import javafx.scene.control.ComboBox?>
 <?import javafx.scene.control.DatePicker?>
 <?import javafx.scene.control.Label?>
+<?import javafx.scene.control.ListView?>
 <?import javafx.scene.control.PasswordField?>
 <?import javafx.scene.control.TextField?>
 <?import javafx.scene.layout.BorderPane?>
@@ -13,12 +14,12 @@
 <?import javafx.scene.layout.GridPane?>
 <?import javafx.scene.layout.RowConstraints?>
 
-<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/8.0.111" xmlns:fx="http://javafx.com/fxml/1">
+<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="439.0" prefWidth="653.0" xmlns="http://javafx.com/javafx/8.0.111" xmlns:fx="http://javafx.com/fxml/1" fx:controller="sample.Controllers.newPolicyController">
    <bottom>
       <ButtonBar prefHeight="40.0" prefWidth="200.0" BorderPane.alignment="CENTER">
         <buttons>
-          <Button mnemonicParsing="false" text="Button" />
-            <Button mnemonicParsing="false" text="Button" />
+          <Button mnemonicParsing="false" text="Save" fx:id="saveButton" />
+            <Button cancelButton="true" mnemonicParsing="false" text="Cancel" fx:id="cancelButton" />
         </buttons>
          <BorderPane.margin>
             <Insets left="10.0" right="10.0" top="10.0" />
@@ -51,6 +52,9 @@
             <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
             <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
             <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+            <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+            <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+            <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
         </rowConstraints>
          <children>
             <Label text="Policy Number" />
@@ -59,43 +63,52 @@
             <Label text="Insurance Type" GridPane.rowIndex="3" />
             <Label text="Beneficiary" GridPane.rowIndex="4" />
             <Label text="Client" GridPane.rowIndex="5" />
-            <TextField GridPane.columnIndex="1" />
-            <TextField GridPane.columnIndex="1" GridPane.rowIndex="1" />
-            <TextField GridPane.columnIndex="1" GridPane.rowIndex="2" />
-            <ComboBox prefWidth="150.0" GridPane.columnIndex="1" GridPane.rowIndex="3" />
-            <TextField GridPane.columnIndex="1" GridPane.rowIndex="4" />
-            <ComboBox prefWidth="150.0" GridPane.columnIndex="1" GridPane.rowIndex="5" />
+            <TextField GridPane.columnIndex="1" fx:id="policyNumberTextField" />
+            <TextField GridPane.columnIndex="1" GridPane.rowIndex="1" fx:id="agentNameTextField" />
+            <TextField GridPane.columnIndex="1" GridPane.rowIndex="2" fx:id="insuranceCompanyTextField" />
+            <ComboBox prefWidth="150.0" GridPane.columnIndex="1" GridPane.rowIndex="3" fx:id="insuranceTypeComboBox" />
+            <TextField GridPane.columnIndex="1" GridPane.rowIndex="4" fx:id="beneficiaryTextField" />
+            <ComboBox prefWidth="150.0" GridPane.columnIndex="1" GridPane.rowIndex="5" fx:id="clientComboBox" />
             <Label text="Gross Premium" GridPane.rowIndex="6" />
             <Label text="Special Discount" GridPane.rowIndex="7" />
             <Label text="Net Premium" GridPane.rowIndex="8" />
             <Label text="Gross Commission" GridPane.rowIndex="9" />
             <Label text="Taxes" GridPane.rowIndex="10" />
             <Label text="Expiry Date" GridPane.rowIndex="11" />
-            <TextField GridPane.columnIndex="1" GridPane.rowIndex="6" />
-            <TextField GridPane.columnIndex="1" GridPane.rowIndex="7" />
-            <TextField GridPane.columnIndex="1" GridPane.rowIndex="8" />
-            <TextField disable="true" GridPane.columnIndex="1" GridPane.rowIndex="9" />
-            <PasswordField GridPane.columnIndex="3" GridPane.rowIndex="9" />
+            <TextField GridPane.columnIndex="1" GridPane.rowIndex="6" fx:id="grossPremiumTextField"/>
+            <TextField GridPane.columnIndex="1" GridPane.rowIndex="7" fx:id="specialDiscountTextField" />
+            <TextField GridPane.columnIndex="1" GridPane.rowIndex="8" fx:id="netPremiumTextField" />
+            <TextField disable="true" GridPane.columnIndex="1" GridPane.rowIndex="9" fx:id="grossCommissionTextField" />
+            <PasswordField GridPane.columnIndex="3" GridPane.rowIndex="9" fx:id="commissionPasswordField" />
             <Label text="Password" GridPane.columnIndex="2" GridPane.halignment="CENTER" GridPane.rowIndex="9" />
-            <ComboBox prefWidth="150.0" GridPane.columnIndex="1" GridPane.rowIndex="10" />
-            <DatePicker GridPane.columnIndex="1" GridPane.rowIndex="11" />
+            <ComboBox prefWidth="150.0" GridPane.columnIndex="1" GridPane.rowIndex="10" fx:id="taxesComboBox" />
+            <DatePicker GridPane.columnIndex="1" GridPane.rowIndex="11" fx:id="expiryDateDatePicker" />
             <Label text="Sum Insured" GridPane.rowIndex="12" />
             <Label text="Currency" GridPane.rowIndex="13" />
             <Label text="Collective" GridPane.rowIndex="14" />
             <Label text="Policy Status" GridPane.rowIndex="15" />
             <Label text="Endorsement Number" GridPane.rowIndex="16" />
-            <TextField GridPane.columnIndex="1" GridPane.rowIndex="12" />
-            <ComboBox prefWidth="150.0" GridPane.columnIndex="1" GridPane.rowIndex="13" />
-            <ComboBox prefWidth="150.0" GridPane.columnIndex="1" GridPane.rowIndex="14" />
-            <ComboBox prefWidth="150.0" GridPane.columnIndex="1" GridPane.rowIndex="15" />
-            <ComboBox prefWidth="150.0" GridPane.columnIndex="1" GridPane.rowIndex="16" />
+            <TextField GridPane.columnIndex="1" GridPane.rowIndex="12" fx:id="sumInsuredTextField" />
+            <ComboBox prefWidth="150.0" GridPane.columnIndex="1" GridPane.rowIndex="13" fx:id="currencyComboBox" />
+            <ComboBox prefWidth="150.0" GridPane.columnIndex="1" GridPane.rowIndex="14" fx:id="collectiveComboBox" />
+            <ComboBox prefWidth="150.0" GridPane.columnIndex="1" GridPane.rowIndex="15" fx:id="policyStatusComboBox" />
+            <ComboBox prefWidth="150.0" GridPane.columnIndex="1" GridPane.rowIndex="16" fx:id="endorsementNumberComboBox" />
+            <Button fx:id="claimImageBrowseButton" mnemonicParsing="false" text="Browse" GridPane.columnIndex="3" GridPane.halignment="CENTER" GridPane.rowIndex="17" GridPane.valignment="CENTER" />
+            <Button fx:id="policyImageBrowseButton" mnemonicParsing="false" text="Browse" GridPane.columnIndex="3" GridPane.halignment="CENTER" GridPane.rowIndex="18" GridPane.valignment="CENTER" />
+            <Button fx:id="collectiveImageBrowseButton" mnemonicParsing="false" text="Browse" GridPane.columnIndex="3" GridPane.halignment="CENTER" GridPane.rowIndex="19" GridPane.valignment="CENTER" />
             <ButtonBar prefHeight="26.0" prefWidth="230.0" GridPane.columnIndex="3" GridPane.rowIndex="5">
               <buttons>
-                  <Button mnemonicParsing="false" prefHeight="26.0" prefWidth="128.0" text="Add Client" />
-                <Button mnemonicParsing="false" text="Edit Client" />
+                  <Button fx:id="addClientButton" mnemonicParsing="false" prefHeight="26.0" prefWidth="128.0" text="Add Client" />
+                <Button fx:id="editClientButton" mnemonicParsing="false" text="Edit Client" />
               </buttons>
             </ButtonBar>
-            <TextField editable="false" promptText="Client Phone Number" GridPane.columnIndex="2" GridPane.rowIndex="5" />
+            <TextField fx:id="clientPhoneNumberTextField" editable="false" promptText="Client Phone Number" GridPane.columnIndex="2" GridPane.rowIndex="5" />
+            <Label text="Claim Image" GridPane.rowIndex="17" />
+            <Label text="Policy Image" GridPane.rowIndex="18" />
+            <Label text="Collective Image" GridPane.rowIndex="19" />
+            <ListView fx:id="claimImageListView" prefHeight="200.0" prefWidth="200.0" GridPane.columnIndex="1" GridPane.rowIndex="17" />
+            <ListView fx:id="policyImageListView" prefHeight="200.0" prefWidth="200.0" GridPane.columnIndex="1" GridPane.rowIndex="18" />
+            <ListView fx:id="collectiveImageTextField" prefHeight="200.0" prefWidth="200.0" GridPane.columnIndex="1" GridPane.rowIndex="19" />
          </children>
          <BorderPane.margin>
             <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
