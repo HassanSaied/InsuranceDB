@@ -2,11 +2,11 @@ package sample.Controllers;
 
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
+import javafx.scene.input.MouseEvent;
 import javafx.stage.FileChooser;
 import sample.Main;
 import sample.Mappers.ClientMapper;
 
-import java.awt.event.MouseEvent;
 import java.io.File;
 import java.util.List;
 
@@ -74,7 +74,7 @@ public class newPolicyController {
     @FXML
     private Button cancelButton;
 
-    newPolicyController(){
+     public newPolicyController(){
 
     }
 
@@ -90,10 +90,14 @@ public class newPolicyController {
 
     }
 
-   /* @FXML protected void handlePolicyImageBrowseButton (MouseEvent event)
+    @FXML protected void handlePolicyImageBrowseButton (MouseEvent event)
     {
         List<File> images = getImages("Policy Images");
+        for (File image:images) {
 
-    }*/
+
+        }
+
+    }
 
 }

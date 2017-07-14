@@ -5,10 +5,8 @@ import javafx.fxml.FXMLLoader;
 import javafx.geometry.Rectangle2D;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
-import javafx.scene.control.TabPane;
 import javafx.stage.Screen;
 import javafx.stage.Stage;
-import sample.util.DatabaseConnector;
 
 public class Main extends Application {
 
@@ -22,11 +20,11 @@ public class Main extends Application {
         primaryStage.setScene(new Scene(root, 300, 275));
 
 
-/*        Screen screen = Screen.getPrimary();
+        Screen screen = Screen.getPrimary();
         Rectangle2D bounds = screen.getVisualBounds();
         primaryStage.setWidth(bounds.getWidth());
         primaryStage.setHeight(bounds.getHeight());
-        primaryStage.setMaximized(true);*/
+        primaryStage.setMaximized(true);
 
 
         primaryStage.show();

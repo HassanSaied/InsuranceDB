@@ -14,7 +14,7 @@
 <?import javafx.scene.layout.GridPane?>
 <?import javafx.scene.layout.RowConstraints?>
 
-<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="439.0" prefWidth="653.0" xmlns="http://javafx.com/javafx/8.0.111" xmlns:fx="http://javafx.com/fxml/1">
+<BorderPane fx:controller="sample.Controllers.newPolicyController" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="439.0" prefWidth="653.0" xmlns="http://javafx.com/javafx/8.0.111" xmlns:fx="http://javafx.com/fxml/1">
    <bottom>
       <ButtonBar prefHeight="40.0" prefWidth="200.0" BorderPane.alignment="CENTER">
         <buttons>
@@ -94,7 +94,7 @@
             <ComboBox fx:id="policyStatusComboBox" prefWidth="150.0" GridPane.columnIndex="1" GridPane.rowIndex="15" />
             <ComboBox fx:id="endorsementNumberComboBox" prefWidth="150.0" GridPane.columnIndex="1" GridPane.rowIndex="16" />
             <Button fx:id="claimImageBrowseButton" mnemonicParsing="false" text="Browse" GridPane.columnIndex="3" GridPane.halignment="CENTER" GridPane.rowIndex="17" GridPane.valignment="CENTER" />
-            <Button fx:id="policyImageBrowseButton" mnemonicParsing="false"  text="Browse" GridPane.columnIndex="3" GridPane.halignment="CENTER" GridPane.rowIndex="18" GridPane.valignment="CENTER" />
+            <Button fx:id="policyImageBrowseButton" onMousePressed="#handlePolicyImageBrowseButton" mnemonicParsing="false"  text="Browse" GridPane.columnIndex="3" GridPane.halignment="CENTER" GridPane.rowIndex="18" GridPane.valignment="CENTER" />
             <Button fx:id="collectiveImageBrowseButton" mnemonicParsing="false" text="Browse" GridPane.columnIndex="3" GridPane.halignment="CENTER" GridPane.rowIndex="19" GridPane.valignment="CENTER" />
             <ButtonBar prefHeight="26.0" prefWidth="230.0" GridPane.columnIndex="3" GridPane.rowIndex="5">
               <buttons>
