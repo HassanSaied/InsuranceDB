@@ -1,6 +1,5 @@
 package sample.Controllers;
 
-import com.sun.xml.internal.ws.policy.privateutil.PolicyUtils;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
@@ -21,6 +20,7 @@ import sample.util.PolicyConnector;
 import javafx.scene.input.*;
 
 import java.io.IOException;
+import java.time.LocalDate;
 import java.util.List;
 import java.util.function.Consumer;
 
@@ -55,8 +55,9 @@ public class PolicyViewController {
     private TableColumn<PolicyMapper, String> specialDiscountColumn;
     @FXML
     private TableColumn<PolicyMapper, String> netPremuimColumn;
-    @FXML
-    private TableColumn<PolicyMapper, String> expiryDateColumn;
+    //@FXML
+    //private TableColumn<PolicyMapper, String> expiryDateColumn;
+    @FXML private TableColumn<PolicyMapper,LocalDate> expiryDateColumn;
     @FXML
     private TableColumn<PolicyMapper, String> sumInssuredColumn;
     @FXML
@@ -82,14 +83,13 @@ public class PolicyViewController {
 
 
     public PolicyViewController() {
+
+        policyMappers = FXCollections.observableArrayList();
         generatePolicyMappers();
     }
 
     private void generatePolicyMappers() {
-        if (policyMappers != null)
             policyMappers.clear();
-        policyMappers = null;
-        policyMappers = FXCollections.observableArrayList();
         List<Policy> policies = PolicyConnector.getPolicies();
         for (Policy policy : policies) {
             policyMappers.add(new PolicyMapper(policy));
@@ -105,8 +105,8 @@ public class PolicyViewController {
         insuranceCompanyColumn.setCellValueFactory(cellData -> cellData.getValue().insuranceCompanyProperty());
         insuranceTypeColumn.setCellValueFactory(cellData -> cellData.getValue().insuranceTypeProperty());
         beneficiaryColumn.setCellValueFactory(cellData -> cellData.getValue().beneficiaryProperty());
-        clientNameColumn.setCellValueFactory(cellData -> cellData.getValue().clientNameProperty());
-        clientPhoneNumberColumn.setCellValueFactory(cellData -> cellData.getValue().clientNumberProperty());
+        clientNameColumn.setCellValueFactory(cellData -> cellData.getValue().clientMapperProperty().getValue().clientNameProperty());
+        clientPhoneNumberColumn.setCellValueFactory(cellData -> cellData.getValue().clientMapperProperty().getValue().clientPhoneNumberProperty());
         grossPremuimColumn.setCellValueFactory(cellData -> cellData.getValue().grossPremuimProperty());
         specialDiscountColumn.setCellValueFactory(cellData -> cellData.getValue().specialDiscountProperty());
         netPremuimColumn.setCellValueFactory(cellData -> cellData.getValue().netPremiumProperty());

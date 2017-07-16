@@ -8,6 +8,8 @@ CREATE TABLE InsuranceType
   insuranceType VARCHAR(80) NOT NULL PRIMARY KEY
 );
 INSERT INTO InsuranceType VALUES ('Car'), ('Vehicle');
+
+
 CREATE TABLE PolicyStatus
 (
   policyStatus VARCHAR(80) NOT NULL PRIMARY KEY
@@ -37,6 +39,7 @@ CREATE TABLE Policy
   grossCommission     FLOAT, /*password*/
   taxes               FLOAT, /*20% or 22.5%*/
   netCommission       FLOAT, /*commission - taxes*/
+  issuanceDate        DATE,
   expiryDate          DATE,
   sumInssured         FLOAT,
   currency            ENUM ('EGP', 'USD', 'EUR'),
@@ -75,17 +78,17 @@ CREATE TABLE ClaimImagePath
 INSERT INTO Clients (InsuranceDB.Clients.clientName, InsuranceDB.Clients.clientNumber)
 VALUES ('Ramy Emad Malek', '01226140201'), ('Walid Hassan', '01113438653');
 INSERT INTO Policy VALUES
-  ('Hassan', 'AIG', 'Car', 'Egypt', 1, '209728', 3047.5, 1234.5, 1234.5, 1234.5, 0.2, 1572, CURDATE(), 12345, 'EGP',
-   'Cache', 'asdadasd', 'Collected', 1234, NULL),
-  ('Hassan', 'AIG', 'Car', 'Egypt', 1, '209729', 3047.5, 1234.5, 1234.5, 1234.5, 0.2, 1572, CURDATE(), 12345, 'EGP',
-   'Cache', 'asdadasd', 'Collected', 1234, NULL),
-  ('Hassan', 'AIG', 'Car', 'Egypt', 1, '209780', 3047.5, 1234.5, 1234.5, 1234.5, 0.2, 1572, CURDATE(), 12345, 'EGP',
-   'Cache', 'asdadasd', 'Collected', 1234, NULL)
-  , ('Hassan', 'AIG', 'Car', 'Egypt', 1, '209724', 3047.5, 1234.5, 1234.5, 1234.5, 0.2, 1572, CURDATE(), 12345, 'EGP',
-     'Cache', 'asdadasd', 'Collected', 1234, NULL),
-  ('Hassan', 'AIG', 'Car', 'Egypt', 1, '209723', 3047.5, 1234.5, 1234.5, 1234.5, 0.2, 1572, CURDATE(), 12345, 'EGP',
-   'Cache', 'asdadasd', 'Collected', 1234, NULL),
-  ('Hassan', 'AIG', 'Car', 'Egypt', 1, '209725', 3047.5, 1234.5, 1234.5, 1234.5, 0.2, 1572, CURDATE(), 12345, 'EGP',
-   'Cache', 'asdadasd', 'Collected', 1234, NULL);
+  ('Hassan', 'AIG', 'Car', 'Egypt', 1, '209728', 3047.5, 1234.5, 1234.5, 1234.5, 0.2, 1572,CURDATE(), CURDATE(), 12345, 'EGP',
+                                                                                      'Cache', 'asdadasd', 'Collected', 1234, NULL),
+  ('Hassan', 'AIG', 'Car', 'Egypt', 1, '209729', 3047.5, 1234.5, 1234.5, 1234.5, 0.2, 1572,CURDATE(),CURDATE(), 12345, 'EGP',
+                                                                                      'Cache', 'asdadasd', 'Collected', 1234, NULL),
+  ('Hassan', 'AIG', 'Car', 'Egypt', 1, '209780', 3047.5, 1234.5, 1234.5, 1234.5, 0.2, 1572,CURDATE() ,CURDATE(), 12345, 'EGP',
+                                                                                      'Cache', 'asdadasd', 'Collected', 1234, NULL)
+  , ('Hassan', 'AIG', 'Car', 'Egypt', 1, '209724', 3047.5, 1234.5, 1234.5, 1234.5, 0.2, 1572,CURDATE(),CURDATE(), 12345, 'EGP',
+                                                                                        'Cache', 'asdadasd', 'Collected', 1234, NULL),
+  ('Hassan', 'AIG', 'Car', 'Egypt', 1, '209723', 3047.5, 1234.5, 1234.5, 1234.5, 0.2, 1572,CURDATE(),CURDATE(), 12345, 'EGP',
+                                                                                      'Cache', 'asdadasd', 'Collected', 1234, NULL),
+  ('Hassan', 'AIG', 'Car', 'Egypt', 1, '209725', 3047.5, 1234.5, 1234.5, 1234.5, 0.2, 1572,CURDATE(),CURDATE(), 12345, 'EGP',
+                                                                                      'Cache', 'asdadasd', 'Collected', 1234, NULL);
 INSERT INTO Policy (InsuranceDB.Policy.policyNumber) VALUES ('12345');
 

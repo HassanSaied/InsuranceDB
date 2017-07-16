@@ -55,6 +55,7 @@ public class ClientConnector {
                 Client currentClient = new Client(resultSet.getInt(1));
                 currentClient.setClientName(resultSet.getString(2));
                 currentClient.setClientPhoneNumber(resultSet.getString(3));
+                clients.add(currentClient);
             }
 
         }
@@ -68,8 +69,8 @@ public class ClientConnector {
 
     public static void updateClient(Client client){
         //language=MySQL
-        String updateSQL =  "UPDATE Clients SET InsuranceDB.Clients.clientName = '?'"+
-                            ", InsuranceDB.Clients.clientNumber = '?'"+
+        String updateSQL =  "UPDATE Clients SET InsuranceDB.Clients.clientName = ?"+
+                            ", InsuranceDB.Clients.clientNumber = ?"+
                             " WHERE InsuranceDB.Clients.clientID = ?;";
         try(PreparedStatement statement = DatabaseConnector.getDatabaseConnection().prepareStatement(updateSQL)){
             statement.setString(1,client.getClientName());

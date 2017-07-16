@@ -1,9 +1,11 @@
 package sample.Mappers;
 
-import javafx.beans.property.SimpleStringProperty;
-import javafx.beans.property.StringProperty;
+import javafx.beans.property.*;
+import sample.model.Client;
 import sample.model.Policy;
 import sample.util.Utils;
+
+import java.time.LocalDate;
 
 /**
  * Created by hassan on 7/8/17.
@@ -19,8 +21,7 @@ public class PolicyMapper {
     private final StringProperty insuranceCompany;
     private final StringProperty insuranceType;
     private final StringProperty beneficiary;
-    private final StringProperty clientName;
-    private final StringProperty clientNumber;
+    private final ObjectProperty<ClientMapper> clientMapper;
     private final StringProperty policyNumber;
     private final StringProperty grossPremuim;
     private final StringProperty specialDiscount;
@@ -28,13 +29,25 @@ public class PolicyMapper {
     private final StringProperty grossCommission;
     private final StringProperty taxes;
     private final StringProperty netCommission;
-    private final StringProperty expiryDate;
     private final StringProperty sumInsured;
     private final StringProperty currency;
     private final StringProperty collective;
     private final StringProperty policyStatus;
     private final StringProperty paidClaims;
     private final StringProperty indoresmentNumber;
+
+
+    public ObjectProperty<LocalDate> expiryDateProperty() {
+        return expiryDate;
+    }
+
+    private final ObjectProperty<LocalDate> expiryDate;
+
+    public ObjectProperty<ClientMapper> clientMapperProperty()
+
+    {
+        return clientMapper;
+    }
 
 
     public StringProperty agentNameProperty() {
@@ -54,16 +67,6 @@ public class PolicyMapper {
 
     public StringProperty beneficiaryProperty() {
         return beneficiary;
-    }
-
-
-    public StringProperty clientNameProperty() {
-        return clientName;
-    }
-
-
-    public StringProperty clientNumberProperty() {
-        return clientNumber;
     }
 
 
@@ -100,11 +103,6 @@ public class PolicyMapper {
     }
 
 
-    public StringProperty expiryDateProperty() {
-        return expiryDate;
-    }
-
-
     public StringProperty sumInsuredProperty() {
         return sumInsured;
     }
@@ -135,12 +133,11 @@ public class PolicyMapper {
 
     public PolicyMapper(Policy policy) {
         this.policy = policy;
+        clientMapper = new SimpleObjectProperty<ClientMapper>(new ClientMapper(policy.getClient()));
         agentName = new SimpleStringProperty(Utils.getMappedString(this.policy.getAgentName()));
         insuranceCompany = new SimpleStringProperty(Utils.getMappedString(this.policy.getInsuranceCompany()));
         insuranceType = new SimpleStringProperty(Utils.getMappedString(this.policy.getInsuranceType()));
         beneficiary = new SimpleStringProperty(Utils.getMappedString(this.policy.getBeneficiary()));
-        clientName = new SimpleStringProperty(this.policy.getClient() == null ? "" : Utils.getMappedString(this.policy.getClient().getClientName()));
-        clientNumber = new SimpleStringProperty(this.policy.getClient() == null ? "" : Utils.getMappedString(this.policy.getClient().getClientPhoneNumber()));
         this.policyNumber = new SimpleStringProperty(this.policy.getPolicyNumber());
         grossPremuim = new SimpleStringProperty(String.valueOf(Utils.getMappedString(this.policy.getGrossPremium())));
         specialDiscount = new SimpleStringProperty(String.valueOf(Utils.getMappedString(this.policy.getSpecialDiscount())));
@@ -148,13 +145,13 @@ public class PolicyMapper {
         grossCommission = new SimpleStringProperty(Utils.getMappedString(this.policy.getGrossCommission()));
         taxes = new SimpleStringProperty(Utils.getMappedString(this.policy.getNetCommission()));
         netCommission = new SimpleStringProperty(Utils.getMappedString(this.policy.getNetCommission()));
-        expiryDate = new SimpleStringProperty(Utils.getMappedString(this.policy.getExpiryDate()));//Need to Reformat It
         sumInsured = new SimpleStringProperty(Utils.getMappedString(this.policy.getSumInsured()));
         currency = new SimpleStringProperty(Utils.getMappedString(this.policy.getCurrency()));
         collective = new SimpleStringProperty(Utils.getMappedString(this.policy.getCollective()));
         policyStatus = new SimpleStringProperty(Utils.getMappedString(this.policy.getPolicyStatus()));
         paidClaims = new SimpleStringProperty(Utils.getMappedString(this.policy.getPaidClaims()));
         indoresmentNumber = new SimpleStringProperty(Utils.getMappedString(this.policy.getIndoresmentNumber()));
+        expiryDate = new SimpleObjectProperty<LocalDate>(this.policy.getExpiryDate() == null ? null : this.policy.getExpiryDate());
     }
 
 

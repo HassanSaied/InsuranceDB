@@ -1,6 +1,8 @@
 package sample.util;
 
+import com.sun.org.apache.regexp.internal.RESyntaxException;
 import org.intellij.lang.annotations.Language;
+import org.jetbrains.annotations.Nullable;
 import sample.model.Policy;
 
 import javax.xml.crypto.Data;
@@ -303,5 +305,31 @@ public class PolicyConnector {
         }
         return true;
 
+    }
+
+    @Nullable
+    public static List<String> getInsuranceTypes (){
+        List<String> insuranceTypes = new Vector<String>();
+        String selectSQL = "SELECT * FROM InsuranceType;";
+        try(Statement statement = DatabaseConnector.getDatabaseConnection().createStatement()){
+            try(ResultSet resultSet = statement.executeQuery(selectSQL)) {
+                while (resultSet.next()){
+                    insuranceTypes.add(resultSet.getString(1));
+                }
+
+            }
+            catch (SQLException exception){
+                System.err.println("Can't execute the insurance types statement");
+                System.err.println("Exception "+exception.getMessage());
+                return null;
+            }
+
+        }
+        catch (SQLException exception){
+            System.err.println("Can't create the insurance types statement");
+            System.err.println("Exception "+exception.getMessage());
+            return null;
+        }
+        return insuranceTypes;
     }
 }
