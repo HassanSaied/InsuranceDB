@@ -311,19 +311,8 @@ public class PolicyConnector {
     public static List<String> getInsuranceTypes (){
         List<String> insuranceTypes = new Vector<String>();
         String selectSQL = "SELECT * FROM InsuranceType;";
-        try(Statement statement = DatabaseConnector.getDatabaseConnection().createStatement()){
-            try(ResultSet resultSet = statement.executeQuery(selectSQL)) {
-                while (resultSet.next()){
-                    insuranceTypes.add(resultSet.getString(1));
-                }
-
-            }
-            catch (SQLException exception){
-                System.err.println("Can't execute the insurance types statement");
-                System.err.println("Exception "+exception.getMessage());
-                return null;
-            }
-
+        try{
+            executeSQLQuery(insuranceTypes,selectSQL,"insurance Types");
         }
         catch (SQLException exception){
             System.err.println("Can't create the insurance types statement");
@@ -331,5 +320,35 @@ public class PolicyConnector {
             return null;
         }
         return insuranceTypes;
+    }
+
+    public static List<String> getPolicyStatus(){
+        List<String> policyStatus = new Vector<String>();
+        String selectSQL = "SELECT * FROM PolicyStatus;;";
+        try{
+            executeSQLQuery(policyStatus,selectSQL,"policy status");
+        }
+        catch (SQLException exception){
+            System.err.println("Can't create the policy status statement");
+            System.err.println("Exception "+exception.getMessage());
+            return null;
+        }
+        return policyStatus;
+    }
+
+    private static void executeSQLQuery(List<String> returnedList, String SQL ,String exceptionString) throws SQLException{
+
+        try(Statement statement = DatabaseConnector.getDatabaseConnection().createStatement()){
+            try(ResultSet resultSet = statement.executeQuery(SQL)) {
+                while (resultSet.next()){
+                    returnedList.add(resultSet.getString(1));
+                }
+
+            }
+            catch (SQLException exception){
+                System.err.println("Can't execute the"+ exceptionString+"statement");
+                System.err.println("Exception "+exception.getMessage());
+            }
+        }
     }
 }

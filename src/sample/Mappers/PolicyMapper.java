@@ -133,7 +133,13 @@ public class PolicyMapper {
 
     public PolicyMapper(Policy policy) {
         this.policy = policy;
-        clientMapper = new SimpleObjectProperty<ClientMapper>(new ClientMapper(policy.getClient()));
+        clientMapper = new SimpleObjectProperty<ClientMapper>(new ClientMapper(policy.getClient())){
+            @Override
+            public void set(ClientMapper newValue) {
+                this.getValue().clientNameProperty().setValue(newValue.clientNameProperty().getValue());
+                this.getValue().clientPhoneNumberProperty().setValue(newValue.clientPhoneNumberProperty().getValue());
+            }
+        };
         agentName = new SimpleStringProperty(Utils.getMappedString(this.policy.getAgentName()));
         insuranceCompany = new SimpleStringProperty(Utils.getMappedString(this.policy.getInsuranceCompany()));
         insuranceType = new SimpleStringProperty(Utils.getMappedString(this.policy.getInsuranceType()));

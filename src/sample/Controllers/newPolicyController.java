@@ -1,5 +1,11 @@
 package sample.Controllers;
 
+import javafx.beans.binding.Binding;
+import javafx.beans.binding.Bindings;
+import javafx.beans.binding.BooleanBinding;
+import javafx.beans.property.SimpleBooleanProperty;
+import javafx.beans.property.SimpleStringProperty;
+import javafx.beans.property.StringProperty;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
@@ -66,17 +72,7 @@ public class newPolicyController {
     @FXML
     private TextField clientPhoneNumberTextField;
     @FXML
-    private ListView<String> policyImageListView;
-    @FXML
-    private ListView<String> claimImageListView;
-    @FXML
-    private ListView<String> collectiveImageTextField;
-    @FXML
-    private Button policyImageBrowseButton;
-    @FXML
-    private Button claimImageBrowseButton;
-    @FXML
-    private Button collectiveImageBrowseButton;
+    private Button imageBrowseButton;
     @FXML
     private Button addClientButton;
     @FXML
@@ -85,11 +81,25 @@ public class newPolicyController {
     private Button saveButton;
     @FXML
     private Button cancelButton;
+    @FXML
+    private ComboBox<String> imageTypeComboBox;
+    @FXML
+    private ListView<String> imagePathListView;
+
+
+    @FXML Button deleteImageButton;
 
     private PolicyMapper currentPolicyMapper = null;
 
     private ObservableList<String> insuranceTypes;
     private ObservableList<ClientMapper> clients;
+    private ObservableList<String> collectiveList;
+    private ObservableList<String> currencyList;
+    private ObservableList<String> policyStatus;
+    private ObservableList<String> taxes;
+    private ObservableList<String> policyImagePath, claimImagePath, collectiveImagePath;
+    private ObservableList<String> selectedImageList;
+    private ObservableList<String> imageTypes;
 
     public newPolicyController() {
         currentPolicyMapper = new PolicyMapper(new Policy());
@@ -103,21 +113,23 @@ public class newPolicyController {
                 clients.add(new ClientMapper(client));
             }
         }
-        currentPolicyMapper.clientMapperProperty().getValue().clientPhoneNumberProperty().addListener((observable, oldValue, newValue) -> System.out.println(newValue));
+        policyStatus = FXCollections.observableArrayList();
+        policyStatus.addAll(PolicyConnector.getPolicyStatus());
+        collectiveList = FXCollections.observableArrayList();
+        collectiveList.addAll("Cache", "Check", "None");
+        currencyList = FXCollections.observableArrayList();
+        currencyList.addAll("EGP", "USD", "EUR");
+        taxes = FXCollections.observableArrayList();
+        taxes.addAll("20%", "22.5%");
+        policyImagePath = FXCollections.observableArrayList();
+        claimImagePath = FXCollections.observableArrayList();
+        collectiveImagePath = FXCollections.observableArrayList();
+        imageTypes = FXCollections.observableArrayList("Policy Image", "Claim Image", "Collective Image");
 
     }
 
     @FXML
     private void initialize() {
-        policyNumberTextField.textProperty().bindBidirectional(currentPolicyMapper.policyNumberProperty());
-        agentNameTextField.textProperty().bindBidirectional(currentPolicyMapper.agentNameProperty());
-        insuranceCompanyTextField.textProperty().bindBidirectional(currentPolicyMapper.insuranceCompanyProperty());
-        insuranceTypeComboBox.setItems(insuranceTypes);
-        insuranceTypeComboBox.valueProperty().bindBidirectional(currentPolicyMapper.insuranceTypeProperty());
-        beneficiaryTextField.textProperty().bindBidirectional(currentPolicyMapper.beneficiaryProperty());
-        grossCommissionTextField.textProperty().bindBidirectional(currentPolicyMapper.grossPremuimProperty());
-        expiryDateDatePicker.valueProperty().bindBidirectional(currentPolicyMapper.expiryDateProperty());
-        clientComboBox.setItems(clients);
         clientComboBox.setCellFactory(new Callback<ListView<ClientMapper>, ListCell<ClientMapper>>() {
             @Override
             public ListCell<ClientMapper> call(ListView<ClientMapper> param) {
@@ -133,15 +145,54 @@ public class newPolicyController {
                 return cell;
             }
         });
-        clientComboBox.valueProperty().bindBidirectional(currentPolicyMapper.clientMapperProperty());
-        clientPhoneNumberTextField.textProperty().bindBidirectional(currentPolicyMapper.clientMapperProperty().getValue().clientPhoneNumberProperty());
+       imageTypeComboBox.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
+            if (newValue.equals("Policy Image"))
+                selectedImageList = policyImagePath;
+            else if (newValue.equals("Claim Image"))
+                selectedImageList = claimImagePath;
+            else selectedImageList = collectiveImagePath;
+            imagePathListView.setItems(selectedImageList);
+        });
+        setBindings();
+        setComboBoxItems();
+    }
 
+    private void setBindings() {
+        policyNumberTextField.textProperty().bindBidirectional(currentPolicyMapper.policyNumberProperty());
+        agentNameTextField.textProperty().bindBidirectional(currentPolicyMapper.agentNameProperty());
+        insuranceCompanyTextField.textProperty().bindBidirectional(currentPolicyMapper.insuranceCompanyProperty());
+        insuranceTypeComboBox.valueProperty().bindBidirectional(currentPolicyMapper.insuranceTypeProperty());
+        beneficiaryTextField.textProperty().bindBidirectional(currentPolicyMapper.beneficiaryProperty());
+        grossCommissionTextField.textProperty().bindBidirectional(currentPolicyMapper.grossCommissionProperty());
+        expiryDateDatePicker.valueProperty().bindBidirectional(currentPolicyMapper.expiryDateProperty());
+        clientComboBox.valueProperty().bindBidirectional(currentPolicyMapper.clientMapperProperty());
+        clientPhoneNumberTextField.textProperty().bindBidirectional(currentPolicyMapper.clientMapperProperty().get().clientPhoneNumberProperty());
+        grossPremiumTextField.textProperty().bindBidirectional(currentPolicyMapper.grossPremuimProperty());
+        specialDiscountTextField.textProperty().bindBidirectional(currentPolicyMapper.specialDiscountProperty());
+        netPremiumTextField.textProperty().bindBidirectional(currentPolicyMapper.netPremiumProperty());
+        taxesComboBox.valueProperty().bindBidirectional(currentPolicyMapper.taxesProperty());
+        grossCommissionTextField.disableProperty().bind(commissionPasswordField.textProperty().isNotEqualTo("ahmed"));
+        sumInsuredTextField.textProperty().bindBidirectional(currentPolicyMapper.sumInsuredProperty());
+        currencyComboBox.valueProperty().bindBidirectional(currentPolicyMapper.currencyProperty());
+        collectiveComboBox.valueProperty().bindBidirectional(currentPolicyMapper.collectiveProperty());
+        policyStatusComboBox.valueProperty().bindBidirectional(currentPolicyMapper.policyStatusProperty());
+        endorsementNumberComboBox.valueProperty().bindBidirectional(currentPolicyMapper.indoresmentNumberProperty());
+        imageBrowseButton.disableProperty().bind(imageTypeComboBox.getSelectionModel().selectedItemProperty().isNull());
+        deleteImageButton.disableProperty().bind(imagePathListView.getSelectionModel().selectedItemProperty().isNull());
+    }
+
+    private void setComboBoxItems() {
+        insuranceTypeComboBox.setItems(insuranceTypes);
+        clientComboBox.setItems(clients);
+        collectiveComboBox.setItems(collectiveList);
+        currencyComboBox.setItems(currencyList);
+        policyStatusComboBox.setItems(policyStatus);
+        taxesComboBox.setItems(taxes);
+        imageTypeComboBox.setItems(imageTypes);
 
     }
 
     private List<File> getImages(String title) {
-        System.out.println(currentPolicyMapper.clientMapperProperty().getValue().clientPhoneNumberProperty().getValue());
-        System.out.println(clientPhoneNumberTextField.textProperty().getValue());
         FileChooser fileChooser = new FileChooser();
         fileChooser.setTitle(title);
         fileChooser.setInitialDirectory(new File(System.getProperty("user.home")));
@@ -150,37 +201,22 @@ public class newPolicyController {
     }
 
     @FXML
-    protected void handlePolicyImageBrowseButton(MouseEvent event) {
-        List<File> images = getImages("Policy Images");
+    protected void handleImageBrowseButton(MouseEvent event) {
+        List<File> images = getImages(imageTypeComboBox.getSelectionModel().getSelectedItem());
         if (images == null) return;
-        for (File image : images) {
-
-
-        }
-
-    }
-
-    @FXML
-    protected void handleClaimImageBrowseButton(MouseEvent event) {
-
-        List<File> images = getImages("Claim Images");
-        if (images == null) return;
-        for (File image : images) {
-
-        }
-
-    }
-
-    @FXML
-    protected void handleCollectiveImageBrowseButton(MouseEvent event) {
-        List<File> images = getImages("Collective Images");
-        if (images == null) return;
-        if (images.size() != 1) {
+        if (imageTypeComboBox.getSelectionModel().getSelectedItem().equals("Collective Image") && images.size() != 1) {
             Alert tooMuchImagesAlert = new Alert(Alert.AlertType.ERROR);
             tooMuchImagesAlert.setTitle("Only one collective Image");
             tooMuchImagesAlert.setHeaderText("you can only choose one collective image");
             tooMuchImagesAlert.showAndWait();
         }
+        for (File image : images) {
+            selectedImageList.add(image.getAbsolutePath());
+        }
+    }
+
+    @FXML protected void handleDeleteImageButton(MouseEvent event){
+        selectedImageList.remove(imagePathListView.getSelectionModel().getSelectedIndex());
     }
 
     @FXML
@@ -188,4 +224,6 @@ public class newPolicyController {
         Stage currentStage = (Stage) cancelButton.getScene().getWindow();
         currentStage.close();
     }
+
+
 }
