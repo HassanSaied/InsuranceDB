@@ -3,7 +3,7 @@ package sample.Mappers;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
 import sample.model.Client;
-import sun.util.cldr.CLDRLocaleDataMetaInfo;
+import sample.util.Utils;
 
 /**
  * Created by hassan on 7/13/17.
@@ -26,6 +26,9 @@ public class ClientMapper {
 
     public void setClient(Client client) {
         this.client = client;
+        clientNameProperty().setValue(client.getClientName());
+        clientPhoneNumberProperty().setValue(client.getClientPhoneNumber());
+
     }
 
     private Client client;
@@ -44,6 +47,14 @@ public class ClientMapper {
 
     public Client getClient (){
         return this.client;
+    }
+
+    public void sync(){
+        this.client.setClientName(Utils.emptyToNull(clientName.getValue()));
+        this.client.setClientPhoneNumber(Utils.emptyToNull(clientPhoneNumber.getValue()));
+    }
+    public boolean save(){
+       return client.save();
     }
 
 

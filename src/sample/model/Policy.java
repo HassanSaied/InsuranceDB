@@ -255,8 +255,9 @@ public class Policy {
     private boolean updatable = false;
 
     public boolean save() {
-        if (updatable)
+        if (updatable) {
             return PolicyConnector.updatePolicy(this);
+        }
         else {
             updatable = true;
             return PolicyConnector.insertPolicy(this);

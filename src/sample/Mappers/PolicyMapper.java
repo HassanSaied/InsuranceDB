@@ -201,7 +201,7 @@ public class PolicyMapper {
         policy.setAgentName(Utils.emptyToNull(agentName.getValue()));
         policy.setBeneficiary(Utils.emptyToNull(beneficiary.getValue()));
         if(clientName.getValue() != null && !clientName.getValue().isEmpty())
-            policy.setClient(Utils.findClient(ClientConnector.getClients(),clientName.getValue(),clientNumber.getValue()));
+            policy.setClient(Utils.findClient(ClientConnector.clients,clientName.getValue(),clientNumber.getValue()));
         else policy.setClient(null);
         policy.setCollective(Utils.stringToCollective(Utils.emptyToNull(collective.getValue())));
         policy.setCurrency(Utils.stringToCurrency(Utils.emptyToNull(currency.getValue())));

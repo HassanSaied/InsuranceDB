@@ -57,7 +57,8 @@ public class Utils {
     public static Client findClient(List<Client> clientList, String clientName, String clientNumber){
 
         for (Client client: clientList) {
-            if(client.getClientName().equals(clientName) && client.getClientPhoneNumber().equals(clientNumber))
+            if(client.getClientPhoneNumber() != null)
+            if(client.getClientName().equals(clientName))
                 return client;
 
         }

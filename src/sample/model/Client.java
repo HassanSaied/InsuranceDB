@@ -10,6 +10,7 @@ public class Client {
     private int clientID;
     private String clientPhoneNumber;
     private String clientName;
+    private boolean updatable = false;
 
     public Client(String clientPhoneNumber, String clientName) {
         setClientName(clientName);
@@ -43,8 +44,14 @@ public class Client {
     public void setClientName(String clientName) {
         this.clientName = clientName;
     }
-    public void save(){
-        ClientConnector.updateClient(this);
+    public boolean save(){
+        if(updatable) {
+            return ClientConnector.updateClient(this);
+        }
+        else {
+            updatable = true;
+         return ClientConnector.insertClient(this);
+        }
     }
 
 }

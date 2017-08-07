@@ -15,10 +15,10 @@ import java.util.Vector;
  */
 public class ClientConnector {
 
+    public static List<Client> clients;
 
     @Nullable
     public static Client getClient(int clientID) {
-
         if(clientID == 0)
             return null;        //TODO: throw exception here, but really will never reach it xD
         String selectSQL = "SELECT * FROM Clients WHERE clientID = ?;";
@@ -64,10 +64,38 @@ public class ClientConnector {
             System.out.println("Exception "+exception.getMessage());
             return null;
         }
+        ClientConnector.clients = clients;
         return clients;
     }
 
-    public static void updateClient(Client client){
+    public static boolean insertClient(Client client){
+
+        String insertStatement = "INSERT INTO Clients " +
+                "(InsuranceDB.Clients.clientName, InsuranceDB.Clients.clientNumber)" +
+                " VALUES(?,?)";
+        try(PreparedStatement statement = DatabaseConnector.getDatabaseConnection().prepareStatement(insertStatement)){
+            statement.setString(1,client.getClientName());
+            statement.setString(2,client.getClientPhoneNumber());
+            try{
+                statement.executeUpdate();
+            }
+            catch (SQLException exception){
+                System.out.println("Can't Insert Client");
+                System.out.println("Exception "+exception.getMessage());
+                return false;
+            }
+        }
+        catch (SQLException exception){
+            System.out.println("Can't prepare insert Client statement");
+            System.out.println("Exception "+exception.getMessage());
+            return false;
+        }
+
+        return true;
+
+    }
+
+    public static boolean updateClient(Client client){
         //language=MySQL
         String updateSQL =  "UPDATE Clients SET InsuranceDB.Clients.clientName = ?"+
                             ", InsuranceDB.Clients.clientNumber = ?"+
@@ -82,13 +110,16 @@ public class ClientConnector {
             catch (SQLException exception){
                 System.out.println("Can't update Client");
                 System.out.println("Exception "+exception.getMessage());
+                return false;
             }
 
         }
         catch (SQLException exception){
             System.out.println("Can't prepare update Client statement");
             System.out.println("Exception "+exception.getMessage());
+            return false;
         }
+        return false;
     }
 
 }

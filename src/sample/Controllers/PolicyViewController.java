@@ -155,9 +155,9 @@ public class PolicyViewController {
     @FXML protected void handleNewButtonMoussePress(MouseEvent event){
         try{
             FXMLLoader newPolicyLoader = new FXMLLoader();
-            newPolicyLoader.setLocation(Main.class.getResource("Views/newPolicyView.fxml"));
+            newPolicyLoader.setLocation(Main.class.getResource("Views/detailedPolicyView.fxml"));
             BorderPane newPolicyBorderPane = newPolicyLoader.load();
-            ((DetailedPolicyController)(newPolicyLoader.getController())).setPolicyMappers(policyMappers);
+            ((DetailedPolicyViewController)(newPolicyLoader.getController())).setPolicyMappers(policyMappers);
             Stage newPolicyDialogStage = new Stage();
             newPolicyDialogStage.setTitle("Add new policy");
             newPolicyDialogStage.initModality(Modality.WINDOW_MODAL);

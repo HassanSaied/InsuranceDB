@@ -3,11 +3,14 @@ package sample.Controllers;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.input.MouseEvent;
+import javafx.scene.layout.BorderPane;
 import javafx.stage.FileChooser;
+import javafx.stage.Modality;
 import javafx.stage.Stage;
-import javafx.util.Callback;
 import sample.Main;
 import sample.Mappers.PolicyMapper;
 import sample.model.Client;
@@ -17,12 +20,13 @@ import sample.util.PolicyConnector;
 import sample.util.Utils;
 
 import java.io.File;
+import java.io.IOException;
 import java.util.List;
 
 /**
  * Created by hassan on 7/13/17.
  */
-public class DetailedPolicyController {
+public class DetailedPolicyViewController {
 
     private ObservableList<PolicyMapper> policyMappers;
 
@@ -99,35 +103,14 @@ public class DetailedPolicyController {
     private ObservableList<String> endorsementNumbers;
     private List<Client> clientList;
 
-    private Callback<ListView<String>, ListCell<String>> callback = new Callback<ListView<String>, ListCell<String>>() {
-        @Override
-        public ListCell<String> call(ListView<String> param) {
-            final ListCell<String> cell = new ListCell<String>() {
-                @Override
-                protected void updateItem(String item, boolean empty) {
-                    super.updateItem(item, empty);
-                    if (empty || item == null)
-                        setText(null);
-                    else setText(item);
-                }
-            };
-            return cell;
-        }
-    };
-
-    public DetailedPolicyController() {
+    public DetailedPolicyViewController() {
 
         currentPolicyMapper = new PolicyMapper(new Policy());
         this.insuranceTypes = FXCollections.observableArrayList();
         this.clients = FXCollections.observableArrayList();
         List<String> insuranceTypesList = PolicyConnector.getInsuranceTypes();
         insuranceTypes.addAll(insuranceTypesList);
-        clientList = ClientConnector.getClients();
-        if (clientList != null) {
-            for (Client client : clientList) {
-                clients.add(client.getClientName());
-            }
-        }
+        generateClient();
         policyStatus = FXCollections.observableArrayList();
         policyStatus.addAll(PolicyConnector.getPolicyStatus());
         collectiveList = FXCollections.observableArrayList();
@@ -143,6 +126,15 @@ public class DetailedPolicyController {
         endorsementNumbers = FXCollections.observableArrayList();
         for (Policy policy : PolicyConnector.policies) {
             endorsementNumbers.add(policy.getPolicyNumber());
+        }
+    }
+    private void generateClient(){
+        clients.clear();
+        clientList = ClientConnector.getClients();
+        if (clientList != null) {
+            for (Client client : clientList) {
+                clients.add(client.getClientName());
+            }
         }
     }
 
@@ -283,6 +275,29 @@ public class DetailedPolicyController {
         }
         Stage currentStage = (Stage) saveButton.getScene().getWindow();
         currentStage.close();
+
+    }
+
+    @FXML protected void handleAddClientButton(MouseEvent event){
+        try{
+            FXMLLoader addClientLoader = new FXMLLoader();
+            addClientLoader.setLocation(Main.class.getResource("Views/detailedClientView.fxml"));
+            Stage addClientStage = new Stage();
+            BorderPane clientBorderPane = addClientLoader.load();
+            addClientStage.setTitle("Add new policy");
+            addClientStage.initModality(Modality.WINDOW_MODAL);
+            addClientStage.initOwner(Main.primaryStage);
+            Scene dialog = new Scene(clientBorderPane);
+            addClientStage.setScene(dialog);
+            addClientStage.showAndWait();
+        }
+        catch (IOException exception){
+            System.err.println("Can't load new Client view");
+            System.err.println(exception.getMessage());
+        }
+        generateClient();
+
+
     }
 
     private boolean isValid(){
