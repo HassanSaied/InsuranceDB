@@ -9,6 +9,7 @@ import javafx.scene.control.Button;
 import javafx.scene.control.TableCell;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
+import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.BorderPane;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
@@ -17,7 +18,6 @@ import sample.Main;
 import sample.Mappers.PolicyMapper;
 import sample.model.Policy;
 import sample.util.PolicyConnector;
-import javafx.scene.input.*;
 
 import java.io.IOException;
 import java.time.LocalDate;
@@ -79,6 +79,7 @@ public class PolicyViewController {
     private void initialize() {
         setColumnContents();
         policyMapperTableView.setItems(policyMappers);
+        deletePolicyButton.disableProperty().bind(policyMapperTableView.getSelectionModel().selectedIndexProperty().isEqualTo(-1));
     }
 
 
@@ -156,7 +157,7 @@ public class PolicyViewController {
             FXMLLoader newPolicyLoader = new FXMLLoader();
             newPolicyLoader.setLocation(Main.class.getResource("Views/newPolicyView.fxml"));
             BorderPane newPolicyBorderPane = newPolicyLoader.load();
-            ((NewPolicyController)(newPolicyLoader.getController())).setPolicyMappers(policyMappers);
+            ((DetailedPolicyController)(newPolicyLoader.getController())).setPolicyMappers(policyMappers);
             Stage newPolicyDialogStage = new Stage();
             newPolicyDialogStage.setTitle("Add new policy");
             newPolicyDialogStage.initModality(Modality.WINDOW_MODAL);
@@ -171,6 +172,12 @@ public class PolicyViewController {
         catch (IOException exception){
             System.err.println("Can't load new policy view");
         }
+
+    }
+
+    @FXML protected void handleDeleteButtonMousePress (MouseEvent event){
+        policyMapperTableView.getSelectionModel().getSelectedItem().getPolicy().delete();
+        generatePolicyMappers();
 
     }
 

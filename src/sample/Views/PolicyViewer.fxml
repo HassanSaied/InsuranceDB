@@ -97,7 +97,7 @@
         <buttons>
           <Button mnemonicParsing="false" text="New" fx:id="newPolicyButton" onMousePressed="#handleNewButtonMoussePress"  />
             <Button mnemonicParsing="false" text="Edit" fx:id="editPolicyButton" />
-            <Button mnemonicParsing="false" text="Delete" fx:id="deletePolicyButton" />
+            <Button mnemonicParsing="false" text="Delete" fx:id="deletePolicyButton" onMousePressed="#handleDeleteButtonMousePress" />
         </buttons>
       </ButtonBar>
    </bottom>

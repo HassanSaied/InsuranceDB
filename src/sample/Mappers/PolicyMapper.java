@@ -209,15 +209,16 @@ public class PolicyMapper {
         policy.setGrossPremium(Utils.toBigDecimal(grossPremuim.getValue()));
         policy.setTaxes(Utils.toBigDecimal(taxes.getValue().trim().replace("%","")));
         policy.setInsuranceCompany(Utils.emptyToNull(insuranceCompany.getValue()));
-        policy.setInsuranceType(Utils.emptyToNull(insuranceCompany.getValue()));
+        policy.setInsuranceType(Utils.emptyToNull(insuranceType.getValue()));
         policy.setExpiryDate(expiryDate.getValue());
         policy.setPaidClaims(Utils.toBigDecimal(paidClaims.getValue()));
         policy.setSumInsured(Utils.toBigDecimal(sumInsured.getValue()));
         policy.setPolicyStatus(Utils.emptyToNull(policyStatus.getValue()));
-        policy.setSpecialDiscount(Utils.toBigDecimal(policyStatus.getValue()));
+        policy.setSpecialDiscount(Utils.toBigDecimal(specialDiscount.getValue()));
         policy.setClaimImagePath(claimImagePath);
         policy.setPolicyImagePath(policyImagePath);
         policy.setCollectiveImagePath(collectiveImagePath);
+        policy.calculateValues();
     }
     public boolean save(){
        return policy.save();

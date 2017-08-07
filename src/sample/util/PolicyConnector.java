@@ -294,22 +294,16 @@ public class PolicyConnector {
 
         //language=MySQL
         String deleteSQL = "DELETE FROM Policy WHERE policyNumber = ?;";
-        try (PreparedStatement statement = DatabaseConnector.getDatabaseConnection().prepareStatement(deleteSQL)) {
-            statement.setString(1, policy.getPolicyNumber());
-            try {
-                statement.executeUpdate();
-            } catch (SQLException exception) {
-                System.err.println("Can't delete policy");
-                System.err.println("Exception " + exception.getMessage());
-                return false;
-            }
-        } catch (SQLException exception) {
-            System.err.println("Can't prepare delete policy statement");
-            System.err.println("Exception " + exception.getMessage());
-            return false;
-        }
-        return true;
+        return executeSQLDelete(deleteSQL,"delete policy",policy) &&deleteClaimImagePath(policy) && deletePolicyImagePath(policy);
+    }
 
+    private static boolean deleteClaimImagePath(Policy policy){
+        String deleteSQL ="DELETE FROM ClaimImagePath WHERE policyNumber = ?;";
+        return executeSQLDelete(deleteSQL,"delete claimImagePath",policy);
+    }
+    private static boolean deletePolicyImagePath(Policy policy){
+        String deleteSQL = "DELETE FROM PolicyImagePath WHERE policyNumber = ?;";
+        return executeSQLDelete(deleteSQL,"delete policyImagePath",policy);
     }
 
     @Nullable
@@ -342,6 +336,23 @@ public class PolicyConnector {
         return policyStatus;
     }
 
+    public static boolean executeSQLDelete(String SQL , String exceptionString,Policy policy){
+        try (PreparedStatement statement = DatabaseConnector.getDatabaseConnection().prepareStatement(SQL)) {
+            statement.setString(1, policy.getPolicyNumber());
+            try {
+                statement.executeUpdate();
+            } catch (SQLException exception) {
+                System.err.println("Can't "+exceptionString);
+                System.err.println("Exception " + exception.getMessage());
+                return false;
+            }
+        } catch (SQLException exception) {
+            System.err.println("Can't prepare "+exceptionString + "statement");
+            System.err.println("Exception " + exception.getMessage());
+            return false;
+        }
+        return true;
+    }
     private static void executeSQLQuery(List<String> returnedList, String SQL ,String exceptionString) throws SQLException{
 
         try(Statement statement = DatabaseConnector.getDatabaseConnection().createStatement()){

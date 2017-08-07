@@ -266,4 +266,11 @@ public class Policy {
     public boolean delete() {
         return PolicyConnector.deletePolicy(this);
     }
+
+    public void calculateValues(){
+        if(grossCommission != null && taxes!=null)
+            netCommission = grossCommission.subtract(taxes.multiply(grossCommission));
+        if(grossPremium !=null && specialDiscount != null)
+             netPremium = grossPremium.subtract(specialDiscount);
+    }
 }

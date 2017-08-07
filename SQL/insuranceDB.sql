@@ -39,7 +39,6 @@ CREATE TABLE Policy
   grossCommission     FLOAT, /*password*/
   taxes               FLOAT, /*20% or 22.5%*/
   netCommission       FLOAT, /*commission - taxes*/
-  issuanceDate        DATE,
   expiryDate          DATE,
   sumInssured         FLOAT,
   currency            ENUM ('EGP', 'USD', 'EUR'),
@@ -48,6 +47,7 @@ CREATE TABLE Policy
   policyStatus        VARCHAR(80),
   paidClaims          FLOAT, /*checks we kda*/
   indoresmentNumber   VARCHAR(80),
+  issuanceDate        DATE,
   FOREIGN KEY (policyStatus) REFERENCES PolicyStatus (policyStatus),
   FOREIGN KEY (insuranceType) REFERENCES InsuranceType (insuranceType),
   FOREIGN KEY (clientID) REFERENCES Clients (clientID),
@@ -55,7 +55,16 @@ CREATE TABLE Policy
     ON DELETE SET NULL
 
 );
-
+DELIMITER &&
+CREATE TRIGGER clientAutoDelete AFTER DELETE ON Policy FOR EACH ROW
+  BEGIN
+    DECLARE clientCount INT;
+    SELECT COUNT(*) FROM Policy WHERE clientID = OLD.clientID INTO clientCount;
+    IF (clientCount = 0) THEN
+      DELETE FROM Clients WHERE clientID = old.clientID;
+    END IF ;
+  END;
+DELIMITER ;
 
 CREATE TABLE PolicyImagePath
 (
@@ -78,17 +87,18 @@ CREATE TABLE ClaimImagePath
 INSERT INTO Clients (InsuranceDB.Clients.clientName, InsuranceDB.Clients.clientNumber)
 VALUES ('Ramy Emad Malek', '01226140201'), ('Walid Hassan', '01113438653');
 INSERT INTO Policy VALUES
-  ('Hassan', 'AIG', 'Car', 'Egypt', 1, '209728', 3047.5, 1234.5, 1234.5, 1234.5, 0.2, 1572,CURDATE(), CURDATE(), 12345, 'EGP',
-                                                                                      'Cache', 'asdadasd', 'Collected', 1234, NULL),
-  ('Hassan', 'AIG', 'Car', 'Egypt', 1, '209729', 3047.5, 1234.5, 1234.5, 1234.5, 0.2, 1572,CURDATE(),CURDATE(), 12345, 'EGP',
-                                                                                      'Cache', 'asdadasd', 'Collected', 1234, NULL),
-  ('Hassan', 'AIG', 'Car', 'Egypt', 1, '209780', 3047.5, 1234.5, 1234.5, 1234.5, 0.2, 1572,CURDATE() ,CURDATE(), 12345, 'EGP',
-                                                                                      'Cache', 'asdadasd', 'Collected', 1234, NULL)
-  , ('Hassan', 'AIG', 'Car', 'Egypt', 1, '209724', 3047.5, 1234.5, 1234.5, 1234.5, 0.2, 1572,CURDATE(),CURDATE(), 12345, 'EGP',
-                                                                                        'Cache', 'asdadasd', 'Collected', 1234, NULL),
-  ('Hassan', 'AIG', 'Car', 'Egypt', 1, '209723', 3047.5, 1234.5, 1234.5, 1234.5, 0.2, 1572,CURDATE(),CURDATE(), 12345, 'EGP',
-                                                                                      'Cache', 'asdadasd', 'Collected', 1234, NULL),
-  ('Hassan', 'AIG', 'Car', 'Egypt', 1, '209725', 3047.5, 1234.5, 1234.5, 1234.5, 0.2, 1572,CURDATE(),CURDATE(), 12345, 'EGP',
-                                                                                      'Cache', 'asdadasd', 'Collected', 1234, NULL);
+  ('Hassan', 'AIG', 'Car', 'Egypt', 1, '209728', 3047.5, 1234.5, 1234.5, 1234.5, 0.2, 1572,CURDATE(), 12345, 'EGP',
+                                                                                      'Cache', 'asdadasd', 'Collected', 1234, NULL,NULL),
+  ('Hassan', 'AIG', 'Car', 'Egypt', 1, '209729', 3047.5, 1234.5, 1234.5, 1234.5, 0.2, 1572,CURDATE(),12345, 'EGP',
+                                                                                      'Cache', 'asdadasd', 'Collected', 1234, NULL,NULL ),
+  ('Hassan', 'AIG', 'Car', 'Egypt', 1, '209780', 3047.5, 1234.5, 1234.5, 1234.5, 0.2, 1572,CURDATE() , 12345, 'EGP',
+                                                                                      'Cache', 'asdadasd', 'Collected', 1234, NULL,NULL)
+  , ('Hassan', 'AIG', 'Car', 'Egypt', 1, '209724', 3047.5, 1234.5, 1234.5, 1234.5, 0.2, 1572,CURDATE(), 12345, 'EGP',
+                                                                                        'Cache', 'asdadasd', 'Collected', 1234, NULL,NULL),
+  ('Hassan', 'AIG', 'Car', 'Egypt', 1, '209723', 3047.5, 1234.5, 1234.5, 1234.5, 0.2, 1572,CURDATE(), 12345, 'EGP',
+                                                                                      'Cache', 'asdadasd', 'Collected', 1234, NULL,NULL),
+  ('Hassan', 'AIG', 'Car', 'Egypt', 1, '209725', 3047.5, 1234.5, 1234.5, 1234.5, 0.2, 1572,CURDATE(), 12345, 'EGP',
+                                                                                      'Cache', 'asdadasd', 'Collected', 1234, NULL,NULL );
 INSERT INTO Policy (InsuranceDB.Policy.policyNumber) VALUES ('12345');
+
 

@@ -16,6 +16,7 @@ import java.util.List;
  */
 public class Utils {
 
+    @Contract("null -> null")
     public static Policy.Currency stringToCurrency(String currency){
         if(currency == null)
             return null;
@@ -26,6 +27,7 @@ public class Utils {
         else return Policy.Currency.USD;
     }
 
+    @Contract("null -> null")
     public static Policy.Collective stringToCollective (String collective){
         if(collective == null)
             return null;
@@ -51,7 +53,8 @@ public class Utils {
         return formatter.format(date);
     }
 
-    public static Client findClient(List<Client> clientList,String clientName,String clientNumber){
+    @Nullable
+    public static Client findClient(List<Client> clientList, String clientName, String clientNumber){
 
         for (Client client: clientList) {
             if(client.getClientName().equals(clientName) && client.getClientPhoneNumber().equals(clientNumber))

@@ -22,7 +22,7 @@ import java.util.List;
 /**
  * Created by hassan on 7/13/17.
  */
-public class NewPolicyController {
+public class DetailedPolicyController {
 
     private ObservableList<PolicyMapper> policyMappers;
 
@@ -115,7 +115,7 @@ public class NewPolicyController {
         }
     };
 
-    public NewPolicyController() {
+    public DetailedPolicyController() {
 
         currentPolicyMapper = new PolicyMapper(new Policy());
         this.insuranceTypes = FXCollections.observableArrayList();
@@ -286,7 +286,7 @@ public class NewPolicyController {
     }
 
     private boolean isValid(){
-        if(!currentPolicyMapper.policyNumberProperty().getValue().matches("[0-9]*"))
+        if(currentPolicyMapper.policyNumberProperty().getValue() ==null || !currentPolicyMapper.policyNumberProperty().getValue().matches("[0-9]*"))
             return false;
         if(!Utils.isDouble(currentPolicyMapper.grossCommissionProperty().getValue()))
             return false;

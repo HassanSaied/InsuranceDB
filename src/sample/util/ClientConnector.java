@@ -3,7 +3,6 @@ package sample.util;
 import org.jetbrains.annotations.Nullable;
 import sample.model.Client;
 
-import javax.xml.crypto.Data;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -17,10 +16,11 @@ import java.util.Vector;
 public class ClientConnector {
 
 
+    @Nullable
     public static Client getClient(int clientID) {
 
         if(clientID == 0)
-            return null;
+            return null;        //TODO: throw exception here, but really will never reach it xD
         String selectSQL = "SELECT * FROM Clients WHERE clientID = ?;";
         Client client = new Client(clientID);
         try(PreparedStatement statement = DatabaseConnector.getDatabaseConnection().prepareStatement(selectSQL)){
