@@ -105,8 +105,8 @@ public class PolicyViewController {
         insuranceCompanyColumn.setCellValueFactory(cellData -> cellData.getValue().insuranceCompanyProperty());
         insuranceTypeColumn.setCellValueFactory(cellData -> cellData.getValue().insuranceTypeProperty());
         beneficiaryColumn.setCellValueFactory(cellData -> cellData.getValue().beneficiaryProperty());
-        clientNameColumn.setCellValueFactory(cellData -> cellData.getValue().clientMapperProperty().getValue().clientNameProperty());
-        clientPhoneNumberColumn.setCellValueFactory(cellData -> cellData.getValue().clientMapperProperty().getValue().clientPhoneNumberProperty());
+        clientNameColumn.setCellValueFactory(cellData -> cellData.getValue().clientNameProperty());
+        clientPhoneNumberColumn.setCellValueFactory(cellData -> cellData.getValue().clientNumberProperty());
         grossPremuimColumn.setCellValueFactory(cellData -> cellData.getValue().grossPremuimProperty());
         specialDiscountColumn.setCellValueFactory(cellData -> cellData.getValue().specialDiscountProperty());
         netPremuimColumn.setCellValueFactory(cellData -> cellData.getValue().netPremiumProperty());
@@ -153,7 +153,10 @@ public class PolicyViewController {
     }
     @FXML protected void handleNewButtonMoussePress(MouseEvent event){
         try{
-            BorderPane newPolicyBorderPane = FXMLLoader.load(Main.class.getResource("Views/newPolicyView.fxml"));
+            FXMLLoader newPolicyLoader = new FXMLLoader();
+            newPolicyLoader.setLocation(Main.class.getResource("Views/newPolicyView.fxml"));
+            BorderPane newPolicyBorderPane = newPolicyLoader.load();
+            ((NewPolicyController)(newPolicyLoader.getController())).setPolicyMappers(policyMappers);
             Stage newPolicyDialogStage = new Stage();
             newPolicyDialogStage.setTitle("Add new policy");
             newPolicyDialogStage.initModality(Modality.WINDOW_MODAL);
@@ -161,6 +164,8 @@ public class PolicyViewController {
             Scene dialog = new Scene(newPolicyBorderPane);
             newPolicyDialogStage.setScene(dialog);
             newPolicyDialogStage.showAndWait();
+            generatePolicyMappers();
+
             return;
         }
         catch (IOException exception){

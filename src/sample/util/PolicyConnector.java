@@ -14,6 +14,8 @@ import java.util.Vector;
  * Created by hassan on 6/29/17.
  */
 public class PolicyConnector {
+
+    public static List<Policy> policies;
     public static List<Policy> getPolicies() {
         List<Policy> policies = new Vector<Policy>();
         try (
@@ -52,7 +54,7 @@ public class PolicyConnector {
             System.err.println("Exception " + exception.getMessage());
 
         }
-
+        PolicyConnector.policies = policies;
         return policies;
     }
 
@@ -242,8 +244,8 @@ public class PolicyConnector {
         String insertSQL = "INSERT INTO ClaimImagePath (claimImagePath, policyNumber) VALUES (?,?);";
         try (PreparedStatement statement = DatabaseConnector.getDatabaseConnection().prepareStatement(insertSQL)) {
             try {
-                for (String policyImagePath : policy.getPolicyImagePath()) {
-                    statement.setString(1, policyImagePath);
+                for (String claimImagePath : policy.getClaimImagePath()) {
+                    statement.setString(1, claimImagePath);
                     statement.setString(2, policy.getPolicyNumber());
                     statement.executeUpdate();
                 }
@@ -262,7 +264,7 @@ public class PolicyConnector {
 
     private static int fillStatement(PreparedStatement statement, Policy policy) throws SQLException {
         int columnCounter = 0;
-        statement.setString(++columnCounter, "\""+policy.getAgentName()+"\"");
+        statement.setString(++columnCounter, policy.getAgentName());
         statement.setString(++columnCounter, policy.getInsuranceCompany());
         statement.setString(++columnCounter, policy.getInsuranceType());
         statement.setString(++columnCounter, policy.getBeneficiary());
@@ -281,7 +283,7 @@ public class PolicyConnector {
         statement.setString(++columnCounter, policy.getPolicyStatus());
         statement.setBigDecimal(++columnCounter, policy.getPaidClaims());
         statement.setString(++columnCounter, policy.getIndoresmentNumber());
-        return columnCounter;
+        return ++columnCounter;
     }
 
 
@@ -322,6 +324,7 @@ public class PolicyConnector {
         return insuranceTypes;
     }
 
+    @Nullable
     public static List<String> getPolicyStatus(){
         List<String> policyStatus = new Vector<String>();
         String selectSQL = "SELECT * FROM PolicyStatus;;";

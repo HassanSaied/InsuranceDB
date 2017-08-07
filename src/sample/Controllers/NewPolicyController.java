@@ -26,12 +26,18 @@ import sample.util.PolicyConnector;
 import sample.util.Utils;
 
 import java.io.File;
+import java.math.BigDecimal;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Vector;
+import java.util.stream.Collectors;
 
 /**
  * Created by hassan on 7/13/17.
  */
-public class newPolicyController {
+public class NewPolicyController {
+
+    private ObservableList<PolicyMapper> policyMappers;
 
     @FXML
     private TextField policyNumberTextField;
@@ -44,7 +50,7 @@ public class newPolicyController {
     @FXML
     private TextField beneficiaryTextField;
     @FXML
-    private ComboBox<ClientMapper> clientComboBox;
+    private ComboBox<String> clientComboBox;
     @FXML
     private TextField grossPremiumTextField;
     @FXML
@@ -86,13 +92,16 @@ public class newPolicyController {
     @FXML
     private ListView<String> imagePathListView;
 
+    @FXML
+    private TextField paidClaimsTextField;
 
-    @FXML Button deleteImageButton;
+    @FXML
+    Button deleteImageButton;
 
     private PolicyMapper currentPolicyMapper = null;
 
     private ObservableList<String> insuranceTypes;
-    private ObservableList<ClientMapper> clients;
+    private ObservableList<String> clients;
     private ObservableList<String> collectiveList;
     private ObservableList<String> currencyList;
     private ObservableList<String> policyStatus;
@@ -100,17 +109,36 @@ public class newPolicyController {
     private ObservableList<String> policyImagePath, claimImagePath, collectiveImagePath;
     private ObservableList<String> selectedImageList;
     private ObservableList<String> imageTypes;
+    private ObservableList<String> endorsementNumbers;
+    private List<Client> clientList;
 
-    public newPolicyController() {
+    private Callback<ListView<String>, ListCell<String>> callback = new Callback<ListView<String>, ListCell<String>>() {
+        @Override
+        public ListCell<String> call(ListView<String> param) {
+            final ListCell<String> cell = new ListCell<String>() {
+                @Override
+                protected void updateItem(String item, boolean empty) {
+                    super.updateItem(item, empty);
+                    if (empty || item == null)
+                        setText(null);
+                    else setText(item);
+                }
+            };
+            return cell;
+        }
+    };
+
+    public NewPolicyController() {
+
         currentPolicyMapper = new PolicyMapper(new Policy());
         this.insuranceTypes = FXCollections.observableArrayList();
         this.clients = FXCollections.observableArrayList();
         List<String> insuranceTypesList = PolicyConnector.getInsuranceTypes();
         insuranceTypes.addAll(insuranceTypesList);
-        List<Client> clientList = ClientConnector.getClients();
+        clientList = ClientConnector.getClients();
         if (clientList != null) {
             for (Client client : clientList) {
-                clients.add(new ClientMapper(client));
+                clients.add(client.getClientName());
             }
         }
         policyStatus = FXCollections.observableArrayList();
@@ -125,27 +153,16 @@ public class newPolicyController {
         claimImagePath = FXCollections.observableArrayList();
         collectiveImagePath = FXCollections.observableArrayList();
         imageTypes = FXCollections.observableArrayList("Policy Image", "Claim Image", "Collective Image");
-
+        endorsementNumbers = FXCollections.observableArrayList();
+        for (Policy policy : PolicyConnector.policies) {
+            endorsementNumbers.add(policy.getPolicyNumber());
+        }
     }
 
     @FXML
     private void initialize() {
-        clientComboBox.setCellFactory(new Callback<ListView<ClientMapper>, ListCell<ClientMapper>>() {
-            @Override
-            public ListCell<ClientMapper> call(ListView<ClientMapper> param) {
-                final ListCell<ClientMapper> cell = new ListCell<ClientMapper>() {
-                    @Override
-                    protected void updateItem(ClientMapper item, boolean empty) {
-                        super.updateItem(item, empty);
-                        if (empty || item == null) setText(null);
-                        else setText(item.clientNameProperty().getValue());
-                    }
 
-                };
-                return cell;
-            }
-        });
-       imageTypeComboBox.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
+        imageTypeComboBox.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
             if (newValue.equals("Policy Image"))
                 selectedImageList = policyImagePath;
             else if (newValue.equals("Claim Image"))
@@ -153,6 +170,16 @@ public class newPolicyController {
             else selectedImageList = collectiveImagePath;
             imagePathListView.setItems(selectedImageList);
         });
+        endorsementNumberComboBox.getSelectionModel().selectedItemProperty().addListener(((observable, oldValue, newValue) -> {
+            if (endorsementNumberComboBox.getSelectionModel().getSelectedIndex() == -1)
+                return;
+            currentPolicyMapper.setPolicy(PolicyConnector.policies.get(endorsementNumberComboBox.getSelectionModel().getSelectedIndex()));
+        }));
+        clientComboBox.getSelectionModel().selectedIndexProperty().addListener(((observable, oldValue, newValue) -> {
+            if (clientComboBox.getSelectionModel().getSelectedItem() == null)
+                return;
+            currentPolicyMapper.clientNumberProperty().setValue(clientList.get((int) newValue).getClientPhoneNumber());
+        }));
         setBindings();
         setComboBoxItems();
     }
@@ -165,8 +192,8 @@ public class newPolicyController {
         beneficiaryTextField.textProperty().bindBidirectional(currentPolicyMapper.beneficiaryProperty());
         grossCommissionTextField.textProperty().bindBidirectional(currentPolicyMapper.grossCommissionProperty());
         expiryDateDatePicker.valueProperty().bindBidirectional(currentPolicyMapper.expiryDateProperty());
-        clientComboBox.valueProperty().bindBidirectional(currentPolicyMapper.clientMapperProperty());
-        clientPhoneNumberTextField.textProperty().bindBidirectional(currentPolicyMapper.clientMapperProperty().get().clientPhoneNumberProperty());
+        clientComboBox.valueProperty().bindBidirectional(currentPolicyMapper.clientNameProperty());
+        clientPhoneNumberTextField.textProperty().bindBidirectional(currentPolicyMapper.clientNumberProperty());
         grossPremiumTextField.textProperty().bindBidirectional(currentPolicyMapper.grossPremuimProperty());
         specialDiscountTextField.textProperty().bindBidirectional(currentPolicyMapper.specialDiscountProperty());
         netPremiumTextField.textProperty().bindBidirectional(currentPolicyMapper.netPremiumProperty());
@@ -179,6 +206,9 @@ public class newPolicyController {
         endorsementNumberComboBox.valueProperty().bindBidirectional(currentPolicyMapper.indoresmentNumberProperty());
         imageBrowseButton.disableProperty().bind(imageTypeComboBox.getSelectionModel().selectedItemProperty().isNull());
         deleteImageButton.disableProperty().bind(imagePathListView.getSelectionModel().selectedItemProperty().isNull());
+        editClientButton.disableProperty().bind(clientComboBox.getSelectionModel().selectedItemProperty().isNull());
+        policyNumberTextField.editableProperty().bind(endorsementNumberComboBox.getSelectionModel().selectedItemProperty().isEqualTo(""));
+        paidClaimsTextField.textProperty().bindBidirectional(currentPolicyMapper.paidClaimsProperty());
     }
 
     private void setComboBoxItems() {
@@ -189,33 +219,46 @@ public class newPolicyController {
         policyStatusComboBox.setItems(policyStatus);
         taxesComboBox.setItems(taxes);
         imageTypeComboBox.setItems(imageTypes);
+        endorsementNumberComboBox.setItems(endorsementNumbers);
 
     }
 
-    private List<File> getImages(String title) {
+    private FileChooser getFileChooser(String title) {
         FileChooser fileChooser = new FileChooser();
         fileChooser.setTitle(title);
         fileChooser.setInitialDirectory(new File(System.getProperty("user.home")));
-        return fileChooser.showOpenMultipleDialog(Main.primaryStage);
+        return fileChooser;
+    }
 
+    public void setPolicyMappers(ObservableList<PolicyMapper> policyMappers) {
+        this.policyMappers = policyMappers;
     }
 
     @FXML
     protected void handleImageBrowseButton(MouseEvent event) {
-        List<File> images = getImages(imageTypeComboBox.getSelectionModel().getSelectedItem());
-        if (images == null) return;
-        if (imageTypeComboBox.getSelectionModel().getSelectedItem().equals("Collective Image") && images.size() != 1) {
-            Alert tooMuchImagesAlert = new Alert(Alert.AlertType.ERROR);
-            tooMuchImagesAlert.setTitle("Only one collective Image");
-            tooMuchImagesAlert.setHeaderText("you can only choose one collective image");
-            tooMuchImagesAlert.showAndWait();
-        }
-        for (File image : images) {
-            selectedImageList.add(image.getAbsolutePath());
+        if (imageTypeComboBox.getSelectionModel().getSelectedItem().equals("Collective Image")) {
+            if (!selectedImageList.isEmpty()) {
+                Alert tooMuchImagesAlert = new Alert(Alert.AlertType.ERROR);
+                tooMuchImagesAlert.setTitle("Only one collective Image");
+                tooMuchImagesAlert.setHeaderText("you can only choose one collective image");
+                tooMuchImagesAlert.showAndWait();
+                return;
+            } else {
+                File image = getFileChooser(imageTypeComboBox.getSelectionModel().getSelectedItem()).showOpenDialog(Main.primaryStage);
+                if (image == null) return;
+                selectedImageList.add(image.getAbsolutePath());
+            }
+        } else {
+            List<File> images = getFileChooser(imageTypeComboBox.getSelectionModel().getSelectedItem()).showOpenMultipleDialog(Main.primaryStage);
+            if (images == null) return;
+            for (File image : images) {
+                selectedImageList.add(image.getAbsolutePath());
+            }
         }
     }
 
-    @FXML protected void handleDeleteImageButton(MouseEvent event){
+    @FXML
+    protected void handleDeleteImageButton(MouseEvent event) {
         selectedImageList.remove(imagePathListView.getSelectionModel().getSelectedIndex());
     }
 
@@ -223,6 +266,27 @@ public class newPolicyController {
     protected void handleCancelButton(MouseEvent event) {
         Stage currentStage = (Stage) cancelButton.getScene().getWindow();
         currentStage.close();
+    }
+
+    @FXML
+    protected void handleSaveButton(MouseEvent event) {
+        if (!collectiveImagePath.isEmpty())
+            currentPolicyMapper.sync(claimImagePath, policyImagePath, collectiveImagePath.get(0));
+        else
+            currentPolicyMapper.sync(claimImagePath,policyImagePath,null);
+        if(currentPolicyMapper.save()){
+            Alert SuccessAlert = new Alert(Alert.AlertType.INFORMATION);
+            SuccessAlert.setTitle("Save Policy");
+            SuccessAlert.setHeaderText("Success in saving new policy");
+            SuccessAlert.showAndWait();
+        }
+        else
+        {
+            Alert FailAlert = new Alert(Alert.AlertType.ERROR);
+            FailAlert.setTitle("Save Policy");
+            FailAlert.setHeaderText("Fail to save new policy");
+            FailAlert.showAndWait();
+        }
     }
 
 

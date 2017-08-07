@@ -52,6 +52,4 @@ public class ClientMapper {
         return clientNameProperty().getValue();
     }
 
-
-
 }

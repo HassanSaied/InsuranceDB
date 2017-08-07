@@ -2,10 +2,12 @@ package sample.util;
 
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
+import sample.model.Client;
 import sample.model.Policy;
 
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
+import java.util.List;
 
 /**
  * Created by hassan on 6/30/17.
@@ -45,7 +47,17 @@ public class Utils {
             return "";
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy");
         return formatter.format(date);
+    }
 
+    public static Client findClient(List<Client> clientList,String clientName,String clientNumber){
+
+        for (Client client: clientList) {
+            if(client.getClientName().equals(clientName) && client.getClientPhoneNumber().equals(clientNumber))
+                return client;
+
+        }
+        return null;
 
     }
+
 }

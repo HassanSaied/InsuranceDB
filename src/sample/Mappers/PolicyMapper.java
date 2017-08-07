@@ -3,9 +3,12 @@ package sample.Mappers;
 import javafx.beans.property.*;
 import sample.model.Client;
 import sample.model.Policy;
+import sample.util.ClientConnector;
 import sample.util.Utils;
 
+import java.math.BigDecimal;
 import java.time.LocalDate;
+import java.util.List;
 
 /**
  * Created by hassan on 7/8/17.
@@ -21,7 +24,8 @@ public class PolicyMapper {
     private final StringProperty insuranceCompany;
     private final StringProperty insuranceType;
     private final StringProperty beneficiary;
-    private final ObjectProperty<ClientMapper> clientMapper;
+    private final StringProperty clientName;
+    private final StringProperty clientNumber;
     private final StringProperty policyNumber;
     private final StringProperty grossPremuim;
     private final StringProperty specialDiscount;
@@ -36,18 +40,11 @@ public class PolicyMapper {
     private final StringProperty paidClaims;
     private final StringProperty indoresmentNumber;
 
-
     public ObjectProperty<LocalDate> expiryDateProperty() {
         return expiryDate;
     }
 
     private final ObjectProperty<LocalDate> expiryDate;
-
-    public ObjectProperty<ClientMapper> clientMapperProperty()
-
-    {
-        return clientMapper;
-    }
 
 
     public StringProperty agentNameProperty() {
@@ -131,15 +128,24 @@ public class PolicyMapper {
         return indoresmentNumber;
     }
 
+
+    public StringProperty clientNameProperty() {
+        return clientName;
+    }
+
+    public StringProperty clientNumberProperty() {
+        return clientNumber;
+    }
+
     public PolicyMapper(Policy policy) {
         this.policy = policy;
-        clientMapper = new SimpleObjectProperty<ClientMapper>(new ClientMapper(policy.getClient())){
-            @Override
-            public void set(ClientMapper newValue) {
-                this.getValue().clientNameProperty().setValue(newValue.clientNameProperty().getValue());
-                this.getValue().clientPhoneNumberProperty().setValue(newValue.clientPhoneNumberProperty().getValue());
-            }
-        };
+        if (this.policy.getClient() == null) {
+            clientName = new SimpleStringProperty(null);
+            clientNumber = new SimpleStringProperty(null);
+        } else {
+            clientName = new SimpleStringProperty(this.policy.getClient().getClientName());
+            clientNumber = new SimpleStringProperty(this.policy.getClient().getClientPhoneNumber());
+        }
         agentName = new SimpleStringProperty(Utils.getMappedString(this.policy.getAgentName()));
         insuranceCompany = new SimpleStringProperty(Utils.getMappedString(this.policy.getInsuranceCompany()));
         insuranceType = new SimpleStringProperty(Utils.getMappedString(this.policy.getInsuranceType()));
@@ -149,7 +155,7 @@ public class PolicyMapper {
         specialDiscount = new SimpleStringProperty(String.valueOf(Utils.getMappedString(this.policy.getSpecialDiscount())));
         netPremium = new SimpleStringProperty(Utils.getMappedString(this.policy.getNetPremium()));
         grossCommission = new SimpleStringProperty(Utils.getMappedString(this.policy.getGrossCommission()));
-        taxes = new SimpleStringProperty(Utils.getMappedString(this.policy.getNetCommission()));
+        taxes = new SimpleStringProperty(Utils.getMappedString(this.policy.getTaxes()));
         netCommission = new SimpleStringProperty(Utils.getMappedString(this.policy.getNetCommission()));
         sumInsured = new SimpleStringProperty(Utils.getMappedString(this.policy.getSumInsured()));
         currency = new SimpleStringProperty(Utils.getMappedString(this.policy.getCurrency()));
@@ -158,6 +164,60 @@ public class PolicyMapper {
         paidClaims = new SimpleStringProperty(Utils.getMappedString(this.policy.getPaidClaims()));
         indoresmentNumber = new SimpleStringProperty(Utils.getMappedString(this.policy.getIndoresmentNumber()));
         expiryDate = new SimpleObjectProperty<LocalDate>(this.policy.getExpiryDate() == null ? null : this.policy.getExpiryDate());
+    }
+
+    public void setPolicy(Policy policy) {
+        this.policy = policy;
+        this.policyNumberProperty().setValue(policy.getPolicyNumber());
+        if (this.policy.getClient() == null) {
+            clientNumber.setValue(null);
+            clientName.setValue(null);
+        } else {
+            this.clientNumber.setValue(policy.getClient().getClientPhoneNumber());
+            this.clientName.setValue(policy.getClient().getClientName());
+        }
+        this.insuranceTypeProperty().setValue(policy.getInsuranceType());
+        this.agentName.setValue(policy.getAgentName());
+        insuranceCompany.setValue(policy.getInsuranceCompany());
+        beneficiary.setValue(policy.getBeneficiary());
+        grossPremuim.setValue(Utils.getMappedString(policy.getGrossPremium()));
+        grossCommission.setValue(Utils.getMappedString(this.policy.getGrossCommission()));
+        specialDiscount.setValue(Utils.getMappedString(this.policy.getSpecialDiscount()));
+        netPremium.setValue(Utils.getMappedString(this.policy.getNetPremium()));
+        taxes.setValue(Utils.getMappedString(this.policy.getTaxes()));
+        netCommission.setValue(Utils.getMappedString(this.policy.getNetCommission()));
+        sumInsured.setValue(Utils.getMappedString(this.policy.getSumInsured()));
+        currency.setValue(Utils.getMappedString(this.policy.getCurrency()));
+        collective.setValue(Utils.getMappedString(this.policy.getCollective()));
+        policyStatus.setValue(Utils.getMappedString(this.policy.getPolicyStatus()));
+        paidClaims.setValue(Utils.getMappedString(this.policy.getPaidClaims()));
+        indoresmentNumber.setValue(Utils.getMappedString(this.policy.getPolicyNumber()));
+        expiryDate.setValue(policy.getExpiryDate());
+    }
+
+    public void sync(List<String> claimImagePath,List<String> policyImagePath,String collectiveImagePath) {
+        policy.setPolicyNumber(policyNumber.getValue());
+        policy.setAgentName(agentName.getValue());
+        policy.setBeneficiary(beneficiary.getValue());
+        policy.setClient(Utils.findClient(ClientConnector.getClients(),clientName.getValue(),clientNumber.getValue()));
+        policy.setCollective(Utils.stringToCollective(collective.getValue()));
+        policy.setCurrency(Utils.stringToCurrency(currency.getValue()));
+        policy.setGrossCommission(new BigDecimal(grossCommission.getValue()));
+        policy.setGrossPremium(new BigDecimal(grossPremuim.getValue()));
+        policy.setTaxes(new BigDecimal(taxes.getValue().trim().replace("%","")).divide(BigDecimal.valueOf(100.0)));  //TODO: implement tax to double conversion
+        policy.setInsuranceCompany(insuranceCompany.getValue());
+        policy.setInsuranceType(insuranceType.getValue());
+        policy.setExpiryDate(expiryDate.getValue());
+        policy.setPaidClaims(new BigDecimal(paidClaims.getValue()));
+        policy.setSumInsured(new BigDecimal(sumInsured.getValue()));
+        policy.setPolicyStatus(policyStatus.getValue());
+        policy.setSpecialDiscount(new BigDecimal(specialDiscount.getValue()));
+        policy.setClaimImagePath(claimImagePath);
+        policy.setPolicyImagePath(policyImagePath);
+        policy.setCollectiveImagePath(collectiveImagePath);
+    }
+    public boolean save(){
+       return policy.save();
     }
 
 
