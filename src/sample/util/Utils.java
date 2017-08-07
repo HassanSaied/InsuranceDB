@@ -2,9 +2,11 @@ package sample.util;
 
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 import sample.model.Client;
 import sample.model.Policy;
 
+import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
@@ -58,6 +60,33 @@ public class Utils {
         }
         return null;
 
+    }
+
+    public static boolean isDouble(String testedString){
+        if(testedString.isEmpty())
+            return true;
+        try{
+            Double.parseDouble(testedString);
+        }
+        catch (NumberFormatException exception) {
+            return false;
+        }
+        return true;
+    }
+
+    @Nullable
+    @Contract(pure = true)
+    public static String emptyToNull(String testedString){
+        if(testedString.isEmpty())
+            return null;
+        else return testedString;
+    }
+
+    @Nullable
+    public static BigDecimal toBigDecimal (String convertibleString){
+        if(convertibleString.isEmpty())
+            return null;
+        else return new BigDecimal(convertibleString);
     }
 
 }

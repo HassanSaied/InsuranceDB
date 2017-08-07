@@ -1,12 +1,13 @@
 package sample.Mappers;
 
-import javafx.beans.property.*;
-import sample.model.Client;
+import javafx.beans.property.ObjectProperty;
+import javafx.beans.property.SimpleObjectProperty;
+import javafx.beans.property.SimpleStringProperty;
+import javafx.beans.property.StringProperty;
 import sample.model.Policy;
 import sample.util.ClientConnector;
 import sample.util.Utils;
 
-import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.List;
 
@@ -197,21 +198,23 @@ public class PolicyMapper {
 
     public void sync(List<String> claimImagePath,List<String> policyImagePath,String collectiveImagePath) {
         policy.setPolicyNumber(policyNumber.getValue());
-        policy.setAgentName(agentName.getValue());
-        policy.setBeneficiary(beneficiary.getValue());
-        policy.setClient(Utils.findClient(ClientConnector.getClients(),clientName.getValue(),clientNumber.getValue()));
-        policy.setCollective(Utils.stringToCollective(collective.getValue()));
-        policy.setCurrency(Utils.stringToCurrency(currency.getValue()));
-        policy.setGrossCommission(new BigDecimal(grossCommission.getValue()));
-        policy.setGrossPremium(new BigDecimal(grossPremuim.getValue()));
-        policy.setTaxes(new BigDecimal(taxes.getValue().trim().replace("%","")).divide(BigDecimal.valueOf(100.0)));  //TODO: implement tax to double conversion
-        policy.setInsuranceCompany(insuranceCompany.getValue());
-        policy.setInsuranceType(insuranceType.getValue());
+        policy.setAgentName(Utils.emptyToNull(agentName.getValue()));
+        policy.setBeneficiary(Utils.emptyToNull(beneficiary.getValue()));
+        if(clientName.getValue() != null && !clientName.getValue().isEmpty())
+            policy.setClient(Utils.findClient(ClientConnector.getClients(),clientName.getValue(),clientNumber.getValue()));
+        else policy.setClient(null);
+        policy.setCollective(Utils.stringToCollective(Utils.emptyToNull(collective.getValue())));
+        policy.setCurrency(Utils.stringToCurrency(Utils.emptyToNull(currency.getValue())));
+        policy.setGrossCommission(Utils.toBigDecimal(grossCommission.getValue()));
+        policy.setGrossPremium(Utils.toBigDecimal(grossPremuim.getValue()));
+        policy.setTaxes(Utils.toBigDecimal(taxes.getValue().trim().replace("%","")));
+        policy.setInsuranceCompany(Utils.emptyToNull(insuranceCompany.getValue()));
+        policy.setInsuranceType(Utils.emptyToNull(insuranceCompany.getValue()));
         policy.setExpiryDate(expiryDate.getValue());
-        policy.setPaidClaims(new BigDecimal(paidClaims.getValue()));
-        policy.setSumInsured(new BigDecimal(sumInsured.getValue()));
-        policy.setPolicyStatus(policyStatus.getValue());
-        policy.setSpecialDiscount(new BigDecimal(specialDiscount.getValue()));
+        policy.setPaidClaims(Utils.toBigDecimal(paidClaims.getValue()));
+        policy.setSumInsured(Utils.toBigDecimal(sumInsured.getValue()));
+        policy.setPolicyStatus(Utils.emptyToNull(policyStatus.getValue()));
+        policy.setSpecialDiscount(Utils.toBigDecimal(policyStatus.getValue()));
         policy.setClaimImagePath(claimImagePath);
         policy.setPolicyImagePath(policyImagePath);
         policy.setCollectiveImagePath(collectiveImagePath);

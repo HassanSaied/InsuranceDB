@@ -4,7 +4,6 @@ import sample.util.PolicyConnector;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
-import java.util.Date;
 import java.util.List;
 
 /**
@@ -161,6 +160,8 @@ public class Policy {
 
     public void setTaxes(BigDecimal taxes) {
         this.taxes = taxes;
+        if(taxes !=null)
+            taxes.divide(BigDecimal.valueOf(100.0));
     }
 
     public BigDecimal getNetCommission() {

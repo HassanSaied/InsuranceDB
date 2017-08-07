@@ -1,11 +1,9 @@
 package sample.util;
 
-import com.sun.org.apache.regexp.internal.RESyntaxException;
 import org.intellij.lang.annotations.Language;
 import org.jetbrains.annotations.Nullable;
 import sample.model.Policy;
 
-import javax.xml.crypto.Data;
 import java.sql.*;
 import java.util.List;
 import java.util.Vector;
@@ -27,7 +25,10 @@ public class PolicyConnector {
                 currentPolicy.setInsuranceCompany(resultSet.getString(2));
                 currentPolicy.setInsuranceType(resultSet.getString(3));
                 currentPolicy.setBeneficiary(resultSet.getString(4));
-                currentPolicy.setClient(ClientConnector.getClient(resultSet.getInt(5)));
+                int clientID = resultSet.getInt(5);
+                if(resultSet.wasNull())
+                    currentPolicy.setClient(null);
+                else currentPolicy.setClient(ClientConnector.getClient(clientID));
                 currentPolicy.setPolicyNumber(resultSet.getString(6));
                 currentPolicy.setGrossPremium(resultSet.getBigDecimal(7));
                 currentPolicy.setSpecialDiscount(resultSet.getBigDecimal(8));
@@ -268,17 +269,19 @@ public class PolicyConnector {
         statement.setString(++columnCounter, policy.getInsuranceCompany());
         statement.setString(++columnCounter, policy.getInsuranceType());
         statement.setString(++columnCounter, policy.getBeneficiary());
-        statement.setInt(++columnCounter, policy.getClient().getClientID());
+        if(policy.getClient() == null)
+            statement.setNull(++columnCounter,Types.INTEGER);
+        else statement.setInt(++columnCounter, policy.getClient().getClientID());
         statement.setBigDecimal(++columnCounter, policy.getGrossPremium());
         statement.setBigDecimal(++columnCounter, policy.getSpecialDiscount());
         statement.setBigDecimal(++columnCounter, policy.getNetPremium());
         statement.setBigDecimal(++columnCounter, policy.getGrossCommission());
         statement.setBigDecimal(++columnCounter, policy.getTaxes());
         statement.setBigDecimal(++columnCounter, policy.getNetCommission());
-        statement.setDate(++columnCounter, Date.valueOf(policy.getExpiryDate()));
+        statement.setDate(++columnCounter,policy.getExpiryDate()!=null?Date.valueOf(policy.getExpiryDate()): null);
         statement.setBigDecimal(++columnCounter, policy.getSumInsured());
-        statement.setString(++columnCounter, policy.getCurrency().toString());
-        statement.setString(++columnCounter, policy.getCollective().toString());
+        statement.setString(++columnCounter, policy.getCurrency()!=null? policy.getCurrency().toString():null);
+        statement.setString(++columnCounter, policy.getCollective()!=null? policy.getCollective().toString():null);
         statement.setString(++columnCounter, policy.getCollectiveImagePath());
         statement.setString(++columnCounter, policy.getPolicyStatus());
         statement.setBigDecimal(++columnCounter, policy.getPaidClaims());

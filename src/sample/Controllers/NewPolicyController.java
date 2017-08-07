@@ -1,13 +1,5 @@
 package sample.Controllers;
 
-import javafx.beans.binding.Binding;
-import javafx.beans.binding.Bindings;
-import javafx.beans.binding.BooleanBinding;
-import javafx.beans.property.SimpleBooleanProperty;
-import javafx.beans.property.SimpleStringProperty;
-import javafx.beans.property.StringProperty;
-import javafx.beans.value.ChangeListener;
-import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
@@ -17,7 +9,6 @@ import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 import javafx.util.Callback;
 import sample.Main;
-import sample.Mappers.ClientMapper;
 import sample.Mappers.PolicyMapper;
 import sample.model.Client;
 import sample.model.Policy;
@@ -26,11 +17,7 @@ import sample.util.PolicyConnector;
 import sample.util.Utils;
 
 import java.io.File;
-import java.math.BigDecimal;
-import java.util.ArrayList;
 import java.util.List;
-import java.util.Vector;
-import java.util.stream.Collectors;
 
 /**
  * Created by hassan on 7/13/17.
@@ -270,6 +257,13 @@ public class NewPolicyController {
 
     @FXML
     protected void handleSaveButton(MouseEvent event) {
+        if(!isValid()){
+            Alert invalidDataAlert = new Alert(Alert.AlertType.ERROR);
+            invalidDataAlert.setTitle("Save Policy");
+            invalidDataAlert.setHeaderText("Error, you have entered invalid data");
+            invalidDataAlert.showAndWait();
+        }
+
         if (!collectiveImagePath.isEmpty())
             currentPolicyMapper.sync(claimImagePath, policyImagePath, collectiveImagePath.get(0));
         else
@@ -287,6 +281,24 @@ public class NewPolicyController {
             FailAlert.setHeaderText("Fail to save new policy");
             FailAlert.showAndWait();
         }
+        Stage currentStage = (Stage) saveButton.getScene().getWindow();
+        currentStage.close();
+    }
+
+    private boolean isValid(){
+        if(!currentPolicyMapper.policyNumberProperty().getValue().matches("[0-9]*"))
+            return false;
+        if(!Utils.isDouble(currentPolicyMapper.grossCommissionProperty().getValue()))
+            return false;
+        if(!Utils.isDouble(currentPolicyMapper.grossPremuimProperty().getValue()))
+            return false;
+        if(!Utils.isDouble(currentPolicyMapper.sumInsuredProperty().getValue()))
+            return false;
+        if(!Utils.isDouble(currentPolicyMapper.specialDiscountProperty().getValue()))
+            return false;
+        if(!Utils.isDouble(currentPolicyMapper.netPremiumProperty().getValue()))
+            return false;
+        return true;
     }
 
 
