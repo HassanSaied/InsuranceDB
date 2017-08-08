@@ -53,6 +53,7 @@ public class Utils {
         return formatter.format(date);
     }
 
+    @Nullable
     public static Client findClient(List<Client> clientList, String clientName){
 
         for (Client client: clientList) {
@@ -90,6 +91,14 @@ public class Utils {
         if(convertibleString.isEmpty())
             return null;
         else return new BigDecimal(convertibleString);
+    }
+
+    @Contract(value = "null -> null", pure = true)
+    public static String taxesToString(BigDecimal taxes){
+        if(taxes == null){
+            return null;
+        }
+        return taxes.equals(BigDecimal.valueOf(0.2))?"20%":"22.5%";
     }
 
 }

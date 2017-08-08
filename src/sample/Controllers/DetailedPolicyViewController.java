@@ -28,8 +28,6 @@ import java.util.List;
  */
 public class DetailedPolicyViewController {
 
-    private ObservableList<PolicyMapper> policyMappers;
-
     @FXML
     private TextField policyNumberTextField;
     @FXML
@@ -128,7 +126,8 @@ public class DetailedPolicyViewController {
             endorsementNumbers.add(policy.getPolicyNumber());
         }
     }
-    private void generateClient(){
+
+    private void generateClient() {
         clients.clear();
         clientList = ClientConnector.getClients();
         if (clientList != null) {
@@ -137,10 +136,21 @@ public class DetailedPolicyViewController {
             }
         }
     }
-    public void setPolicy(Policy policy){
-        if(policy == null)
+
+    public void setPolicy(Policy policy) {
+        if (policy == null)
             return;
         currentPolicyMapper.setPolicy(policy);
+        policyImagePath.clear();
+        claimImagePath.clear();
+        collectiveImagePath.clear();
+        if (policy.getPolicyImagePath() != null)
+            policyImagePath.addAll(policy.getPolicyImagePath());
+        if (policy.getClaimImagePath() != null)
+            claimImagePath.addAll(policy.getClaimImagePath());
+        if (policy.getCollectiveImagePath() != null)
+            collectiveImagePath.add(policy.getCollectiveImagePath());
+
     }
 
     @FXML
@@ -214,10 +224,6 @@ public class DetailedPolicyViewController {
         return fileChooser;
     }
 
-    public void setPolicyMappers(ObservableList<PolicyMapper> policyMappers) {
-        this.policyMappers = policyMappers;
-    }
-
     @FXML
     protected void handleImageBrowseButton(MouseEvent event) {
         if (imageTypeComboBox.getSelectionModel().getSelectedItem().equals("Collective Image")) {
@@ -254,7 +260,7 @@ public class DetailedPolicyViewController {
 
     @FXML
     protected void handleSaveButton(MouseEvent event) {
-        if(!isValid()){
+        if (!isValid()) {
             Alert invalidDataAlert = new Alert(Alert.AlertType.ERROR);
             invalidDataAlert.setTitle("Save Policy");
             invalidDataAlert.setHeaderText("Error, you have entered invalid data");
@@ -264,15 +270,13 @@ public class DetailedPolicyViewController {
         if (!collectiveImagePath.isEmpty())
             currentPolicyMapper.sync(claimImagePath, policyImagePath, collectiveImagePath.get(0));
         else
-            currentPolicyMapper.sync(claimImagePath,policyImagePath,null);
-        if(currentPolicyMapper.save()){
+            currentPolicyMapper.sync(claimImagePath, policyImagePath, null);
+        if (currentPolicyMapper.save()) {
             Alert SuccessAlert = new Alert(Alert.AlertType.INFORMATION);
             SuccessAlert.setTitle("Save Policy");
             SuccessAlert.setHeaderText("Success in saving new policy");
             SuccessAlert.showAndWait();
-        }
-        else
-        {
+        } else {
             Alert FailAlert = new Alert(Alert.AlertType.ERROR);
             FailAlert.setTitle("Save Policy");
             FailAlert.setHeaderText("Fail to save new policy");
@@ -283,43 +287,46 @@ public class DetailedPolicyViewController {
 
     }
 
-    @FXML protected void handleAddClientButton(MouseEvent event){
+    @FXML
+    protected void handleAddClientButton(MouseEvent event) {
         manageClient(null);
     }
-    @FXML protected void handleEditClientButton(MouseEvent event){
-        manageClient(Utils.findClient(ClientConnector.clients,clientComboBox.getSelectionModel().getSelectedItem()));
+
+    @FXML
+    protected void handleEditClientButton(MouseEvent event) {
+        manageClient(Utils.findClient(ClientConnector.clients, clientComboBox.getSelectionModel().getSelectedItem()));
     }
 
-    private boolean isValid(){
-        if(currentPolicyMapper.policyNumberProperty().getValue() ==null || !currentPolicyMapper.policyNumberProperty().getValue().matches("[0-9]*"))
+    private boolean isValid() {
+        if (currentPolicyMapper.policyNumberProperty().getValue() == null || !currentPolicyMapper.policyNumberProperty().getValue().matches("[0-9]*"))
             return false;
-        if(!Utils.isDouble(currentPolicyMapper.grossCommissionProperty().getValue()))
+        if (!Utils.isDouble(currentPolicyMapper.grossCommissionProperty().getValue()))
             return false;
-        if(!Utils.isDouble(currentPolicyMapper.grossPremuimProperty().getValue()))
+        if (!Utils.isDouble(currentPolicyMapper.grossPremuimProperty().getValue()))
             return false;
-        if(!Utils.isDouble(currentPolicyMapper.sumInsuredProperty().getValue()))
+        if (!Utils.isDouble(currentPolicyMapper.sumInsuredProperty().getValue()))
             return false;
-        if(!Utils.isDouble(currentPolicyMapper.specialDiscountProperty().getValue()))
+        if (!Utils.isDouble(currentPolicyMapper.specialDiscountProperty().getValue()))
             return false;
-        if(!Utils.isDouble(currentPolicyMapper.netPremiumProperty().getValue()))
+        if (!Utils.isDouble(currentPolicyMapper.netPremiumProperty().getValue()))
             return false;
         return true;
     }
-    private void manageClient(Client client){
-        try{
+
+    private void manageClient(Client client) {
+        try {
             FXMLLoader addClientLoader = new FXMLLoader();
             addClientLoader.setLocation(Main.class.getResource("Views/detailedClientView.fxml"));
             Stage addClientStage = new Stage();
             BorderPane clientBorderPane = addClientLoader.load();
             addClientStage.setTitle("Client Dialog");
-            ((DetailedClientViewController)(addClientLoader.getController())).setClient(client);
+            ((DetailedClientViewController) (addClientLoader.getController())).setClient(client);
             addClientStage.initModality(Modality.WINDOW_MODAL);
             addClientStage.initOwner(Main.primaryStage);
             Scene dialog = new Scene(clientBorderPane);
             addClientStage.setScene(dialog);
             addClientStage.showAndWait();
-        }
-        catch (IOException exception){
+        } catch (IOException exception) {
             System.err.println("Can't load new Client view");
             System.err.println(exception.getMessage());
         }

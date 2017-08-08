@@ -80,6 +80,7 @@ public class PolicyViewController {
         setColumnContents();
         policyMapperTableView.setItems(policyMappers);
         deletePolicyButton.disableProperty().bind(policyMapperTableView.getSelectionModel().selectedIndexProperty().isEqualTo(-1));
+        editPolicyButton.disableProperty().bind(policyMapperTableView.getSelectionModel().selectedIndexProperty().isEqualTo(-1));
     }
 
 
@@ -172,7 +173,7 @@ public class PolicyViewController {
             FXMLLoader newPolicyLoader = new FXMLLoader();
             newPolicyLoader.setLocation(Main.class.getResource("Views/detailedPolicyView.fxml"));
             BorderPane newPolicyBorderPane = newPolicyLoader.load();
-            ((DetailedPolicyViewController)(newPolicyLoader.getController())).setPolicyMappers(policyMappers);
+            ((DetailedPolicyViewController)(newPolicyLoader.getController())).setPolicy(policy);
             Stage newPolicyDialogStage = new Stage();
             newPolicyDialogStage.setTitle("Add new policy");
             newPolicyDialogStage.initModality(Modality.WINDOW_MODAL);

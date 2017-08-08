@@ -8,6 +8,7 @@ import sample.model.Policy;
 import sample.util.ClientConnector;
 import sample.util.Utils;
 
+import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.List;
 
@@ -156,7 +157,7 @@ public class PolicyMapper {
         specialDiscount = new SimpleStringProperty(String.valueOf(Utils.getMappedString(this.policy.getSpecialDiscount())));
         netPremium = new SimpleStringProperty(Utils.getMappedString(this.policy.getNetPremium()));
         grossCommission = new SimpleStringProperty(Utils.getMappedString(this.policy.getGrossCommission()));
-        taxes = new SimpleStringProperty(Utils.getMappedString(this.policy.getTaxes()));
+        taxes = new SimpleStringProperty(Utils.taxesToString(this.policy.getTaxes()));
         netCommission = new SimpleStringProperty(Utils.getMappedString(this.policy.getNetCommission()));
         sumInsured = new SimpleStringProperty(Utils.getMappedString(this.policy.getSumInsured()));
         currency = new SimpleStringProperty(Utils.getMappedString(this.policy.getCurrency()));
@@ -185,7 +186,7 @@ public class PolicyMapper {
         grossCommission.setValue(Utils.getMappedString(this.policy.getGrossCommission()));
         specialDiscount.setValue(Utils.getMappedString(this.policy.getSpecialDiscount()));
         netPremium.setValue(Utils.getMappedString(this.policy.getNetPremium()));
-        taxes.setValue(Utils.getMappedString(this.policy.getTaxes()));
+        taxes.setValue(Utils.taxesToString(this.policy.getTaxes()));
         netCommission.setValue(Utils.getMappedString(this.policy.getNetCommission()));
         sumInsured.setValue(Utils.getMappedString(this.policy.getSumInsured()));
         currency.setValue(Utils.getMappedString(this.policy.getCurrency()));
@@ -207,7 +208,9 @@ public class PolicyMapper {
         policy.setCurrency(Utils.stringToCurrency(Utils.emptyToNull(currency.getValue())));
         policy.setGrossCommission(Utils.toBigDecimal(grossCommission.getValue()));
         policy.setGrossPremium(Utils.toBigDecimal(grossPremuim.getValue()));
-        policy.setTaxes(Utils.toBigDecimal(taxes.getValue().trim().replace("%","")));
+        if(Utils.emptyToNull(taxes.getValue())==null)
+            policy.setTaxes(null);
+        else policy.setTaxes(Utils.toBigDecimal(taxes.getValue().trim().replace("%","")).divide(BigDecimal.valueOf(100.0)));
         policy.setInsuranceCompany(Utils.emptyToNull(insuranceCompany.getValue()));
         policy.setInsuranceType(Utils.emptyToNull(insuranceType.getValue()));
         policy.setExpiryDate(expiryDate.getValue());

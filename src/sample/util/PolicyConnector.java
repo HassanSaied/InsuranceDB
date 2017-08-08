@@ -34,8 +34,8 @@ public class PolicyConnector {
                 currentPolicy.setSpecialDiscount(resultSet.getBigDecimal(8));
                 currentPolicy.setNetPremium(resultSet.getBigDecimal(9));
                 currentPolicy.setGrossCommission(resultSet.getBigDecimal(10));
-                currentPolicy.setNetCommission(resultSet.getBigDecimal(11));
-                currentPolicy.setTaxes(resultSet.getBigDecimal(12));
+                currentPolicy.setTaxes(resultSet.getBigDecimal(11));
+                currentPolicy.setNetCommission(resultSet.getBigDecimal(12));
                 currentPolicy.setExpiryDate(resultSet.getDate(13)==null?null:resultSet.getDate(13).toLocalDate());
                 currentPolicy.setSumInsured(resultSet.getBigDecimal(14));
                 currentPolicy.setCurrency(Utils.stringToCurrency(resultSet.getString(15)));
@@ -124,7 +124,7 @@ public class PolicyConnector {
                 return false;
 
             }
-            if (!updateClaimImagesPath(policy) || !updatePolicyImagesPath(policy))
+            if (!insertClaimImagesPath(policy) || !insertPolicyImagesPath(policy))
                 return false;
 
         } catch (SQLException exception) {

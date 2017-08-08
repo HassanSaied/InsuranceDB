@@ -160,8 +160,6 @@ public class Policy {
 
     public void setTaxes(BigDecimal taxes) {
         this.taxes = taxes;
-        if(taxes !=null)
-            taxes.divide(BigDecimal.valueOf(100.0));
     }
 
     public BigDecimal getNetCommission() {
