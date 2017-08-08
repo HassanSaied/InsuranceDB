@@ -55,25 +55,6 @@ CREATE TABLE Policy
     ON DELETE SET NULL
 
 );
-DELIMITER &&
-CREATE TRIGGER clientAutoDelete AFTER DELETE ON Policy FOR EACH ROW
-  BEGIN
-    DECLARE clientCount INT;
-    SELECT COUNT(*) FROM Policy WHERE clientID = OLD.clientID INTO clientCount;
-    IF (clientCount = 0) THEN
-      DELETE FROM Clients WHERE clientID = old.clientID;
-    END IF ;
-  END;
-DELIMITER ;
-
-CREATE TABLE PolicyImagePath
-(
-  policyImagePath VARCHAR(255),
-  policyNumber    VARCHAR(80) NOT NULL,
-  FOREIGN KEY (policyNumber) REFERENCES Policy (policyNumber)
-    ON DELETE CASCADE
-
-);
 
 CREATE TABLE ClaimImagePath
 (
@@ -84,8 +65,37 @@ CREATE TABLE ClaimImagePath
 
 );
 
+CREATE TABLE PolicyImagePath
+(
+  policyImagePath VARCHAR(255),
+  policyNumber    VARCHAR(80) NOT NULL,
+  FOREIGN KEY (policyNumber) REFERENCES Policy (policyNumber)
+    ON DELETE CASCADE
+
+);
+
+DELIMITER && ;
+CREATE TRIGGER clientAutoDelete AFTER DELETE ON Policy FOR EACH ROW
+  BEGIN
+    DECLARE clientCount INT;
+    SELECT COUNT(*) FROM Policy WHERE clientID = OLD.clientID INTO clientCount;
+    IF (clientCount = 0) THEN
+      DELETE FROM Clients WHERE clientID = old.clientID;
+    END IF ;
+  END;
+DELIMITER ;
+
+DELIMITER && ;
+CREATE  TRIGGER pathAutoDelete BEFORE UPDATE ON Policy FOR EACH ROW
+  BEGIN
+    DELETE FROM PolicyImagePath WHERE PolicyImagePath.policyNumber = NEW.policyNumber;
+    DELETE FROM ClaimImagePath WHERE ClaimImagePath.policyNumber = NEW.policyNumber;
+  END ;
+DELIMITER ;
+
 INSERT INTO Clients (InsuranceDB.Clients.clientName, InsuranceDB.Clients.clientNumber)
 VALUES ('Ramy Emad Malek', '01226140201'), ('Walid Hassan', '01113438653');
+
 INSERT INTO Policy VALUES
   ('Hassan', 'AIG', 'Car', 'Egypt', 1, '209728', 3047.5, 1234.5, 1234.5, 1234.5, 0.2, 1572,CURDATE(), 12345, 'EGP',
                                                                                       'Cache', 'asdadasd', 'Collected', 1234, NULL,NULL),
