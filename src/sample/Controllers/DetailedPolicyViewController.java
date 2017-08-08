@@ -137,6 +137,11 @@ public class DetailedPolicyViewController {
             }
         }
     }
+    public void setPolicy(Policy policy){
+        if(policy == null)
+            return;
+        currentPolicyMapper.setPolicy(policy);
+    }
 
     @FXML
     private void initialize() {
@@ -279,25 +284,10 @@ public class DetailedPolicyViewController {
     }
 
     @FXML protected void handleAddClientButton(MouseEvent event){
-        try{
-            FXMLLoader addClientLoader = new FXMLLoader();
-            addClientLoader.setLocation(Main.class.getResource("Views/detailedClientView.fxml"));
-            Stage addClientStage = new Stage();
-            BorderPane clientBorderPane = addClientLoader.load();
-            addClientStage.setTitle("Add new policy");
-            addClientStage.initModality(Modality.WINDOW_MODAL);
-            addClientStage.initOwner(Main.primaryStage);
-            Scene dialog = new Scene(clientBorderPane);
-            addClientStage.setScene(dialog);
-            addClientStage.showAndWait();
-        }
-        catch (IOException exception){
-            System.err.println("Can't load new Client view");
-            System.err.println(exception.getMessage());
-        }
-        generateClient();
-
-
+        manageClient(null);
+    }
+    @FXML protected void handleEditClientButton(MouseEvent event){
+        manageClient(Utils.findClient(ClientConnector.clients,clientComboBox.getSelectionModel().getSelectedItem()));
     }
 
     private boolean isValid(){
@@ -314,6 +304,28 @@ public class DetailedPolicyViewController {
         if(!Utils.isDouble(currentPolicyMapper.netPremiumProperty().getValue()))
             return false;
         return true;
+    }
+    private void manageClient(Client client){
+        try{
+            FXMLLoader addClientLoader = new FXMLLoader();
+            addClientLoader.setLocation(Main.class.getResource("Views/detailedClientView.fxml"));
+            Stage addClientStage = new Stage();
+            BorderPane clientBorderPane = addClientLoader.load();
+            addClientStage.setTitle("Client Dialog");
+            ((DetailedClientViewController)(addClientLoader.getController())).setClient(client);
+            addClientStage.initModality(Modality.WINDOW_MODAL);
+            addClientStage.initOwner(Main.primaryStage);
+            Scene dialog = new Scene(clientBorderPane);
+            addClientStage.setScene(dialog);
+            addClientStage.showAndWait();
+        }
+        catch (IOException exception){
+            System.err.println("Can't load new Client view");
+            System.err.println(exception.getMessage());
+        }
+        generateClient();
+        currentPolicyMapper.clientNameProperty().setValue(null);
+        currentPolicyMapper.clientNumberProperty().setValue(null);
     }
 
 

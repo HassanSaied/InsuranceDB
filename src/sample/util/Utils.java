@@ -53,8 +53,7 @@ public class Utils {
         return formatter.format(date);
     }
 
-    @Nullable
-    public static Client findClient(List<Client> clientList, String clientName, String clientNumber){
+    public static Client findClient(List<Client> clientList, String clientName){
 
         for (Client client: clientList) {
             if(client.getClientPhoneNumber() != null)

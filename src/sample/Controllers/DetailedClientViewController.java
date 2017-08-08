@@ -27,6 +27,11 @@ public class DetailedClientViewController {
         clientNameTextField.textProperty().bindBidirectional(currentClientMapper.clientNameProperty());
         clientPhoneNumberTextField.textProperty().bindBidirectional(currentClientMapper.clientPhoneNumberProperty());
     }
+    public void setClient(Client client){
+        if(client==null)
+            return;
+        currentClientMapper.setClient(client);
+    }
 
 
     @FXML protected void handleCancelButton(MouseEvent event){

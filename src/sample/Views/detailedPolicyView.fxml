@@ -99,7 +99,7 @@
             <ButtonBar prefHeight="26.0" prefWidth="230.0" GridPane.columnIndex="3" GridPane.rowIndex="5">
               <buttons>
                   <Button fx:id="addClientButton" mnemonicParsing="false" prefHeight="26.0" prefWidth="128.0" text="Add Client" onMousePressed="#handleAddClientButton" />
-                <Button fx:id="editClientButton" mnemonicParsing="false" text="Edit Client" />
+                <Button fx:id="editClientButton" mnemonicParsing="false" text="Edit Client" onMousePressed="#handleEditClientButton" />
               </buttons>
             </ButtonBar>
             <TextField fx:id="clientPhoneNumberTextField" editable="false" promptText="Client Phone Number" GridPane.columnIndex="2" GridPane.rowIndex="5" />

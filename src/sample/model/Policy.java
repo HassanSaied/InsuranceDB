@@ -274,4 +274,8 @@ public class Policy {
         if(grossPremium !=null && specialDiscount != null)
              netPremium = grossPremium.subtract(specialDiscount);
     }
+
+    public void setUpdatable(){
+        updatable = true;
+    }
 }

@@ -40,6 +40,9 @@ public class Client {
     public String getClientName() {
         return clientName;
     }
+    public void setUpdatable(){
+        updatable = true;
+    }
 
     public void setClientName(String clientName) {
         this.clientName = clientName;

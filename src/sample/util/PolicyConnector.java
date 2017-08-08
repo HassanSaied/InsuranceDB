@@ -46,6 +46,7 @@ public class PolicyConnector {
                 currentPolicy.setIndoresmentNumber(resultSet.getString(20));
                 currentPolicy.setClaimImagePath(getClaimImagesPath(currentPolicy.getPolicyNumber()));
                 currentPolicy.setPolicyImagePath(getPolicyImagesPath(currentPolicy.getPolicyNumber()));
+                currentPolicy.setUpdatable();
                 policies.add(currentPolicy);
             }
 

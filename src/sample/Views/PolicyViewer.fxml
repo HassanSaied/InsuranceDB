@@ -96,7 +96,7 @@
       <ButtonBar prefHeight="40.0" prefWidth="200.0" BorderPane.alignment="CENTER">
         <buttons>
           <Button mnemonicParsing="false" text="New" fx:id="newPolicyButton" onMousePressed="#handleNewButtonMoussePress"  />
-            <Button mnemonicParsing="false" text="Edit" fx:id="editPolicyButton" />
+            <Button mnemonicParsing="false" text="Edit" fx:id="editPolicyButton" onMousePressed="#handleEditPolicyButton" />
             <Button mnemonicParsing="false" text="Delete" fx:id="deletePolicyButton" onMousePressed="#handleDeleteButtonMousePress" />
         </buttons>
       </ButtonBar>

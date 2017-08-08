@@ -41,6 +41,7 @@ public class ClientConnector {
             System.out.println("Exception "+exception.getMessage());
             return null;
         }
+        client.setUpdatable();
         return client;
     }
 
@@ -55,6 +56,7 @@ public class ClientConnector {
                 Client currentClient = new Client(resultSet.getInt(1));
                 currentClient.setClientName(resultSet.getString(2));
                 currentClient.setClientPhoneNumber(resultSet.getString(3));
+                currentClient.setUpdatable();
                 clients.add(currentClient);
             }
 
@@ -119,7 +121,7 @@ public class ClientConnector {
             System.out.println("Exception "+exception.getMessage());
             return false;
         }
-        return false;
+        return true;
     }
 
 }

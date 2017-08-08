@@ -153,6 +153,21 @@ public class PolicyViewController {
 
     }
     @FXML protected void handleNewButtonMoussePress(MouseEvent event){
+        managePolicy(null);
+
+    }
+
+    @FXML protected void handleDeleteButtonMousePress (MouseEvent event){
+        policyMapperTableView.getSelectionModel().getSelectedItem().getPolicy().delete();
+        generatePolicyMappers();
+
+    }
+
+    @FXML protected void handleEditPolicyButton (MouseEvent event){
+        managePolicy(policyMapperTableView.getSelectionModel().getSelectedItem().getPolicy());
+    }
+
+    private void managePolicy(Policy policy){
         try{
             FXMLLoader newPolicyLoader = new FXMLLoader();
             newPolicyLoader.setLocation(Main.class.getResource("Views/detailedPolicyView.fxml"));
@@ -166,19 +181,10 @@ public class PolicyViewController {
             newPolicyDialogStage.setScene(dialog);
             newPolicyDialogStage.showAndWait();
             generatePolicyMappers();
-
-            return;
         }
         catch (IOException exception){
             System.err.println("Can't load new policy view");
         }
-
-    }
-
-    @FXML protected void handleDeleteButtonMousePress (MouseEvent event){
-        policyMapperTableView.getSelectionModel().getSelectedItem().getPolicy().delete();
-        generatePolicyMappers();
-
     }
 
 }
