@@ -121,6 +121,7 @@ public class DetailedPolicyViewController {
     }
 
     private void generateInsuranceTypes() {
+        insuranceTypes.clear();
         List<String> insuranceTypesList = PolicyConnector.getInsuranceTypes();
         if (insuranceTypesList != null)
             insuranceTypes.addAll(insuranceTypesList);

@@ -99,7 +99,7 @@
                 <Button fx:id="editClientButton" mnemonicParsing="false" onMousePressed="#handleEditClientButton" text="Edit Client" />
               </buttons>
             </ButtonBar>
-            <ButtonBar GridPane.columnIndex="3" GridPane.rowIndex="4">
+            <ButtonBar GridPane.columnIndex="3" GridPane.rowIndex="3">
                <buttons>
                   <Button mnemonicParsing="false" onMousePressed="#handleAddInsuranceTypeButton" text="Add Insurance Type" />
                </buttons>
