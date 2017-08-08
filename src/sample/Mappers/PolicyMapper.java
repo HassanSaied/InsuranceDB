@@ -47,6 +47,11 @@ public class PolicyMapper {
     }
 
     private final ObjectProperty<LocalDate> expiryDate;
+    private final ObjectProperty<LocalDate> issuanceDate;
+
+    public ObjectProperty<LocalDate> issuanceDateProperty() {
+        return issuanceDate;
+    }
 
 
     public StringProperty agentNameProperty() {
@@ -165,6 +170,7 @@ public class PolicyMapper {
         policyStatus = new SimpleStringProperty(Utils.getMappedString(this.policy.getPolicyStatus()));
         paidClaims = new SimpleStringProperty(Utils.getMappedString(this.policy.getPaidClaims()));
         indoresmentNumber = new SimpleStringProperty(Utils.getMappedString(this.policy.getIndoresmentNumber()));
+        issuanceDate = new SimpleObjectProperty<LocalDate>(this.policy.getIssuanceDate() == null ? null : this.policy.getIssuanceDate());
         expiryDate = new SimpleObjectProperty<LocalDate>(this.policy.getExpiryDate() == null ? null : this.policy.getExpiryDate());
     }
 
@@ -195,25 +201,28 @@ public class PolicyMapper {
         paidClaims.setValue(Utils.getMappedString(this.policy.getPaidClaims()));
         indoresmentNumber.setValue(Utils.getMappedString(this.policy.getPolicyNumber()));
         expiryDate.setValue(policy.getExpiryDate());
+        issuanceDate.setValue(policy.getIssuanceDate());
     }
 
-    public void sync(List<String> claimImagePath,List<String> policyImagePath,String collectiveImagePath) {
+    public void sync(List<String> claimImagePath, List<String> policyImagePath, String collectiveImagePath) {
         policy.setPolicyNumber(policyNumber.getValue());
         policy.setAgentName(Utils.emptyToNull(agentName.getValue()));
         policy.setBeneficiary(Utils.emptyToNull(beneficiary.getValue()));
-        if(clientName.getValue() != null && !clientName.getValue().isEmpty())
-            policy.setClient(Utils.findClient(ClientConnector.clients,clientName.getValue()));
+        if (clientName.getValue() != null && !clientName.getValue().isEmpty())
+            policy.setClient(Utils.findClient(ClientConnector.clients, clientName.getValue()));
         else policy.setClient(null);
         policy.setCollective(Utils.stringToCollective(Utils.emptyToNull(collective.getValue())));
         policy.setCurrency(Utils.stringToCurrency(Utils.emptyToNull(currency.getValue())));
         policy.setGrossCommission(Utils.toBigDecimal(grossCommission.getValue()));
         policy.setGrossPremium(Utils.toBigDecimal(grossPremuim.getValue()));
-        if(Utils.emptyToNull(taxes.getValue())==null)
+        if (Utils.emptyToNull(taxes.getValue()) == null)
             policy.setTaxes(null);
-        else policy.setTaxes(Utils.toBigDecimal(taxes.getValue().trim().replace("%","")).divide(BigDecimal.valueOf(100.0)));
+        else
+            policy.setTaxes(Utils.toBigDecimal(taxes.getValue().trim().replace("%", "")).divide(BigDecimal.valueOf(100.0)));
         policy.setInsuranceCompany(Utils.emptyToNull(insuranceCompany.getValue()));
         policy.setInsuranceType(Utils.emptyToNull(insuranceType.getValue()));
         policy.setExpiryDate(expiryDate.getValue());
+        policy.setIssuanceDate(issuanceDate.getValue());
         policy.setPaidClaims(Utils.toBigDecimal(paidClaims.getValue()));
         policy.setSumInsured(Utils.toBigDecimal(sumInsured.getValue()));
         policy.setPolicyStatus(Utils.emptyToNull(policyStatus.getValue()));
@@ -223,8 +232,9 @@ public class PolicyMapper {
         policy.setCollectiveImagePath(collectiveImagePath);
         policy.calculateValues();
     }
-    public boolean save(){
-       return policy.save();
+
+    public boolean save() {
+        return policy.save();
     }
 
 

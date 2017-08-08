@@ -4,6 +4,7 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
+import javafx.geometry.Rectangle2D;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.TableCell;
@@ -12,12 +13,15 @@ import javafx.scene.control.TableView;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.BorderPane;
 import javafx.stage.Modality;
+import javafx.stage.Screen;
 import javafx.stage.Stage;
 import javafx.util.Callback;
+import org.jetbrains.annotations.Contract;
 import sample.Main;
 import sample.Mappers.PolicyMapper;
 import sample.model.Policy;
 import sample.util.PolicyConnector;
+import sample.util.Utils;
 
 import java.io.IOException;
 import java.time.LocalDate;
@@ -58,6 +62,7 @@ public class PolicyViewController {
     //@FXML
     //private TableColumn<PolicyMapper, String> expiryDateColumn;
     @FXML private TableColumn<PolicyMapper,LocalDate> expiryDateColumn;
+    @FXML private TableColumn<PolicyMapper,LocalDate> issuanceDateColumn;
     @FXML
     private TableColumn<PolicyMapper, String> sumInssuredColumn;
     @FXML
@@ -74,6 +79,19 @@ public class PolicyViewController {
     private Button editPolicyButton;
     @FXML
     private Button deletePolicyButton;
+
+    @Contract(pure = true)
+    private static TableCell<PolicyMapper, LocalDate> call(TableColumn<PolicyMapper, LocalDate> param) {
+        final TableCell<PolicyMapper, LocalDate> cell = new TableCell<PolicyMapper, LocalDate>() {
+            @Override
+            protected void updateItem(LocalDate item, boolean empty) {
+                if (empty || item == null)
+                    setText(null);
+                else setText(Utils.getMappedString(item));
+            }
+        };
+        return cell;
+    }
 
     @FXML
     private void initialize() {
@@ -112,7 +130,10 @@ public class PolicyViewController {
         grossPremuimColumn.setCellValueFactory(cellData -> cellData.getValue().grossPremuimProperty());
         specialDiscountColumn.setCellValueFactory(cellData -> cellData.getValue().specialDiscountProperty());
         netPremuimColumn.setCellValueFactory(cellData -> cellData.getValue().netPremiumProperty());
+        issuanceDateColumn.setCellValueFactory(cellData->cellData.getValue().issuanceDateProperty());
+        issuanceDateColumn.setCellFactory(PolicyViewController::call);
         expiryDateColumn.setCellValueFactory(cellData -> cellData.getValue().expiryDateProperty());
+        expiryDateColumn.setCellFactory(PolicyViewController::call);
         sumInssuredColumn.setCellValueFactory(cellData -> cellData.getValue().sumInsuredProperty());
         currencyColumn.setCellValueFactory(cellData -> cellData.getValue().currencyProperty());
         collectiveColumn.setCellValueFactory(cellData -> cellData.getValue().collectiveProperty());
@@ -180,6 +201,11 @@ public class PolicyViewController {
             newPolicyDialogStage.initOwner(Main.primaryStage);
             Scene dialog = new Scene(newPolicyBorderPane);
             newPolicyDialogStage.setScene(dialog);
+            Screen screen = Screen.getPrimary();
+            Rectangle2D bounds = screen.getVisualBounds();
+            newPolicyDialogStage.setWidth(bounds.getWidth());
+            newPolicyDialogStage.setHeight(bounds.getHeight());
+            newPolicyDialogStage.setMaximized(true);
             newPolicyDialogStage.showAndWait();
             generatePolicyMappers();
         }

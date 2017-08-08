@@ -63,6 +63,16 @@ public class Policy {
     private BigDecimal grossCommission;
     private BigDecimal taxes;
     private BigDecimal netCommission;
+
+    public LocalDate getIssuanceDate() {
+        return issuanceDate;
+    }
+
+    public void setIssuanceDate(LocalDate issuanceDate) {
+        this.issuanceDate = issuanceDate;
+    }
+
+    private LocalDate issuanceDate;
     private LocalDate expiryDate;
     private BigDecimal sumInsured;
     private Currency currency;

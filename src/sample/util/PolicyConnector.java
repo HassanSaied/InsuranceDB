@@ -46,6 +46,7 @@ public class PolicyConnector {
                 currentPolicy.setIndoresmentNumber(resultSet.getString(20));
                 currentPolicy.setClaimImagePath(getClaimImagesPath(currentPolicy.getPolicyNumber()));
                 currentPolicy.setPolicyImagePath(getPolicyImagesPath(currentPolicy.getPolicyNumber()));
+                currentPolicy.setIssuanceDate(resultSet.getDate(21)==null?null:resultSet.getDate(21).toLocalDate());
                 currentPolicy.setUpdatable();
                 policies.add(currentPolicy);
             }
@@ -113,7 +114,7 @@ public class PolicyConnector {
                 " clientID = ? ," + " grossPremuim = ? ," + " specialDiscount = ? ," + " netPremuim = ? ," +
                 " grossCommission = ? ," + " taxes = ? ," + " netCommission = ? ," + " expiryDate = ? ," +
                 " sumInssured = ? ," + " currency = ? ," + " collective = ? ," + " collectiveImagePath = ?," +
-                " policyStatus = ?," + " paidClaims = ? ," + " indoresmentNumber = ? " + "WHERE policyNumber = ?; ";
+                " policyStatus = ?," + " paidClaims = ? ," + " indoresmentNumber = ?, "+"issuanceDate = ? " + "WHERE policyNumber = ?; ";
         try (PreparedStatement statement = DatabaseConnector.getDatabaseConnection().prepareStatement(updateSQL)) {
             statement.setString(fillStatement(statement, policy), policy.getPolicyNumber());
             try {
@@ -195,8 +196,8 @@ public class PolicyConnector {
                 "  ,clientID,grossPremuim,specialDiscount,netPremuim" +
                 "  ,grossCommission,taxes,netCommission,expiryDate" +
                 "  ,sumInssured,currency,collective,collectiveImagePath" +
-                "  ,policyStatus,paidClaims,indoresmentNumber,policyNumber)" +
-                "VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?);";
+                "  ,policyStatus,paidClaims,indoresmentNumber,issuanceDate,policyNumber)" +
+                "VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?);";
 
         try (PreparedStatement statement = DatabaseConnector.getDatabaseConnection().prepareStatement(insertSQL)) {
             statement.setString(fillStatement(statement, policy), policy.getPolicyNumber());
@@ -287,6 +288,7 @@ public class PolicyConnector {
         statement.setString(++columnCounter, policy.getPolicyStatus());
         statement.setBigDecimal(++columnCounter, policy.getPaidClaims());
         statement.setString(++columnCounter, policy.getIndoresmentNumber());
+        statement.setDate(++columnCounter,policy.getIssuanceDate()!=null?Date.valueOf(policy.getIssuanceDate()):null);
         return ++columnCounter;
     }
 
@@ -368,5 +370,18 @@ public class PolicyConnector {
                 System.err.println("Exception "+exception.getMessage());
             }
         }
+    }
+
+    public static void insertInsuranceType(String insuranceType){
+        String insertSQL = "INSERT INTO InsuranceType VALUES (?)";
+        try(PreparedStatement statement = DatabaseConnector.getDatabaseConnection().prepareStatement(insertSQL)){
+            statement.setString(1,insuranceType);
+            statement.executeUpdate();
+        }
+        catch (SQLException exception){
+            System.err.println("Can't prepare the insert insurance type statement");
+            System.err.println("Exception "+exception.getMessage());
+        }
+
     }
 }

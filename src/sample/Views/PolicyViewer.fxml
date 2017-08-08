@@ -63,7 +63,12 @@
                           <Label prefWidth="80" text="Net Premium" textAlignment="CENTER" wrapText="true" />
                       </graphic>
                   </TableColumn>
-                  <TableColumn fx:id="expiryDateColumn" prefWidth="75.0">
+                  <TableColumn fx:id="issuanceDateColumn"  >
+                     <graphic>
+                        <Label text="Issuance Date" prefWidth="80.0" textAlignment="CENTER" wrapText="true" />
+                     </graphic>
+                  </TableColumn>
+                  <TableColumn fx:id="expiryDateColumn"  prefWidth="75.0">
                      <graphic>
                         <Label prefWidth="80" text="Expiry Date" textAlignment="CENTER" wrapText="true" />
                      </graphic></TableColumn>
@@ -77,7 +82,7 @@
                      </graphic></TableColumn>
                   <TableColumn fx:id="collectiveColumn">
                      <graphic>
-                        <Label text="Collective" textAlignment="CENTER" wrapText="true" prefWidth="80" />
+                        <Label prefWidth="80" text="Collective" textAlignment="CENTER" wrapText="true" />
                      </graphic></TableColumn>
                   <TableColumn fx:id="policyStatusColumn" prefWidth="75.0">
                      <graphic>
@@ -95,9 +100,9 @@
    <bottom>
       <ButtonBar prefHeight="40.0" prefWidth="200.0" BorderPane.alignment="CENTER">
         <buttons>
-          <Button mnemonicParsing="false" text="New" fx:id="newPolicyButton" onMousePressed="#handleNewButtonMoussePress"  />
-            <Button mnemonicParsing="false" text="Edit" fx:id="editPolicyButton" onMousePressed="#handleEditPolicyButton" />
-            <Button mnemonicParsing="false" text="Delete" fx:id="deletePolicyButton" onMousePressed="#handleDeleteButtonMousePress" />
+          <Button fx:id="newPolicyButton" mnemonicParsing="false" onMousePressed="#handleNewButtonMoussePress" text="New" />
+            <Button fx:id="editPolicyButton" mnemonicParsing="false" onMousePressed="#handleEditPolicyButton" text="Edit" />
+            <Button fx:id="deletePolicyButton" mnemonicParsing="false" onMousePressed="#handleDeleteButtonMousePress" text="Delete" />
         </buttons>
       </ButtonBar>
    </bottom>

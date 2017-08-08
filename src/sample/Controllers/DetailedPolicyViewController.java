@@ -16,12 +16,14 @@ import sample.Mappers.PolicyMapper;
 import sample.model.Client;
 import sample.model.Policy;
 import sample.util.ClientConnector;
+import sample.util.Definitions;
 import sample.util.PolicyConnector;
 import sample.util.Utils;
 
 import java.io.File;
 import java.io.IOException;
 import java.util.List;
+import java.util.Optional;
 
 /**
  * Created by hassan on 7/13/17.
@@ -45,7 +47,7 @@ public class DetailedPolicyViewController {
     @FXML
     private TextField specialDiscountTextField;
     @FXML
-    private TextField netPremiumTextField;
+    private DatePicker issuanceDataDatePicker;
     @FXML
     private TextField grossCommissionTextField;
     @FXML
@@ -62,8 +64,6 @@ public class DetailedPolicyViewController {
     private ComboBox<String> collectiveComboBox;
     @FXML
     private ComboBox<String> policyStatusComboBox;
-    @FXML
-    private ComboBox<String> endorsementNumberComboBox;
     @FXML
     private TextField clientPhoneNumberTextField;
     @FXML
@@ -91,14 +91,9 @@ public class DetailedPolicyViewController {
 
     private ObservableList<String> insuranceTypes;
     private ObservableList<String> clients;
-    private ObservableList<String> collectiveList;
-    private ObservableList<String> currencyList;
     private ObservableList<String> policyStatus;
-    private ObservableList<String> taxes;
     private ObservableList<String> policyImagePath, claimImagePath, collectiveImagePath;
     private ObservableList<String> selectedImageList;
-    private ObservableList<String> imageTypes;
-    private ObservableList<String> endorsementNumbers;
     private List<Client> clientList;
 
     public DetailedPolicyViewController() {
@@ -106,25 +101,13 @@ public class DetailedPolicyViewController {
         currentPolicyMapper = new PolicyMapper(new Policy());
         this.insuranceTypes = FXCollections.observableArrayList();
         this.clients = FXCollections.observableArrayList();
-        List<String> insuranceTypesList = PolicyConnector.getInsuranceTypes();
-        insuranceTypes.addAll(insuranceTypesList);
         generateClient();
+        generateInsuranceTypes();
         policyStatus = FXCollections.observableArrayList();
         policyStatus.addAll(PolicyConnector.getPolicyStatus());
-        collectiveList = FXCollections.observableArrayList();
-        collectiveList.addAll("Cache", "Check", "None");
-        currencyList = FXCollections.observableArrayList();
-        currencyList.addAll("EGP", "USD", "EUR");
-        taxes = FXCollections.observableArrayList();
-        taxes.addAll("20%", "22.5%");
         policyImagePath = FXCollections.observableArrayList();
         claimImagePath = FXCollections.observableArrayList();
         collectiveImagePath = FXCollections.observableArrayList();
-        imageTypes = FXCollections.observableArrayList("Policy Image", "Claim Image", "Collective Image");
-        endorsementNumbers = FXCollections.observableArrayList();
-        for (Policy policy : PolicyConnector.policies) {
-            endorsementNumbers.add(policy.getPolicyNumber());
-        }
     }
 
     private void generateClient() {
@@ -135,6 +118,12 @@ public class DetailedPolicyViewController {
                 clients.add(client.getClientName());
             }
         }
+    }
+
+    private void generateInsuranceTypes() {
+        List<String> insuranceTypesList = PolicyConnector.getInsuranceTypes();
+        if (insuranceTypesList != null)
+            insuranceTypes.addAll(insuranceTypesList);
     }
 
     public void setPolicy(Policy policy) {
@@ -164,11 +153,6 @@ public class DetailedPolicyViewController {
             else selectedImageList = collectiveImagePath;
             imagePathListView.setItems(selectedImageList);
         });
-        endorsementNumberComboBox.getSelectionModel().selectedItemProperty().addListener(((observable, oldValue, newValue) -> {
-            if (endorsementNumberComboBox.getSelectionModel().getSelectedIndex() == -1)
-                return;
-            currentPolicyMapper.setPolicy(PolicyConnector.policies.get(endorsementNumberComboBox.getSelectionModel().getSelectedIndex()));
-        }));
         clientComboBox.getSelectionModel().selectedIndexProperty().addListener(((observable, oldValue, newValue) -> {
             if (clientComboBox.getSelectionModel().getSelectedItem() == null)
                 return;
@@ -186,35 +170,31 @@ public class DetailedPolicyViewController {
         beneficiaryTextField.textProperty().bindBidirectional(currentPolicyMapper.beneficiaryProperty());
         grossCommissionTextField.textProperty().bindBidirectional(currentPolicyMapper.grossCommissionProperty());
         expiryDateDatePicker.valueProperty().bindBidirectional(currentPolicyMapper.expiryDateProperty());
+        issuanceDataDatePicker.valueProperty().bindBidirectional(currentPolicyMapper.issuanceDateProperty());
         clientComboBox.valueProperty().bindBidirectional(currentPolicyMapper.clientNameProperty());
         clientPhoneNumberTextField.textProperty().bindBidirectional(currentPolicyMapper.clientNumberProperty());
         grossPremiumTextField.textProperty().bindBidirectional(currentPolicyMapper.grossPremuimProperty());
         specialDiscountTextField.textProperty().bindBidirectional(currentPolicyMapper.specialDiscountProperty());
-        netPremiumTextField.textProperty().bindBidirectional(currentPolicyMapper.netPremiumProperty());
         taxesComboBox.valueProperty().bindBidirectional(currentPolicyMapper.taxesProperty());
-        grossCommissionTextField.disableProperty().bind(commissionPasswordField.textProperty().isNotEqualTo("ahmed"));
+        grossCommissionTextField.disableProperty().bind(commissionPasswordField.textProperty().isNotEqualTo(Definitions.password));
         sumInsuredTextField.textProperty().bindBidirectional(currentPolicyMapper.sumInsuredProperty());
         currencyComboBox.valueProperty().bindBidirectional(currentPolicyMapper.currencyProperty());
         collectiveComboBox.valueProperty().bindBidirectional(currentPolicyMapper.collectiveProperty());
         policyStatusComboBox.valueProperty().bindBidirectional(currentPolicyMapper.policyStatusProperty());
-        endorsementNumberComboBox.valueProperty().bindBidirectional(currentPolicyMapper.indoresmentNumberProperty());
         imageBrowseButton.disableProperty().bind(imageTypeComboBox.getSelectionModel().selectedItemProperty().isNull());
         deleteImageButton.disableProperty().bind(imagePathListView.getSelectionModel().selectedItemProperty().isNull());
         editClientButton.disableProperty().bind(clientComboBox.getSelectionModel().selectedItemProperty().isNull());
-        policyNumberTextField.editableProperty().bind(endorsementNumberComboBox.getSelectionModel().selectedItemProperty().isEqualTo(""));
         paidClaimsTextField.textProperty().bindBidirectional(currentPolicyMapper.paidClaimsProperty());
     }
 
     private void setComboBoxItems() {
         insuranceTypeComboBox.setItems(insuranceTypes);
         clientComboBox.setItems(clients);
-        collectiveComboBox.setItems(collectiveList);
-        currencyComboBox.setItems(currencyList);
+        collectiveComboBox.setItems(Definitions.collectiveList);
+        currencyComboBox.setItems(Definitions.currencyList);
         policyStatusComboBox.setItems(policyStatus);
-        taxesComboBox.setItems(taxes);
-        imageTypeComboBox.setItems(imageTypes);
-        endorsementNumberComboBox.setItems(endorsementNumbers);
-
+        taxesComboBox.setItems(Definitions.taxes);
+        imageTypeComboBox.setItems(Definitions.imageTypes);
     }
 
     private FileChooser getFileChooser(String title) {
@@ -297,6 +277,19 @@ public class DetailedPolicyViewController {
         manageClient(Utils.findClient(ClientConnector.clients, clientComboBox.getSelectionModel().getSelectedItem()));
     }
 
+    @FXML
+    protected void handleAddInsuranceTypeButton(MouseEvent event) {
+        TextInputDialog dialog = new TextInputDialog();
+        dialog.setTitle("Insurance Type Dialog");
+        dialog.setHeaderText("Input new Insurance Type");
+        dialog.setContentText("Insurance Type");
+        Optional<String> result = dialog.showAndWait();
+        result.ifPresent(insuranceType -> PolicyConnector.insertInsuranceType(insuranceType));
+        generateInsuranceTypes();
+
+
+    }
+
     private boolean isValid() {
         if (currentPolicyMapper.policyNumberProperty().getValue() == null || !currentPolicyMapper.policyNumberProperty().getValue().matches("[0-9]*"))
             return false;
@@ -307,8 +300,6 @@ public class DetailedPolicyViewController {
         if (!Utils.isDouble(currentPolicyMapper.sumInsuredProperty().getValue()))
             return false;
         if (!Utils.isDouble(currentPolicyMapper.specialDiscountProperty().getValue()))
-            return false;
-        if (!Utils.isDouble(currentPolicyMapper.netPremiumProperty().getValue()))
             return false;
         return true;
     }
