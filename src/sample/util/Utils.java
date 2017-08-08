@@ -98,7 +98,7 @@ public class Utils {
         if(taxes == null){
             return null;
         }
-        return taxes.equals(BigDecimal.valueOf(0.2))?"20%":"22.5%";
+        return new StringBuilder(taxes.multiply(BigDecimal.valueOf(100)).toString()).append('%').toString();
     }
 
 }
