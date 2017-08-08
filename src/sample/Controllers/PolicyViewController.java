@@ -61,8 +61,10 @@ public class PolicyViewController {
     private TableColumn<PolicyMapper, String> netPremuimColumn;
     //@FXML
     //private TableColumn<PolicyMapper, String> expiryDateColumn;
-    @FXML private TableColumn<PolicyMapper,LocalDate> expiryDateColumn;
-    @FXML private TableColumn<PolicyMapper,LocalDate> issuanceDateColumn;
+    @FXML
+    private TableColumn<PolicyMapper, LocalDate> expiryDateColumn;
+    @FXML
+    private TableColumn<PolicyMapper, LocalDate> issuanceDateColumn;
     @FXML
     private TableColumn<PolicyMapper, String> sumInssuredColumn;
     @FXML
@@ -109,7 +111,7 @@ public class PolicyViewController {
     }
 
     private void generatePolicyMappers() {
-            policyMappers.clear();
+        policyMappers.clear();
         List<Policy> policies = PolicyConnector.getPolicies();
         for (Policy policy : policies) {
             policyMappers.add(new PolicyMapper(policy));
@@ -130,7 +132,7 @@ public class PolicyViewController {
         grossPremuimColumn.setCellValueFactory(cellData -> cellData.getValue().grossPremuimProperty());
         specialDiscountColumn.setCellValueFactory(cellData -> cellData.getValue().specialDiscountProperty());
         netPremuimColumn.setCellValueFactory(cellData -> cellData.getValue().netPremiumProperty());
-        issuanceDateColumn.setCellValueFactory(cellData->cellData.getValue().issuanceDateProperty());
+        issuanceDateColumn.setCellValueFactory(cellData -> cellData.getValue().issuanceDateProperty());
         issuanceDateColumn.setCellFactory(PolicyViewController::call);
         expiryDateColumn.setCellValueFactory(cellData -> cellData.getValue().expiryDateProperty());
         expiryDateColumn.setCellFactory(PolicyViewController::call);
@@ -166,37 +168,45 @@ public class PolicyViewController {
     }
 
     private void handlePolicyNumberClickEvent(Policy policy) {
-        System.out.println(policy.getPolicyNumber());
+        managePolicy(policyMapperTableView.getSelectionModel().getSelectedItem().getPolicy(),true,"Views/policyImageViewer.fxml","View policy");
+
 
     }
 
     private void handleIndoresmentNumberClickEvent(Policy policy) {
-        System.out.println("123");
 
-    }
-    @FXML protected void handleNewButtonMoussePress(MouseEvent event){
-        managePolicy(null);
 
     }
 
-    @FXML protected void handleDeleteButtonMousePress (MouseEvent event){
+    @FXML
+    protected void handleNewButtonMoussePress(MouseEvent event) {
+        managePolicy(null,false,"Views/detailedPolicyView.fxml","Add new policy");
+    }
+
+    @FXML
+    protected void handleDeleteButtonMousePress(MouseEvent event) {
         policyMapperTableView.getSelectionModel().getSelectedItem().getPolicy().delete();
         generatePolicyMappers();
 
     }
 
-    @FXML protected void handleEditPolicyButton (MouseEvent event){
-        managePolicy(policyMapperTableView.getSelectionModel().getSelectedItem().getPolicy());
+    @FXML
+    protected void handleEditPolicyButton(MouseEvent event) {
+        managePolicy(policyMapperTableView.getSelectionModel().getSelectedItem().getPolicy(),false,"Views/detailedPolicyView.fxml","Edit policy");
     }
 
-    private void managePolicy(Policy policy){
-        try{
+    private void managePolicy(Policy policy, boolean image,String location,String title) {
+        try {
             FXMLLoader newPolicyLoader = new FXMLLoader();
-            newPolicyLoader.setLocation(Main.class.getResource("Views/detailedPolicyView.fxml"));
+            newPolicyLoader.setLocation(Main.class.getResource(location));
             BorderPane newPolicyBorderPane = newPolicyLoader.load();
-            ((DetailedPolicyViewController)(newPolicyLoader.getController())).setPolicy(policy);
+            if (!image)
+                ((DetailedPolicyViewController) (newPolicyLoader.getController())).setPolicy(policy);
+            else{
+                ((PolicyImageViewController)(newPolicyLoader.getController())).setPolicy(policy);
+            }
             Stage newPolicyDialogStage = new Stage();
-            newPolicyDialogStage.setTitle("Add new policy");
+            newPolicyDialogStage.setTitle(title);
             newPolicyDialogStage.initModality(Modality.WINDOW_MODAL);
             newPolicyDialogStage.initOwner(Main.primaryStage);
             Scene dialog = new Scene(newPolicyBorderPane);
@@ -208,8 +218,7 @@ public class PolicyViewController {
             newPolicyDialogStage.setMaximized(true);
             newPolicyDialogStage.showAndWait();
             generatePolicyMappers();
-        }
-        catch (IOException exception){
+        } catch (IOException exception) {
             System.err.println("Can't load new policy view");
         }
     }
