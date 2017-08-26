@@ -199,7 +199,7 @@ public class PolicyMapper {
         collective.setValue(Utils.getMappedString(this.policy.getCollective()));
         policyStatus.setValue(Utils.getMappedString(this.policy.getPolicyStatus()));
         paidClaims.setValue(Utils.getMappedString(this.policy.getPaidClaims()));
-        indoresmentNumber.setValue(Utils.getMappedString(this.policy.getPolicyNumber()));
+        indoresmentNumber.setValue(Utils.emptyToNull(this.policy.getIndoresmentNumber()));
         expiryDate.setValue(policy.getExpiryDate());
         issuanceDate.setValue(policy.getIssuanceDate());
     }
@@ -230,6 +230,7 @@ public class PolicyMapper {
         policy.setClaimImagePath(claimImagePath);
         policy.setPolicyImagePath(policyImagePath);
         policy.setCollectiveImagePath(collectiveImagePath);
+        policy.setIndoresmentNumber(Utils.emptyToNull(indoresmentNumber.getValue()));
         policy.calculateValues();
     }
 

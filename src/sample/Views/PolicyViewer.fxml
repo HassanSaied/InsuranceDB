@@ -12,7 +12,7 @@
    <center>
       <AnchorPane prefHeight="200.0" prefWidth="200.0" BorderPane.alignment="CENTER">
          <children>
-            <TableView fx:id="policyMapperTableView" prefHeight="360.0" prefWidth="600.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+            <TableView fx:id="policyMapperTableView" prefHeight="360.0" prefWidth="600.0" tableMenuButtonVisible="true" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
               <columns>
                 <TableColumn fx:id="policyNumberColumn" editable="false">
                      <graphic>
@@ -63,12 +63,12 @@
                           <Label prefWidth="80" text="Net Premium" textAlignment="CENTER" wrapText="true" />
                       </graphic>
                   </TableColumn>
-                  <TableColumn fx:id="issuanceDateColumn"  >
+                  <TableColumn fx:id="issuanceDateColumn">
                      <graphic>
-                        <Label text="Issuance Date" prefWidth="80.0" textAlignment="CENTER" wrapText="true" />
+                        <Label prefWidth="80.0" text="Issuance Date" textAlignment="CENTER" wrapText="true" />
                      </graphic>
                   </TableColumn>
-                  <TableColumn fx:id="expiryDateColumn"  prefWidth="75.0">
+                  <TableColumn fx:id="expiryDateColumn" prefWidth="75.0">
                      <graphic>
                         <Label prefWidth="80" text="Expiry Date" textAlignment="CENTER" wrapText="true" />
                      </graphic></TableColumn>
