@@ -1,5 +1,7 @@
 package sample.model;
 
+import org.jetbrains.annotations.Contract;
+import org.jetbrains.annotations.Nullable;
 import sample.util.PolicyConnector;
 
 import java.math.BigDecimal;
@@ -16,6 +18,8 @@ public class Policy {
         USD,
         EUR;
 
+        @Nullable
+        @Contract(pure = true)
         @Override
         public String toString() {
             switch (this) {
@@ -35,6 +39,8 @@ public class Policy {
         Check,
         None;
 
+        @Nullable
+        @Contract(pure = true)
         @Override
         public String toString() {
             switch (this) {
