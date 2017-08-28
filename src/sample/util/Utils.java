@@ -81,6 +81,8 @@ public class Utils {
     @Nullable
     @Contract(pure = true)
     public static String emptyToNull(String testedString){
+        if(testedString == null)
+            return null;
         if(testedString.isEmpty())
             return null;
         else return testedString;
@@ -99,6 +101,14 @@ public class Utils {
             return null;
         }
         return new StringBuilder(taxes.multiply(BigDecimal.valueOf(100)).toString()).append('%').toString();
+    }
+
+    @Nullable
+    public static Policy findPolicy(String policyNumber){
+        for(Policy policy : PolicyConnector.policies)
+            if(policy.getPolicyNumber().equals(policyNumber))
+                return policy;
+        return null;
     }
 
 }

@@ -83,6 +83,8 @@ public class DetailedPolicyViewController {
 
     @FXML
     private TextField paidClaimsTextField;
+    @FXML private ComboBox<String> endorsementNumberComboBox;
+    @FXML private boolean edit = false;
 
     @FXML
     Button deleteImageButton;
@@ -95,7 +97,14 @@ public class DetailedPolicyViewController {
     private ObservableList<String> policyImagePath, claimImagePath, collectiveImagePath;
     private ObservableList<String> selectedImageList;
     private List<Client> clientList;
+    private ObservableList<String> policyNumbers;
 
+    public void setEdit(boolean edit){
+        this.edit = edit;
+        if(edit) {
+            endorsementNumberComboBox.setDisable(true);
+        }
+    }
     public DetailedPolicyViewController() {
 
         currentPolicyMapper = new PolicyMapper(new Policy());
@@ -108,6 +117,11 @@ public class DetailedPolicyViewController {
         policyImagePath = FXCollections.observableArrayList();
         claimImagePath = FXCollections.observableArrayList();
         collectiveImagePath = FXCollections.observableArrayList();
+        policyNumbers = FXCollections.observableArrayList();
+        if(PolicyConnector.policies!=null)
+            for(Policy policy :PolicyConnector.policies){
+            policyNumbers.add(policy.getPolicyNumber());
+            }
     }
 
     private void generateClient() {
@@ -121,6 +135,7 @@ public class DetailedPolicyViewController {
     }
 
     private void generateInsuranceTypes() {
+        insuranceTypes.clear();
         List<String> insuranceTypesList = PolicyConnector.getInsuranceTypes();
         if (insuranceTypesList != null)
             insuranceTypes.addAll(insuranceTypesList);
@@ -139,8 +154,9 @@ public class DetailedPolicyViewController {
             claimImagePath.addAll(policy.getClaimImagePath());
         if (policy.getCollectiveImagePath() != null)
             collectiveImagePath.add(policy.getCollectiveImagePath());
-
+        policyNumberTextField.setDisable(true);
     }
+
 
     @FXML
     private void initialize() {
@@ -158,6 +174,15 @@ public class DetailedPolicyViewController {
                 return;
             currentPolicyMapper.clientNumberProperty().setValue(clientList.get((int) newValue).getClientPhoneNumber());
         }));
+        endorsementNumberComboBox.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) ->{
+            if(newValue == null)
+                return;
+            if(newValue.isEmpty())
+                return;
+            if(edit)
+                return;
+            currentPolicyMapper.setPolicy(Policy.endorse(Utils.findPolicy(newValue)));
+        });
         setBindings();
         setComboBoxItems();
     }
@@ -185,6 +210,7 @@ public class DetailedPolicyViewController {
         deleteImageButton.disableProperty().bind(imagePathListView.getSelectionModel().selectedItemProperty().isNull());
         editClientButton.disableProperty().bind(clientComboBox.getSelectionModel().selectedItemProperty().isNull());
         paidClaimsTextField.textProperty().bindBidirectional(currentPolicyMapper.paidClaimsProperty());
+        endorsementNumberComboBox.valueProperty().bindBidirectional(currentPolicyMapper.indoresmentNumberProperty());
     }
 
     private void setComboBoxItems() {
@@ -195,6 +221,7 @@ public class DetailedPolicyViewController {
         policyStatusComboBox.setItems(policyStatus);
         taxesComboBox.setItems(Definitions.taxes);
         imageTypeComboBox.setItems(Definitions.imageTypes);
+        endorsementNumberComboBox.setItems(policyNumbers);
     }
 
     private FileChooser getFileChooser(String title) {
@@ -293,8 +320,12 @@ public class DetailedPolicyViewController {
     private boolean isValid() {
         if (currentPolicyMapper.policyNumberProperty().getValue() == null || !currentPolicyMapper.policyNumberProperty().getValue().matches("[0-9]*"))
             return false;
-        if (!Utils.isDouble(currentPolicyMapper.grossCommissionProperty().getValue()))
-            return false;
+        if(currentPolicyMapper.indoresmentNumberProperty()!=null && !currentPolicyMapper.indoresmentNumberProperty().getValue().isEmpty()) {
+            if (currentPolicyMapper.policyNumberProperty().getValue().equals(currentPolicyMapper.indoresmentNumberProperty().getValue()))
+                return false;
+        }
+                if (!Utils.isDouble(currentPolicyMapper.grossCommissionProperty().getValue()))
+                    return false;
         if (!Utils.isDouble(currentPolicyMapper.grossPremuimProperty().getValue()))
             return false;
         if (!Utils.isDouble(currentPolicyMapper.sumInsuredProperty().getValue()))

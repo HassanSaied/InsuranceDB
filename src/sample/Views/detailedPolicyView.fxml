@@ -55,6 +55,7 @@
             <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
             <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
             <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+            <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
         </rowConstraints>
          <children>
             <Label text="Policy Number" />
@@ -99,21 +100,23 @@
                 <Button fx:id="editClientButton" mnemonicParsing="false" onMousePressed="#handleEditClientButton" text="Edit Client" />
               </buttons>
             </ButtonBar>
-            <ButtonBar GridPane.columnIndex="3" GridPane.rowIndex="4">
+            <ButtonBar GridPane.columnIndex="3" GridPane.rowIndex="3">
                <buttons>
                   <Button mnemonicParsing="false" onMousePressed="#handleAddInsuranceTypeButton" text="Add Insurance Type" />
                </buttons>
             </ButtonBar>
             <TextField fx:id="clientPhoneNumberTextField" editable="false" promptText="Client Phone Number" GridPane.columnIndex="2" GridPane.rowIndex="5" />
-            <ListView fx:id="imagePathListView" prefHeight="200.0" prefWidth="200.0" GridPane.columnIndex="1" GridPane.columnSpan="2" GridPane.rowIndex="17" GridPane.rowSpan="2147483647" />
-            <ButtonBar prefHeight="40.0" prefWidth="200.0" GridPane.columnIndex="3" GridPane.rowIndex="18">
+            <ListView fx:id="imagePathListView" prefHeight="200.0" prefWidth="200.0" GridPane.columnIndex="1" GridPane.columnSpan="2" GridPane.rowIndex="18" GridPane.rowSpan="2147483647" />
+            <ButtonBar prefHeight="40.0" prefWidth="200.0" GridPane.columnIndex="3" GridPane.rowIndex="19">
               <buttons>
                 <Button fx:id="deleteImageButton" mnemonicParsing="false" onMousePressed="#handleDeleteImageButton" text="Delete" />
                   <Button fx:id="imageBrowseButton" mnemonicParsing="false" onMousePressed="#handleImageBrowseButton" text="Browse" />
               </buttons>
             </ButtonBar>
-            <ComboBox fx:id="imageTypeComboBox" prefWidth="208.0" GridPane.rowIndex="18" />
-            <Label text="Image Type" GridPane.rowIndex="17" />
+            <ComboBox fx:id="imageTypeComboBox" prefWidth="208.0" GridPane.rowIndex="19" />
+            <Label text="Image Type" GridPane.rowIndex="18" />
+            <Label text="Endorsement Number" GridPane.rowIndex="17" />
+            <ComboBox fx:id="endorsementNumberComboBox" prefWidth="150.0" GridPane.columnIndex="1" GridPane.rowIndex="17" />
          </children>
          <BorderPane.margin>
             <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />

@@ -268,8 +268,47 @@ public class Policy {
 
     private boolean updatable = false;
 
+    public Policy() {
+        updatable = false;
+    }
+
+    @Contract("null -> null")
+    public static Policy endorse (Policy policy) {
+        if(policy==null)
+            return null;
+        Policy currentPolicy = new Policy();
+        currentPolicy.agentName = policy.agentName;
+        currentPolicy.insuranceCompany = policy.insuranceCompany;
+        currentPolicy.insuranceType = policy.insuranceType;
+        currentPolicy.beneficiary = policy.beneficiary;
+        currentPolicy.client = policy.client;
+        currentPolicy.grossPremium = policy.grossPremium;
+        currentPolicy.specialDiscount = policy.specialDiscount;
+        currentPolicy.netPremium = policy.netPremium;
+        currentPolicy.grossCommission = policy.grossCommission;
+        currentPolicy.taxes = policy.taxes;
+        currentPolicy.netCommission = policy.netCommission;
+        currentPolicy.issuanceDate = policy.issuanceDate;
+        currentPolicy.expiryDate = policy.expiryDate;
+        currentPolicy.sumInsured = policy.sumInsured;
+        currentPolicy.currency = policy.currency;
+        currentPolicy.collective = policy.collective;
+        currentPolicy.collectiveImagePath = policy.collectiveImagePath;
+        currentPolicy.policyStatus = policy.policyStatus;
+        currentPolicy.paidClaims = policy.paidClaims;
+        currentPolicy.indoresmentNumber = policy.indoresmentNumber;
+        currentPolicy.policyImagePath = policy.policyImagePath;
+        currentPolicy.claimImagePath = policy.claimImagePath;
+        currentPolicy.indoresmentNumber = policy.getPolicyNumber();
+        currentPolicy.updatable = false;
+        return currentPolicy;
+
+    }
+
+
     public boolean save() {
         if (updatable) {
+
             return PolicyConnector.updatePolicy(this);
         }
         else {

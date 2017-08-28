@@ -75,5 +75,5 @@ public class EndorsementConnector {
         return endoresmentImagePath;
     }
 
-    public static insertIndoresment
+    //public static insertIndoresment
 }

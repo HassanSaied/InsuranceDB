@@ -168,19 +168,30 @@ public class PolicyViewController {
     }
 
     private void handlePolicyNumberClickEvent(Policy policy) {
-        managePolicy(policyMapperTableView.getSelectionModel().getSelectedItem().getPolicy(),true,"Views/policyImageViewer.fxml","View policy");
+        managePolicy(policyMapperTableView.getSelectionModel().getSelectedItem().getPolicy(),true,"Views/policyImageViewer.fxml","View policy",false);
 
 
     }
 
     private void handleIndoresmentNumberClickEvent(Policy policy) {
+        if(policy.getIndoresmentNumber()==null)
+            return;
+        PolicyMapper selectedMapper = null ;
+        for(PolicyMapper  mapper: policyMappers){
+            if(mapper.policyNumberProperty().getValue().equals(policy.getIndoresmentNumber())){
+                selectedMapper = mapper;
+            }
+        }
+        policyMapperTableView.getSelectionModel().clearSelection();
+        policyMapperTableView.getSelectionModel().select(policyMappers.indexOf(selectedMapper));
+        policyMapperTableView.getSelectionModel().select(selectedMapper);
 
 
     }
 
     @FXML
     protected void handleNewButtonMoussePress(MouseEvent event) {
-        managePolicy(null,false,"Views/detailedPolicyView.fxml","Add new policy");
+        managePolicy(null,false,"Views/detailedPolicyView.fxml","Add new policy",false);
     }
 
     @FXML
@@ -192,18 +203,22 @@ public class PolicyViewController {
 
     @FXML
     protected void handleEditPolicyButton(MouseEvent event) {
-        managePolicy(policyMapperTableView.getSelectionModel().getSelectedItem().getPolicy(),false,"Views/detailedPolicyView.fxml","Edit policy");
+        managePolicy(policyMapperTableView.getSelectionModel().getSelectedItem().getPolicy(),false,"Views/detailedPolicyView.fxml","Edit policy",true);
     }
 
-    private void managePolicy(Policy policy, boolean image,String location,String title) {
+    private void managePolicy(Policy policy, boolean image,String location,String title,boolean edit) {
         try {
             FXMLLoader newPolicyLoader = new FXMLLoader();
             newPolicyLoader.setLocation(Main.class.getResource(location));
             BorderPane newPolicyBorderPane = newPolicyLoader.load();
-            if (!image)
+            if (!image){
+                ((DetailedPolicyViewController) (newPolicyLoader.getController())).setEdit(edit);
                 ((DetailedPolicyViewController) (newPolicyLoader.getController())).setPolicy(policy);
+
+            }
             else{
                 ((PolicyImageViewController)(newPolicyLoader.getController())).setPolicy(policy);
+
             }
             Stage newPolicyDialogStage = new Stage();
             newPolicyDialogStage.setTitle(title);
