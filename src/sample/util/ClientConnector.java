@@ -1,6 +1,5 @@
 package sample.util;
 
-import org.jetbrains.annotations.Nullable;
 import sample.model.Client;
 
 import java.sql.PreparedStatement;
@@ -17,7 +16,7 @@ public class ClientConnector {
 
     public static List<Client> clients;
 
-    @Nullable
+
     public static Client getClient(int clientID) {
         if(clientID == 0)
             return null;        //TODO: throw exception here, but really will never reach it xD
@@ -45,8 +44,6 @@ public class ClientConnector {
         return client;
     }
 
-
-    @Nullable
     public static List<Client> getClients(){
 
         List<Client> clients = new Vector<Client>();

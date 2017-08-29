@@ -1,7 +1,5 @@
 package sample.util;
 
-import org.intellij.lang.annotations.Language;
-import org.jetbrains.annotations.Nullable;
 import sample.model.Policy;
 
 import java.sql.*;
@@ -192,7 +190,7 @@ public class PolicyConnector {
 
     public static boolean insertPolicy(Policy policy) {
 
-        @Language("MySQL") String insertSQL = "INSERT INTO Policy (agentName,insuranceCompany,insuranceType,beneficiary" +
+        String insertSQL = "INSERT INTO Policy (agentName,insuranceCompany,insuranceType,beneficiary" +
                 "  ,clientID,grossPremuim,specialDiscount,netPremuim" +
                 "  ,grossCommission,taxes,netCommission,expiryDate" +
                 "  ,sumInssured,currency,collective,collectiveImagePath" +
@@ -309,7 +307,6 @@ public class PolicyConnector {
         return executeSQLDelete(deleteSQL,"delete policyImagePath",policy);
     }
 
-    @Nullable
     public static List<String> getInsuranceTypes (){
         List<String> insuranceTypes = new Vector<String>();
         String selectSQL = "SELECT * FROM InsuranceType;";
@@ -324,7 +321,6 @@ public class PolicyConnector {
         return insuranceTypes;
     }
 
-    @Nullable
     public static List<String> getPolicyStatus(){
         List<String> policyStatus = new Vector<String>();
         String selectSQL = "SELECT * FROM PolicyStatus;;";

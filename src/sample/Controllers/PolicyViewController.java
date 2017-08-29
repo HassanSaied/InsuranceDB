@@ -16,7 +16,6 @@ import javafx.stage.Modality;
 import javafx.stage.Screen;
 import javafx.stage.Stage;
 import javafx.util.Callback;
-import org.jetbrains.annotations.Contract;
 import sample.Main;
 import sample.Mappers.PolicyMapper;
 import sample.model.Policy;
@@ -82,7 +81,6 @@ public class PolicyViewController {
     @FXML
     private Button deletePolicyButton;
 
-    @Contract(pure = true)
     private static TableCell<PolicyMapper, LocalDate> call(TableColumn<PolicyMapper, LocalDate> param) {
         final TableCell<PolicyMapper, LocalDate> cell = new TableCell<PolicyMapper, LocalDate>() {
             @Override

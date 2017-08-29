@@ -1,8 +1,6 @@
 package sample.util;
 
-import org.jetbrains.annotations.Contract;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+
 import sample.model.Client;
 import sample.model.Policy;
 
@@ -16,7 +14,6 @@ import java.util.List;
  */
 public class Utils {
 
-    @Contract("null -> null")
     public static Policy.Currency stringToCurrency(String currency){
         if(currency == null)
             return null;
@@ -27,7 +24,6 @@ public class Utils {
         else return Policy.Currency.USD;
     }
 
-    @Contract("null -> null")
     public static Policy.Collective stringToCollective (String collective){
         if(collective == null)
             return null;
@@ -38,14 +34,13 @@ public class Utils {
         else return Policy.Collective.None;
     }
 
-    @Contract("null -> !null")
     public static <T> String getMappedString(T property){
         if(property == null)
             return "";
         else return property.toString();
     }
 
-    @NotNull
+
     public static String getMappedString(LocalDate date){
         if(date == null)
             return "";
@@ -53,7 +48,7 @@ public class Utils {
         return formatter.format(date);
     }
 
-    @Nullable
+
     public static Client findClient(List<Client> clientList, String clientName){
 
         for (Client client: clientList) {
@@ -77,9 +72,6 @@ public class Utils {
         }
         return true;
     }
-
-    @Nullable
-    @Contract(pure = true)
     public static String emptyToNull(String testedString){
         if(testedString == null)
             return null;
@@ -88,14 +80,14 @@ public class Utils {
         else return testedString;
     }
 
-    @Nullable
+
     public static BigDecimal toBigDecimal (String convertibleString){
         if(convertibleString.isEmpty())
             return null;
         else return new BigDecimal(convertibleString);
     }
 
-    @Contract(value = "null -> null", pure = true)
+
     public static String taxesToString(BigDecimal taxes){
         if(taxes == null){
             return null;
@@ -103,7 +95,7 @@ public class Utils {
         return new StringBuilder(taxes.multiply(BigDecimal.valueOf(100)).toString()).append('%').toString();
     }
 
-    @Nullable
+
     public static Policy findPolicy(String policyNumber){
         for(Policy policy : PolicyConnector.policies)
             if(policy.getPolicyNumber().equals(policyNumber))

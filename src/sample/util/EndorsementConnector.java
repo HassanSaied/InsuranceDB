@@ -1,6 +1,5 @@
 package sample.util;
 
-import org.jetbrains.annotations.Nullable;
 import sample.model.Endorsement;
 
 import java.sql.PreparedStatement;
@@ -11,7 +10,6 @@ import java.util.Vector;
 
 public class EndorsementConnector {
 
-    @Nullable
     public static List<Endorsement> getEndorsements(String policyNumber) {
         List<Endorsement> endorsements = new Vector<Endorsement>();
         String selectSQL = "SELECT * FROM endorsements WHERE policyNumber = ?;";
@@ -47,7 +45,6 @@ public class EndorsementConnector {
         return endorsements;
     }
 
-    @Nullable
     private static List<String> getEndoresmentImagePath(Endorsement endorsement) {
         List<String> endoresmentImagePath = new Vector<String>();
         String selectSQL = "SELECT imagePath " +
