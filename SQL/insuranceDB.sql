@@ -74,41 +74,98 @@ CREATE TABLE PolicyImagePath
 
 );
 
-DELIMITER && ;
-CREATE TRIGGER clientAutoDelete AFTER DELETE ON Policy FOR EACH ROW
+DELIMITER &&;
+CREATE TRIGGER clientAutoDelete
+AFTER DELETE ON Policy
+FOR EACH ROW
   BEGIN
     DECLARE clientCount INT;
-    SELECT COUNT(*) FROM Policy WHERE clientID = OLD.clientID INTO clientCount;
-    IF (clientCount = 0) THEN
-      DELETE FROM Clients WHERE clientID = old.clientID;
-    END IF ;
+    SELECT COUNT(*)
+    FROM Policy
+    WHERE clientID = OLD.clientID
+    INTO clientCount;
+    IF (clientCount = 0)
+    THEN
+      DELETE FROM Clients
+      WHERE clientID = old.clientID;
+    END IF;
   END;
 DELIMITER ;
 
-DELIMITER && ;
-CREATE  TRIGGER pathAutoDelete BEFORE UPDATE ON Policy FOR EACH ROW
+DELIMITER &&;
+CREATE TRIGGER pathAutoDelete
+BEFORE UPDATE ON Policy
+FOR EACH ROW
   BEGIN
-    DELETE FROM PolicyImagePath WHERE PolicyImagePath.policyNumber = NEW.policyNumber;
-    DELETE FROM ClaimImagePath WHERE ClaimImagePath.policyNumber = NEW.policyNumber;
-  END ;
+    DELETE FROM PolicyImagePath
+    WHERE PolicyImagePath.policyNumber = NEW.policyNumber;
+    DELETE FROM ClaimImagePath
+    WHERE ClaimImagePath.policyNumber = NEW.policyNumber;
+  END;
+DELIMITER ;
+
+CREATE TABLE Endorsement
+(
+  policyNumber      VARCHAR(80),
+  endorsementNumber VARCHAR(80),
+  issuanceDate      DATE,
+  grossPremium      FLOAT,
+  specialDiscount   FLOAT,
+  netPremium        FLOAT,
+  grossCommission   FLOAT,
+  taxes             FLOAT,
+  netCommission     FLOAT,
+
+  PRIMARY KEY (policyNumber, endorsementNumber),
+  FOREIGN KEY (policyNumber) REFERENCES Policy (policyNumber)
+    ON DELETE CASCADE
+
+);
+
+CREATE TABLE EndorsementImagePath
+(
+  policyNumber      VARCHAR(80),
+  endorsementNumber VARCHAR(80),
+  imagePath         VARCHAR(255),
+  FOREIGN KEY (policyNumber, endorsementNumber) REFERENCES Endorsement (policyNumber, endorsementNumber)
+    ON DELETE CASCADE
+
+);
+
+
+DELIMITER &&;
+CREATE TRIGGER EndorsementPathAutoDelete
+BEFORE UPDATE ON Endorsement
+FOR EACH ROW
+  BEGIN
+    DELETE FROM EndorsementImagePath
+    WHERE EndorsementImagePath.policyNumber = NEW.policyNumber AND
+          EndorsementImagePath.endorsementNumber = NEW.endorsementNumber;
+  END;
 DELIMITER ;
 
 INSERT INTO Clients (InsuranceDB.Clients.clientName, InsuranceDB.Clients.clientNumber)
 VALUES ('Ramy Emad Malek', '01226140201'), ('Walid Hassan', '01113438653');
 
 INSERT INTO Policy VALUES
-  ('Hassan', 'AIG', 'Car', 'Egypt', 1, '209728', 3047.5, 1234.5, 1234.5, 1234.5, 0.2, 1572,CURDATE(), 12345, 'EGP',
-                                                                                      'Cache', 'asdadasd', 'Collected', 1234, NULL,NULL),
-  ('Hassan', 'AIG', 'Car', 'Egypt', 1, '209729', 3047.5, 1234.5, 1234.5, 1234.5, 0.2, 1572,CURDATE(),12345, 'EGP',
-                                                                                      'Cache', 'asdadasd', 'Collected', 1234, NULL,NULL ),
-  ('Hassan', 'AIG', 'Car', 'Egypt', 1, '209780', 3047.5, 1234.5, 1234.5, 1234.5, 0.2, 1572,CURDATE() , 12345, 'EGP',
-                                                                                      'Cache', 'asdadasd', 'Collected', 1234, NULL,NULL)
-  , ('Hassan', 'AIG', 'Car', 'Egypt', 1, '209724', 3047.5, 1234.5, 1234.5, 1234.5, 0.2, 1572,CURDATE(), 12345, 'EGP',
-                                                                                        'Cache', 'asdadasd', 'Collected', 1234, NULL,NULL),
-  ('Hassan', 'AIG', 'Car', 'Egypt', 1, '209723', 3047.5, 1234.5, 1234.5, 1234.5, 0.2, 1572,CURDATE(), 12345, 'EGP',
-                                                                                      'Cache', 'asdadasd', 'Collected', 1234, NULL,NULL),
-  ('Hassan', 'AIG', 'Car', 'Egypt', 1, '209725', 3047.5, 1234.5, 1234.5, 1234.5, 0.2, 1572,CURDATE(), 12345, 'EGP',
-                                                                                      'Cache', 'asdadasd', 'Collected', 1234, NULL,NULL );
+  ('Hassan', 'AIG', 'Car', 'Egypt', 1, '209728', 3047.5, 1234.5, 1234.5, 1234.5, 0.2, 1572, CURDATE(), 12345, 'EGP',
+                                                                                      'Cache', 'asdadasd', 'Collected',
+                                                                                      1234, NULL, NULL),
+  ('Hassan', 'AIG', 'Car', 'Egypt', 1, '209729', 3047.5, 1234.5, 1234.5, 1234.5, 0.2, 1572, CURDATE(), 12345, 'EGP',
+                                                                                      'Cache', 'asdadasd', 'Collected',
+                                                                                      1234, NULL, NULL),
+  ('Hassan', 'AIG', 'Car', 'Egypt', 1, '209780', 3047.5, 1234.5, 1234.5, 1234.5, 0.2, 1572, CURDATE(), 12345, 'EGP',
+                                                                                      'Cache', 'asdadasd', 'Collected',
+                                                                                      1234, NULL, NULL)
+  , ('Hassan', 'AIG', 'Car', 'Egypt', 1, '209724', 3047.5, 1234.5, 1234.5, 1234.5, 0.2, 1572, CURDATE(), 12345, 'EGP',
+                                                                                        'Cache', 'asdadasd',
+                                                                                        'Collected', 1234, NULL, NULL),
+  ('Hassan', 'AIG', 'Car', 'Egypt', 1, '209723', 3047.5, 1234.5, 1234.5, 1234.5, 0.2, 1572, CURDATE(), 12345, 'EGP',
+                                                                                      'Cache', 'asdadasd', 'Collected',
+                                                                                      1234, NULL, NULL),
+  ('Hassan', 'AIG', 'Car', 'Egypt', 1, '209725', 3047.5, 1234.5, 1234.5, 1234.5, 0.2, 1572, CURDATE(), 12345, 'EGP',
+                                                                                      'Cache', 'asdadasd', 'Collected',
+                                                                                      1234, NULL, NULL);
 INSERT INTO Policy (InsuranceDB.Policy.policyNumber) VALUES ('12345');
 
 
