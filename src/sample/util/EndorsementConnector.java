@@ -68,7 +68,7 @@ public class EndorsementConnector {
 
             }
         } catch (SQLException exception) {
-            System.err.println("Couldn't prepare get endoresment Image Path statement ");
+            System.err.println("Couldn't prepare get endorsement Image Path statement ");
             System.err.println("Exception" + exception.getMessage());
             return null;
 
@@ -135,7 +135,7 @@ public class EndorsementConnector {
         return true;
     }
 
-    private static boolean updateEndorsement(Endorsement endorsement){
+    public static boolean updateEndorsement(Endorsement endorsement){
         String updateSQL = "UPDATE Endorsement SET issuanceDate = ?, grossPremium = ?,specialDiscount = ?, netPremium = ?,grossCommission = ? , taxes = ?, " +
                 "netCommission = ? WHERE policyNumber = ? AND endorsementNumber = ?;";
         try(PreparedStatement statement = DatabaseConnector.getDatabaseConnection().prepareStatement(updateSQL)){
@@ -153,15 +153,34 @@ public class EndorsementConnector {
 
         }
         catch (SQLException exception){
-            System.err.println("Couldn't prepare Update endorsement statment");
+            System.err.println("Couldn't prepare Update endorsement statement");
             System.err.println("Exception" + exception.getMessage());
             return false;
 
         }
         return true;
     }
-    private static boolean deleteEndorsement(Endorsement endorsement){
-        return false;
+    public static boolean deleteEndorsement(Endorsement endorsement){
+        String deleteSQL = "DELETE FROM Endorsement WHERE policyNumber = ? AND endorsementNumber = ?;";
+        try(PreparedStatement statement = DatabaseConnector.getDatabaseConnection().prepareStatement(deleteSQL)){
+            statement.setString(1,endorsement.getPolicyNumber());
+            statement.setString(2,endorsement.getEndorsementNumber());
+            try{
+                statement.executeUpdate();
+            }
+            catch (SQLException exception){
+                System.err.println("Couldn't Delete endorsement");
+                System.err.println("Exception" + exception.getMessage());
+                return false;
+
+            }
+        }
+        catch (SQLException exception) {
+            System.err.println("Couldn't prepare Delete endorsement statement");
+            System.err.println("Exception" + exception.getMessage());
+            return false;
+        }
+        return true;
     }
 
 }

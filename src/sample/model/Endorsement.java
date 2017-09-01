@@ -1,21 +1,24 @@
 package sample.model;
 
+import sample.util.EndorsementConnector;
+
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.List;
 
 public class Endorsement {
 
-    String policyNumber;
-    String endorsementNumber;
-    LocalDate issuanceDate;
-    BigDecimal grossPremium;
-    BigDecimal specialDiscount;
-    BigDecimal netPremium;
-    BigDecimal grossCommission;
-    BigDecimal taxes;
-    BigDecimal netCommission;
-    List<String> imagePath;
+    private String policyNumber;
+    private String endorsementNumber;
+    private LocalDate issuanceDate;
+    private BigDecimal grossPremium;
+    private BigDecimal specialDiscount;
+    private BigDecimal netPremium;
+    private BigDecimal grossCommission;
+    private BigDecimal taxes;
+    private BigDecimal netCommission;
+    private List<String> imagePath;
+    boolean updatable = false;
 
     public String getPolicyNumber() {
         return policyNumber;
@@ -39,6 +42,10 @@ public class Endorsement {
 
     public void setIssuanceDate(LocalDate issuanceDate) {
         this.issuanceDate = issuanceDate;
+    }
+
+    public Endorsement(String policyNumber) {
+        this.policyNumber = policyNumber;
     }
 
     public BigDecimal getGrossPremium() {
@@ -95,5 +102,20 @@ public class Endorsement {
 
     public void setImagePath(List<String> imagePath) {
         this.imagePath = imagePath;
+    }
+
+    public boolean save() {
+        if (updatable)
+            return EndorsementConnector.updateEndorsement(this);
+        else {
+            if (!EndorsementConnector.insertEndorsement(this))
+                return false;
+            updatable = true;
+            return true;
+        }
+    }
+
+    public boolean delete(){
+        return EndorsementConnector.deleteEndorsement(this);
     }
 }
