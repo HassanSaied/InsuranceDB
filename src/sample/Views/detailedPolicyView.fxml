@@ -116,8 +116,7 @@
             <ComboBox fx:id="imageTypeComboBox" prefWidth="208.0" GridPane.rowIndex="19" />
             <Label text="Image Type" GridPane.rowIndex="18" />
             <Label text="Endorsement Number" GridPane.rowIndex="17" />
-            <ComboBox fx:id="endorsementNumberComboBox" prefWidth="150.0" GridPane.columnIndex="1" GridPane.rowIndex="17" />
-         </children>
+          </children>
          <BorderPane.margin>
             <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
          </BorderPane.margin>

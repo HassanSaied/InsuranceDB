@@ -215,10 +215,7 @@ public class PolicyMapper {
         policy.setCurrency(Utils.stringToCurrency(Utils.emptyToNull(currency.getValue())));
         policy.setGrossCommission(Utils.toBigDecimal(grossCommission.getValue()));
         policy.setGrossPremium(Utils.toBigDecimal(grossPremuim.getValue()));
-        if (Utils.emptyToNull(taxes.getValue()) == null)
-            policy.setTaxes(null);
-        else
-            policy.setTaxes(Utils.toBigDecimal(taxes.getValue().trim().replace("%", "")).divide(BigDecimal.valueOf(100.0)));
+        policy.setTaxes(Utils.stringToTaxes(taxes.getValue()));
         policy.setInsuranceCompany(Utils.emptyToNull(insuranceCompany.getValue()));
         policy.setInsuranceType(Utils.emptyToNull(insuranceType.getValue()));
         policy.setExpiryDate(expiryDate.getValue());

@@ -118,4 +118,10 @@ public class Endorsement {
     public boolean delete(){
         return EndorsementConnector.deleteEndorsement(this);
     }
+    public void computeValues(){
+        if(grossCommission != null && taxes!=null)
+            netCommission = grossCommission.subtract(taxes.multiply(grossCommission));
+        if(grossPremium !=null && specialDiscount != null)
+            netPremium = grossPremium.subtract(specialDiscount);
+    }
 }

@@ -12,6 +12,42 @@ import java.util.List;
 
 public class EndorsementMapper {
 
+    public StringProperty policyNumberProperty() {
+        return policyNumber;
+    }
+
+    public StringProperty endorsementNumberProperty() {
+        return endorsementNumber;
+    }
+
+    public StringProperty grossPremiumProperty() {
+        return grossPremium;
+    }
+
+    public StringProperty netPremiumProperty() {
+        return netPremium;
+    }
+
+    public StringProperty grossCommissionProperty() {
+        return grossCommission;
+    }
+
+    public StringProperty netCommissionProperty() {
+        return netCommission;
+    }
+
+    public StringProperty specialDiscountProperty() {
+        return specialDiscount;
+    }
+
+    public StringProperty taxesProperty() {
+        return taxes;
+    }
+
+    public ObjectProperty<LocalDate> issuanceDateProperty() {
+        return issuanceDate;
+    }
+
     private Endorsement endorsement;
     private final StringProperty policyNumber;
     private final StringProperty endorsementNumber;
@@ -23,7 +59,7 @@ public class EndorsementMapper {
     private final StringProperty taxes;
     private final ObjectProperty<LocalDate> issuanceDate;
 
-    public EndorsementMapper(Endorsement endorsement){
+    public EndorsementMapper(Endorsement endorsement) {
         this.endorsement = endorsement;
         policyNumber = new SimpleStringProperty(this.endorsement.getPolicyNumber());
         endorsementNumber = new SimpleStringProperty(this.endorsement.getEndorsementNumber());
@@ -33,10 +69,10 @@ public class EndorsementMapper {
         netCommission = new SimpleStringProperty(Utils.getMappedString(this.endorsement.getNetCommission()));
         specialDiscount = new SimpleStringProperty(Utils.getMappedString(this.endorsement.getSpecialDiscount()));
         taxes = new SimpleStringProperty(Utils.getMappedString(this.endorsement.getTaxes()));
-        issuanceDate = new SimpleObjectProperty<>(this.endorsement.getIssuanceDate()==null?null:this.endorsement.getIssuanceDate());
+        issuanceDate = new SimpleObjectProperty<>(this.endorsement.getIssuanceDate() == null ? null : this.endorsement.getIssuanceDate());
     }
 
-    public void setEndorsement(Endorsement endorsement){
+    public void setEndorsement(Endorsement endorsement) {
         this.endorsement = endorsement;
         policyNumber.setValue(endorsement.getPolicyNumber());
         endorsementNumber.setValue(this.endorsement.getEndorsementNumber());
@@ -49,21 +85,22 @@ public class EndorsementMapper {
         issuanceDate.setValue(endorsement.getIssuanceDate());
     }
 
-    public void sync (List<String> endorsementImagePath){
+    public void sync(List<String> endorsementImagePath) {
+        endorsement.setEndorsementNumber(endorsementNumber.getValue());
         endorsement.setGrossPremium(Utils.toBigDecimal(grossPremium.getValue()));
         endorsement.setGrossCommission(Utils.toBigDecimal(grossCommission.getValue()));
         endorsement.setNetPremium(Utils.toBigDecimal(netPremium.getValue()));
         endorsement.setNetCommission(Utils.toBigDecimal(netCommission.getValue()));
         endorsement.setSpecialDiscount(Utils.toBigDecimal(specialDiscount.getValue()));
-        endorsement.setTaxes(Utils.toBigDecimal(taxes.getValue()));
+        endorsement.setTaxes(Utils.stringToTaxes(taxes.getValue()));
         endorsement.setIssuanceDate(issuanceDate.getValue());
+        endorsement.setImagePath(endorsementImagePath);
 
     }
 
-    public boolean save(){
+    public boolean save() {
         return endorsement.save();
     }
-
 
 
 }

@@ -20,8 +20,7 @@ public class EndorsementConnector {
             statement.setString(1, policyNumber);
             try (ResultSet resultSet = statement.executeQuery()) {
                 while (resultSet.next()) {
-                    Endorsement currentEndorsement = new Endorsement();
-                    currentEndorsement.setPolicyNumber(resultSet.getString(1));
+                    Endorsement currentEndorsement = new Endorsement(resultSet.getString(1));
                     currentEndorsement.setEndorsementNumber(resultSet.getString(2));
                     currentEndorsement.setIssuanceDate(resultSet.getDate(3) == null ? null : resultSet.getDate(3).toLocalDate());
                     currentEndorsement.setGrossPremium(resultSet.getBigDecimal(4));
@@ -50,16 +49,16 @@ public class EndorsementConnector {
     }
 
     private static List<String> getEndorsementImagePath(Endorsement endorsement) {
-        List<String> endoresmentImagePath = new Vector<String>();
+        List<String> endorsementImagePath = new Vector<String>();
         String selectSQL = "SELECT imagePath " +
-                "FROM endoresmentImagePath " +
-                "WHERE policyNumber = ? AND endoresmentNumber = ? ;";
+                "FROM EndorsementImagePath " +
+                "WHERE policyNumber = ? AND endorsementNumber = ? ;";
         try (PreparedStatement statement = DatabaseConnector.getDatabaseConnection().prepareStatement(selectSQL)) {
             statement.setString(1, endorsement.getPolicyNumber());
             statement.setString(2, endorsement.getEndorsementNumber());
             try (ResultSet resultSet = statement.executeQuery()) {
                 while (resultSet.next()) {
-                    endoresmentImagePath.add(resultSet.getString(1));
+                    endorsementImagePath.add(resultSet.getString(1));
                 }
             } catch (SQLException exception) {
                 System.err.println("Couldn't get endorsement Image Path");
@@ -73,7 +72,7 @@ public class EndorsementConnector {
             return null;
 
         }
-        return endoresmentImagePath;
+        return endorsementImagePath;
     }
 
     public static boolean insertEndorsement(Endorsement endorsement) {

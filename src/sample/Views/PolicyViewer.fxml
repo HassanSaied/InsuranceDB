@@ -58,7 +58,7 @@
                           <Label prefWidth="80" text="Special Discount" textAlignment="CENTER" wrapText="true" />
                       </graphic>
                   </TableColumn>
-                  <TableColumn fx:id="netPremuimColumn">
+                  <TableColumn fx:id="netPremiumColumn">
                       <graphic>
                           <Label prefWidth="80" text="Net Premium" textAlignment="CENTER" wrapText="true" />
                       </graphic>

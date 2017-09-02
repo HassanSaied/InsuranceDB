@@ -5,6 +5,7 @@ import sample.model.Client;
 import sample.model.Policy;
 
 import java.math.BigDecimal;
+import java.math.MathContext;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
@@ -101,6 +102,13 @@ public class Utils {
             if(policy.getPolicyNumber().equals(policyNumber))
                 return policy;
         return null;
+    }
+
+    public static BigDecimal stringToTaxes(String tax){
+        if(emptyToNull(tax)==null)
+            return null;
+        else return Utils.toBigDecimal(tax.trim().replace("%", "")).
+                divide(BigDecimal.valueOf(100.0));
     }
 
 }
