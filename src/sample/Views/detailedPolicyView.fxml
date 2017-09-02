@@ -14,112 +14,131 @@
 <?import javafx.scene.layout.GridPane?>
 <?import javafx.scene.layout.RowConstraints?>
 
-<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="439.0" prefWidth="653.0" xmlns="http://javafx.com/javafx/8.0.111" xmlns:fx="http://javafx.com/fxml/1" fx:controller="sample.Controllers.DetailedPolicyViewController">
-   <bottom>
-      <ButtonBar prefHeight="40.0" prefWidth="200.0" BorderPane.alignment="CENTER">
-        <buttons>
-          <Button fx:id="saveButton" mnemonicParsing="false" onMousePressed="#handleSaveButton" text="Save" />
-            <Button fx:id="cancelButton" cancelButton="true" mnemonicParsing="false" onMousePressed="#handleCancelButton" text="Cancel" />
-        </buttons>
-         <BorderPane.margin>
-            <Insets left="10.0" right="10.0" top="10.0" />
-         </BorderPane.margin>
-      </ButtonBar>
-   </bottom>
-   <center>
-      <GridPane vgap="10.0" BorderPane.alignment="CENTER">
-        <columnConstraints>
-          <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
-            <ColumnConstraints hgrow="SOMETIMES" maxWidth="239.0" minWidth="97.0" prefWidth="152.0" />
-            <ColumnConstraints hgrow="SOMETIMES" maxWidth="239.0" minWidth="10.0" prefWidth="152.0" />
-          <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
-        </columnConstraints>
-        <rowConstraints>
-            <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-            <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-            <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-          <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-          <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-          <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-            <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-            <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-            <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-            <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-            <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-            <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-            <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-            <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-            <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-            <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-            <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-            <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-            <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-            <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-            <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-        </rowConstraints>
-         <children>
-            <Label text="Policy Number" />
-            <Label text="Agent Name" GridPane.rowIndex="1" />
-            <Label text="Insurance Company" GridPane.rowIndex="2" />
-            <Label text="Insurance Type" GridPane.rowIndex="3" />
-            <Label text="Beneficiary" GridPane.rowIndex="4" />
-            <Label text="Client" GridPane.rowIndex="5" />
-            <TextField fx:id="policyNumberTextField" GridPane.columnIndex="1" />
-            <TextField fx:id="agentNameTextField" GridPane.columnIndex="1" GridPane.rowIndex="1" />
-            <TextField fx:id="insuranceCompanyTextField" GridPane.columnIndex="1" GridPane.rowIndex="2" />
-            <ComboBox fx:id="insuranceTypeComboBox" prefHeight="26.0" prefWidth="208.0" GridPane.columnIndex="1" GridPane.rowIndex="3" />
-            <TextField fx:id="beneficiaryTextField" GridPane.columnIndex="1" GridPane.rowIndex="4" />
-            <ComboBox fx:id="clientComboBox" prefHeight="26.0" prefWidth="208.0" GridPane.columnIndex="1" GridPane.rowIndex="5" />
-            <Label text="Gross Premium" GridPane.rowIndex="6" />
-            <Label text="Special Discount" GridPane.rowIndex="7" />
-            <Label text="Gross Commission" GridPane.rowIndex="8" />
-            <Label text="Taxes" GridPane.rowIndex="9" />
-            <Label text="Expiry Date" GridPane.rowIndex="11" />
-            <TextField fx:id="grossPremiumTextField" GridPane.columnIndex="1" GridPane.rowIndex="6" />
-            <TextField fx:id="specialDiscountTextField" GridPane.columnIndex="1" GridPane.rowIndex="7" />
-            <TextField fx:id="grossCommissionTextField" disable="true" GridPane.columnIndex="1" GridPane.rowIndex="8" />
-            <PasswordField fx:id="commissionPasswordField" GridPane.columnIndex="3" GridPane.rowIndex="8" />
-            <Label text="Password" GridPane.columnIndex="2" GridPane.halignment="CENTER" GridPane.rowIndex="8" />
-            <ComboBox fx:id="taxesComboBox" prefHeight="26.0" prefWidth="208.0" GridPane.columnIndex="1" GridPane.rowIndex="9" />
-            <DatePicker fx:id="issuanceDataDatePicker" GridPane.columnIndex="1" GridPane.rowIndex="10" />
-            <DatePicker fx:id="expiryDateDatePicker" GridPane.columnIndex="1" GridPane.rowIndex="11" />
-            <Label text="Issuance Data" GridPane.rowIndex="10" />
-            <Label text="Sum Insured" GridPane.rowIndex="12" />
-            <Label text="Paid Claims" GridPane.rowIndex="13" />
-            <Label text="Currency" GridPane.rowIndex="14" />
-            <Label text="Collective" GridPane.rowIndex="15" />
-            <Label text="Policy Status" GridPane.rowIndex="16" />
-            <TextField fx:id="sumInsuredTextField" GridPane.columnIndex="1" GridPane.rowIndex="12" />
-            <TextField fx:id="paidClaimsTextField" GridPane.columnIndex="1" GridPane.rowIndex="13" />
-            <ComboBox fx:id="currencyComboBox" prefHeight="26.0" prefWidth="208.0" GridPane.columnIndex="1" GridPane.rowIndex="14" />
-            <ComboBox fx:id="collectiveComboBox" prefHeight="26.0" prefWidth="208.0" GridPane.columnIndex="1" GridPane.rowIndex="15" />
-            <ComboBox fx:id="policyStatusComboBox" prefHeight="26.0" prefWidth="208.0" GridPane.columnIndex="1" GridPane.rowIndex="16" />
-            <ButtonBar prefHeight="26.0" prefWidth="230.0" GridPane.columnIndex="3" GridPane.rowIndex="5">
-              <buttons>
-                  <Button fx:id="addClientButton" mnemonicParsing="false" onMousePressed="#handleAddClientButton" prefHeight="26.0" prefWidth="128.0" text="Add Client" />
-                <Button fx:id="editClientButton" mnemonicParsing="false" onMousePressed="#handleEditClientButton" text="Edit Client" />
-              </buttons>
-            </ButtonBar>
-            <ButtonBar GridPane.columnIndex="3" GridPane.rowIndex="3">
-               <buttons>
-                  <Button mnemonicParsing="false" onMousePressed="#handleAddInsuranceTypeButton" text="Add Insurance Type" />
-               </buttons>
-            </ButtonBar>
-            <TextField fx:id="clientPhoneNumberTextField" editable="false" promptText="Client Phone Number" GridPane.columnIndex="2" GridPane.rowIndex="5" />
-            <ListView fx:id="imagePathListView" prefHeight="200.0" prefWidth="200.0" GridPane.columnIndex="1" GridPane.columnSpan="2" GridPane.rowIndex="18" GridPane.rowSpan="2147483647" />
-            <ButtonBar prefHeight="40.0" prefWidth="200.0" GridPane.columnIndex="3" GridPane.rowIndex="19">
-              <buttons>
-                <Button fx:id="deleteImageButton" mnemonicParsing="false" onMousePressed="#handleDeleteImageButton" text="Delete" />
-                  <Button fx:id="imageBrowseButton" mnemonicParsing="false" onMousePressed="#handleImageBrowseButton" text="Browse" />
-              </buttons>
-            </ButtonBar>
-            <ComboBox fx:id="imageTypeComboBox" prefWidth="208.0" GridPane.rowIndex="19" />
-            <Label text="Image Type" GridPane.rowIndex="18" />
-            <Label text="Endorsement Number" GridPane.rowIndex="17" />
-          </children>
-         <BorderPane.margin>
-            <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
-         </BorderPane.margin>
-      </GridPane>
-   </center>
+<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="439.0"
+            prefWidth="653.0" xmlns="http://javafx.com/javafx/8.0.111" xmlns:fx="http://javafx.com/fxml/1"
+            fx:controller="sample.Controllers.DetailedPolicyViewController">
+    <bottom>
+        <ButtonBar prefHeight="40.0" prefWidth="200.0" BorderPane.alignment="CENTER">
+            <buttons>
+                <Button fx:id="saveButton" mnemonicParsing="false" onMousePressed="#handleSaveButton" text="Save"/>
+                <Button fx:id="cancelButton" cancelButton="true" mnemonicParsing="false"
+                        onMousePressed="#handleCancelButton" text="Cancel"/>
+            </buttons>
+            <BorderPane.margin>
+                <Insets left="10.0" right="10.0" top="10.0"/>
+            </BorderPane.margin>
+        </ButtonBar>
+    </bottom>
+    <center>
+        <GridPane vgap="10.0" BorderPane.alignment="CENTER">
+            <columnConstraints>
+                <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0"/>
+                <ColumnConstraints hgrow="SOMETIMES" maxWidth="239.0" minWidth="97.0" prefWidth="152.0"/>
+                <ColumnConstraints hgrow="SOMETIMES" maxWidth="239.0" minWidth="10.0" prefWidth="152.0"/>
+                <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0"/>
+            </columnConstraints>
+            <rowConstraints>
+                <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES"/>
+                <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES"/>
+                <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES"/>
+                <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES"/>
+                <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES"/>
+                <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES"/>
+                <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES"/>
+                <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES"/>
+                <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES"/>
+                <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES"/>
+                <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES"/>
+                <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES"/>
+                <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES"/>
+                <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES"/>
+                <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES"/>
+                <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES"/>
+                <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES"/>
+                <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES"/>
+                <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES"/>
+                <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES"/>
+                <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES"/>
+            </rowConstraints>
+            <children>
+                <Label text="Policy Number"/>
+                <Label text="Agent Name" GridPane.rowIndex="1"/>
+                <Label text="Insurance Company" GridPane.rowIndex="2"/>
+                <Label text="Insurance Type" GridPane.rowIndex="3"/>
+                <Label text="Beneficiary" GridPane.rowIndex="4"/>
+                <Label text="Client" GridPane.rowIndex="5"/>
+                <TextField fx:id="policyNumberTextField" GridPane.columnIndex="1"/>
+                <TextField fx:id="agentNameTextField" GridPane.columnIndex="1" GridPane.rowIndex="1"/>
+                <TextField fx:id="insuranceCompanyTextField" GridPane.columnIndex="1" GridPane.rowIndex="2"/>
+                <ComboBox fx:id="insuranceTypeComboBox" prefHeight="26.0" prefWidth="208.0" GridPane.columnIndex="1"
+                          GridPane.rowIndex="3"/>
+                <TextField fx:id="beneficiaryTextField" GridPane.columnIndex="1" GridPane.rowIndex="4"/>
+                <ComboBox fx:id="clientComboBox" prefHeight="26.0" prefWidth="208.0" GridPane.columnIndex="1"
+                          GridPane.rowIndex="5"/>
+                <Label text="Gross Premium" GridPane.rowIndex="6"/>
+                <Label text="Special Discount" GridPane.rowIndex="7"/>
+                <Label text="Gross Commission" GridPane.rowIndex="9"/>
+                <Label text="Taxes" GridPane.rowIndex="10"/>
+                <Label text="Expiry Date" GridPane.rowIndex="12"/>
+                <TextField fx:id="grossPremiumTextField" GridPane.columnIndex="1" GridPane.rowIndex="6"/>
+                <TextField fx:id="specialDiscountTextField" GridPane.columnIndex="1" GridPane.rowIndex="7"/>
+                <Label text="Net Premium" GridPane.rowIndex="8"/>
+                <TextField fx:id="netPremiumTextField" GridPane.columnIndex="1" GridPane.rowIndex="8"/>
+                <TextField fx:id="grossCommissionTextField" disable="true" GridPane.columnIndex="1"
+                           GridPane.rowIndex="9"/>
+                <PasswordField fx:id="commissionPasswordField" GridPane.columnIndex="3" GridPane.rowIndex="9"/>
+                <Label text="Password" GridPane.columnIndex="2" GridPane.halignment="CENTER" GridPane.rowIndex="9"/>
+                <ComboBox fx:id="taxesComboBox" prefHeight="26.0" prefWidth="208.0" GridPane.columnIndex="1"
+                          GridPane.rowIndex="10"/>
+                <DatePicker fx:id="issuanceDataDatePicker" GridPane.columnIndex="1" GridPane.rowIndex="11"/>
+                <DatePicker fx:id="expiryDateDatePicker" GridPane.columnIndex="1" GridPane.rowIndex="12"/>
+                <Label text="Issuance Data" GridPane.rowIndex="11"/>
+                <Label text="Sum Insured" GridPane.rowIndex="13"/>
+                <Label text="Paid Claims" GridPane.rowIndex="14"/>
+                <Label text="Currency" GridPane.rowIndex="15"/>
+                <Label text="Collective" GridPane.rowIndex="16"/>
+                <Label text="Policy Status" GridPane.rowIndex="17"/>
+                <TextField fx:id="sumInsuredTextField" GridPane.columnIndex="1" GridPane.rowIndex="13"/>
+                <TextField fx:id="paidClaimsTextField" GridPane.columnIndex="1" GridPane.rowIndex="14"/>
+                <ComboBox fx:id="currencyComboBox" prefHeight="26.0" prefWidth="208.0" GridPane.columnIndex="1"
+                          GridPane.rowIndex="15"/>
+                <ComboBox fx:id="collectiveComboBox" prefHeight="26.0" prefWidth="208.0" GridPane.columnIndex="1"
+                          GridPane.rowIndex="16"/>
+                <ComboBox fx:id="policyStatusComboBox" prefHeight="26.0" prefWidth="208.0" GridPane.columnIndex="1"
+                          GridPane.rowIndex="17"/>
+                <ButtonBar prefHeight="26.0" prefWidth="230.0" GridPane.columnIndex="3" GridPane.rowIndex="5">
+                    <buttons>
+                        <Button fx:id="addClientButton" mnemonicParsing="false" onMousePressed="#handleAddClientButton"
+                                prefHeight="26.0" prefWidth="128.0" text="Add Client"/>
+                        <Button fx:id="editClientButton" mnemonicParsing="false"
+                                onMousePressed="#handleEditClientButton" text="Edit Client"/>
+                    </buttons>
+                </ButtonBar>
+                <ButtonBar GridPane.columnIndex="3" GridPane.rowIndex="3">
+                    <buttons>
+                        <Button mnemonicParsing="false" onMousePressed="#handleAddInsuranceTypeButton"
+                                text="Add Insurance Type"/>
+                    </buttons>
+                </ButtonBar>
+                <TextField fx:id="clientPhoneNumberTextField" editable="false" promptText="Client Phone Number"
+                           GridPane.columnIndex="2" GridPane.rowIndex="5"/>
+                <ListView fx:id="imagePathListView" prefHeight="200.0" prefWidth="200.0" GridPane.columnIndex="1"
+                          GridPane.columnSpan="2" GridPane.rowIndex="18" GridPane.rowSpan="2147483647"/>
+                <ButtonBar prefHeight="40.0" prefWidth="200.0" GridPane.columnIndex="3" GridPane.rowIndex="19">
+                    <buttons>
+                        <Button fx:id="deleteImageButton" mnemonicParsing="false"
+                                onMousePressed="#handleDeleteImageButton" text="Delete"/>
+                        <Button fx:id="imageBrowseButton" mnemonicParsing="false"
+                                onMousePressed="#handleImageBrowseButton" text="Browse"/>
+                    </buttons>
+                </ButtonBar>
+                <ComboBox fx:id="imageTypeComboBox" prefWidth="208.0" GridPane.rowIndex="19"/>
+                <Label text="Image Type" GridPane.rowIndex="18"/>
+
+            </children>
+            <BorderPane.margin>
+                <Insets bottom="10.0" left="10.0" right="10.0" top="10.0"/>
+            </BorderPane.margin>
+        </GridPane>
+    </center>
 </BorderPane>

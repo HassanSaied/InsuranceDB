@@ -30,6 +30,7 @@ public class EndorsementConnector {
                     currentEndorsement.setTaxes(resultSet.getBigDecimal(8));
                     currentEndorsement.setNetCommission(resultSet.getBigDecimal(9));
                     currentEndorsement.setImagePath(getEndorsementImagePath(currentEndorsement));
+                    currentEndorsement.setUpdatable();
                     endorsements.add(currentEndorsement);
 
                 }

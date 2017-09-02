@@ -36,7 +36,7 @@ public class EndorsementViewController {
     @FXML
     private TableColumn<EndorsementMapper, String> specialDiscountTableColumn;
     @FXML
-    private Button editEndorsementButton;
+    private Button editEndorsementButton,deleteEndorsementButton;
     private String policyNumber;
     public ObservableList<EndorsementMapper> endorsementMappers;
 
@@ -56,6 +56,7 @@ public class EndorsementViewController {
         setColumnContents();
         endorsementTableView.setItems(endorsementMappers);
         editEndorsementButton.disableProperty().bind(endorsementTableView.getSelectionModel().selectedIndexProperty().lessThan(0));
+        deleteEndorsementButton.disableProperty().bind(endorsementTableView.getSelectionModel().selectedIndexProperty().lessThan(0));
     }
 
     public void setPolicyNumber(String policyNumber) {
@@ -90,9 +91,36 @@ public class EndorsementViewController {
             System.err.println("Exception " + exception.getMessage());
         }
     }
+
+
+    @FXML protected void handleEditButton(MouseEvent event){
+        FXMLLoader detailedEndorsementViewLoader = new FXMLLoader();
+        detailedEndorsementViewLoader.setLocation(Main.class.getResource("Views/detailedEndorsementView.fxml"));
+        try {
+            BorderPane detailedEndorsementViewBorderPane = detailedEndorsementViewLoader.load();
+            ((DetailedEndorsementViewController) detailedEndorsementViewLoader.getController()).setPolicyNumber(policyNumber);
+            ((DetailedEndorsementViewController) detailedEndorsementViewLoader.getController()).setEndorsement(endorsementTableView.getSelectionModel().getSelectedItem().getEndorsement());
+            Stage newEndorsementStage = new Stage();
+            newEndorsementStage.setTitle("New Endorsement");
+            newEndorsementStage.initModality(Modality.WINDOW_MODAL);
+            newEndorsementStage.initOwner(Main.primaryStage);
+            Scene dialog = new Scene(detailedEndorsementViewBorderPane);
+            newEndorsementStage.setScene(dialog);
+            newEndorsementStage.showAndWait();
+            generateEndorsementMappers();
+        } catch (IOException exception) {
+            System.err.println("Couldn't Load detailed Endorsement View");
+            System.err.println("Exception " + exception.getMessage());
+        }
+
+    }
     @FXML protected void handleCloseButton(MouseEvent event){
         Stage currentStage = (Stage)editEndorsementButton.getScene().getWindow();
         currentStage.close();
+    }
+    @FXML protected void handleDeleteButton(MouseEvent event){
+        endorsementTableView.getSelectionModel().getSelectedItem().delete();
+        generateEndorsementMappers();
     }
 
 

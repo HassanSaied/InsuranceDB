@@ -80,7 +80,7 @@ public class DetailedPolicyViewController {
     private ComboBox<String> imageTypeComboBox;
     @FXML
     private ListView<String> imagePathListView;
-
+    @FXML private TextField netPremiumTextField;
     @FXML
     private TextField paidClaimsTextField;
 
@@ -185,6 +185,7 @@ public class DetailedPolicyViewController {
         policyStatusComboBox.valueProperty().bindBidirectional(currentPolicyMapper.policyStatusProperty());
         imageBrowseButton.disableProperty().bind(imageTypeComboBox.getSelectionModel().selectedItemProperty().isNull());
         deleteImageButton.disableProperty().bind(imagePathListView.getSelectionModel().selectedItemProperty().isNull());
+        netPremiumTextField.textProperty().bindBidirectional(currentPolicyMapper.netPremiumProperty());
         editClientButton.disableProperty().bind(clientComboBox.getSelectionModel().selectedItemProperty().isNull());
         paidClaimsTextField.textProperty().bindBidirectional(currentPolicyMapper.paidClaimsProperty());
    }

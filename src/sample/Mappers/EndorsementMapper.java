@@ -95,11 +95,18 @@ public class EndorsementMapper {
         endorsement.setTaxes(Utils.stringToTaxes(taxes.getValue()));
         endorsement.setIssuanceDate(issuanceDate.getValue());
         endorsement.setImagePath(endorsementImagePath);
+        endorsement.computeValues();
 
     }
 
     public boolean save() {
         return endorsement.save();
+    }
+    public boolean delete(){
+        return endorsement.delete();
+    }
+    public Endorsement getEndorsement(){
+        return endorsement;
     }
 
 

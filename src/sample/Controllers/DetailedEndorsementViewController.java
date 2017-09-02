@@ -5,10 +5,15 @@ import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import javafx.scene.input.MouseEvent;
+import javafx.stage.FileChooser;
 import javafx.stage.Stage;
+import sample.Main;
 import sample.Mappers.EndorsementMapper;
 import sample.model.Endorsement;
 import sample.util.Definitions;
+
+import java.io.File;
+import java.util.List;
 
 public class DetailedEndorsementViewController {
 
@@ -30,6 +35,7 @@ public class DetailedEndorsementViewController {
     private PasswordField commissionPasswordField;
     @FXML
     private ListView<String> endorsementImageListView;
+    @FXML private TextField netPremiumTextField;
     private EndorsementMapper currentEndorsementMapper;
     private ObservableList<String> endorsementImagePath;
 
@@ -51,6 +57,7 @@ public class DetailedEndorsementViewController {
         grossPremiumTextField.textProperty().bindBidirectional(currentEndorsementMapper.grossPremiumProperty());
         specialDiscountTextField.textProperty().bindBidirectional(currentEndorsementMapper.specialDiscountProperty());
         taxesComboBox.valueProperty().bindBidirectional(currentEndorsementMapper.taxesProperty());
+        netPremiumTextField.textProperty().bindBidirectional(currentEndorsementMapper.netPremiumProperty());
         issuanceDateDatePicker.valueProperty().bindBidirectional(currentEndorsementMapper.issuanceDateProperty());
         grossCommissionTextField.disableProperty().bind(commissionPasswordField.textProperty().isNotEqualTo(Definitions.password));
     }
@@ -68,6 +75,7 @@ public class DetailedEndorsementViewController {
 
     public void setEndorsement(Endorsement endorsement) {
         currentEndorsementMapper.setEndorsement(endorsement);
+        endorsementImagePath.addAll(endorsement.getImagePath());
     }
 
     @FXML
@@ -83,6 +91,17 @@ public class DetailedEndorsementViewController {
     protected void handleCancelButton(MouseEvent event) {
         Stage currentStage = (Stage) endorsementNumberTextField.getScene().getWindow();
         currentStage.close();
+    }
+    @FXML protected void handleBrowseButton(MouseEvent event){
+        FileChooser fileChooser = new FileChooser();
+        fileChooser.setTitle("Endorsement Images");
+        fileChooser.setInitialDirectory(new File(System.getProperty("user.home")));
+        List<File> images= fileChooser.showOpenMultipleDialog(Main.primaryStage);
+        if(images == null)
+            return;
+        for(File file : images){
+            endorsementImagePath.add(file.getAbsolutePath());
+        }
     }
 
 }

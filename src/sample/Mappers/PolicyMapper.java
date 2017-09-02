@@ -1,14 +1,10 @@
 package sample.Mappers;
 
-import javafx.beans.property.ObjectProperty;
-import javafx.beans.property.SimpleObjectProperty;
-import javafx.beans.property.SimpleStringProperty;
-import javafx.beans.property.StringProperty;
+import javafx.beans.property.*;
 import sample.model.Policy;
 import sample.util.ClientConnector;
 import sample.util.Utils;
 
-import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.List;
 
@@ -40,7 +36,8 @@ public class PolicyMapper {
     private final StringProperty collective;
     private final StringProperty policyStatus;
     private final StringProperty paidClaims;
-    private final StringProperty indoresmentNumber;
+    private final StringProperty endorsementNumber;
+    private final BooleanProperty hasEndorsement;
 
     public ObjectProperty<LocalDate> expiryDateProperty() {
         return expiryDate;
@@ -53,6 +50,9 @@ public class PolicyMapper {
         return issuanceDate;
     }
 
+    public BooleanProperty hasEndorsementProperty() {
+        return hasEndorsement;
+    }
 
     public StringProperty agentNameProperty() {
         return agentName;
@@ -131,8 +131,8 @@ public class PolicyMapper {
         return paidClaims;
     }
 
-    public StringProperty indoresmentNumberProperty() {
-        return indoresmentNumber;
+    public StringProperty endorsementNumberProperty() {
+        return endorsementNumber;
     }
 
 
@@ -169,9 +169,10 @@ public class PolicyMapper {
         collective = new SimpleStringProperty(Utils.getMappedString(this.policy.getCollective()));
         policyStatus = new SimpleStringProperty(Utils.getMappedString(this.policy.getPolicyStatus()));
         paidClaims = new SimpleStringProperty(Utils.getMappedString(this.policy.getPaidClaims()));
-        indoresmentNumber = new SimpleStringProperty(Utils.getMappedString(this.policy.getIndoresmentNumber()));
-        issuanceDate = new SimpleObjectProperty<LocalDate>(this.policy.getIssuanceDate() == null ? null : this.policy.getIssuanceDate());
-        expiryDate = new SimpleObjectProperty<LocalDate>(this.policy.getExpiryDate() == null ? null : this.policy.getExpiryDate());
+        endorsementNumber = new SimpleStringProperty(Utils.getMappedString(this.policy.getIndoresmentNumber()));
+        issuanceDate = new SimpleObjectProperty<LocalDate>(this.policy.getIssuanceDate());
+        expiryDate = new SimpleObjectProperty<LocalDate>(this.policy.getExpiryDate());
+        hasEndorsement = new SimpleBooleanProperty(this.policy.hasEndorsements());
     }
 
     public void setPolicy(Policy policy) {
@@ -199,9 +200,10 @@ public class PolicyMapper {
         collective.setValue(Utils.getMappedString(this.policy.getCollective()));
         policyStatus.setValue(Utils.getMappedString(this.policy.getPolicyStatus()));
         paidClaims.setValue(Utils.getMappedString(this.policy.getPaidClaims()));
-        indoresmentNumber.setValue(Utils.emptyToNull(this.policy.getIndoresmentNumber()));
+        endorsementNumber.setValue(Utils.emptyToNull(this.policy.getIndoresmentNumber()));
         expiryDate.setValue(policy.getExpiryDate());
         issuanceDate.setValue(policy.getIssuanceDate());
+        hasEndorsement.setValue(policy.hasEndorsements());
     }
 
     public void sync(List<String> claimImagePath, List<String> policyImagePath, String collectiveImagePath) {
@@ -215,6 +217,7 @@ public class PolicyMapper {
         policy.setCurrency(Utils.stringToCurrency(Utils.emptyToNull(currency.getValue())));
         policy.setGrossCommission(Utils.toBigDecimal(grossCommission.getValue()));
         policy.setGrossPremium(Utils.toBigDecimal(grossPremuim.getValue()));
+        policy.setNetPremium(Utils.toBigDecimal(netPremium.getValue()));
         policy.setTaxes(Utils.stringToTaxes(taxes.getValue()));
         policy.setInsuranceCompany(Utils.emptyToNull(insuranceCompany.getValue()));
         policy.setInsuranceType(Utils.emptyToNull(insuranceType.getValue()));
@@ -227,7 +230,7 @@ public class PolicyMapper {
         policy.setClaimImagePath(claimImagePath);
         policy.setPolicyImagePath(policyImagePath);
         policy.setCollectiveImagePath(collectiveImagePath);
-        policy.setIndoresmentNumber(Utils.emptyToNull(indoresmentNumber.getValue()));
+        policy.setIndoresmentNumber(Utils.emptyToNull(endorsementNumber.getValue()));
         policy.calculateValues();
     }
 

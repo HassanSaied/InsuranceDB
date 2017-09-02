@@ -8,8 +8,7 @@
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.BorderPane?>
 
-
-<BorderPane fx:controller="sample.Controllers.EndorsementViewController" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/8.0.111" xmlns:fx="http://javafx.com/fxml/1">
+<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/8.0.111" xmlns:fx="http://javafx.com/fxml/1" fx:controller="sample.Controllers.EndorsementViewController">
    <center>
       <AnchorPane prefHeight="200.0" prefWidth="200.0" BorderPane.alignment="CENTER">
          <children>
@@ -51,9 +50,10 @@
    <bottom>
       <ButtonBar prefHeight="40.0" prefWidth="200.0" BorderPane.alignment="CENTER">
         <buttons>
-          <Button onMousePressed="#handleNewButton" mnemonicParsing="false" text="New" />
-            <Button fx:id="editEndorsementButton" mnemonicParsing="false" text="Edit" />
-            <Button onMousePressed="#handleCloseButton" cancelButton="true" mnemonicParsing="false" text="Close" />
+          <Button mnemonicParsing="false" onMousePressed="#handleNewButton" text="New" />
+            <Button onMousePressed="#handleEditButton" fx:id="editEndorsementButton" mnemonicParsing="false" text="Edit" />
+            <Button onMousePressed="#handleDeleteButton" fx:id="deleteEndorsementButton" mnemonicParsing="false" text="Delete" />
+            <Button cancelButton="true" mnemonicParsing="false" onMousePressed="#handleCloseButton" text="Close" />
         </buttons>
       </ButtonBar>
    </bottom>

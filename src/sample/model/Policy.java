@@ -82,6 +82,15 @@ public class Policy {
     private String indoresmentNumber;
     private List<String> policyImagePath;
     private List<String> claimImagePath;
+    private boolean hasEndorsements = false;
+
+    public boolean hasEndorsements() {
+        return hasEndorsements;
+    }
+
+    public void setHasEndorsements(boolean hasEndorsements) {
+        this.hasEndorsements = hasEndorsements;
+    }
 
     public String getAgentName() {
         return agentName;
@@ -316,8 +325,6 @@ public class Policy {
     public void calculateValues(){
         if(grossCommission != null && taxes!=null)
             netCommission = grossCommission.subtract(taxes.multiply(grossCommission));
-        if(grossPremium !=null && specialDiscount != null)
-             netPremium = grossPremium.subtract(specialDiscount);
     }
 
     public void setUpdatable(){

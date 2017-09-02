@@ -45,6 +45,7 @@ public class PolicyConnector {
                 currentPolicy.setClaimImagePath(getClaimImagesPath(currentPolicy.getPolicyNumber()));
                 currentPolicy.setPolicyImagePath(getPolicyImagesPath(currentPolicy.getPolicyNumber()));
                 currentPolicy.setIssuanceDate(resultSet.getDate(21)==null?null:resultSet.getDate(21).toLocalDate());
+                currentPolicy.setHasEndorsements(resultSet.getBoolean(22));
                 currentPolicy.setUpdatable();
                 policies.add(currentPolicy);
             }

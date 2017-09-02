@@ -39,7 +39,7 @@ public class PolicyViewController {
     @FXML
     private TableColumn<PolicyMapper, String> policyNumberColumn;
     @FXML
-    private TableColumn<PolicyMapper, String> indoresmentNumberColumn;
+    private TableColumn<PolicyMapper, Boolean> hasEndorsementsColumn;
     @FXML
     private TableColumn<PolicyMapper, String> agentNameColumn;
     @FXML
@@ -119,8 +119,27 @@ public class PolicyViewController {
     private void setColumnContents() {
         policyNumberColumn.setCellValueFactory(cellData -> cellData.getValue().policyNumberProperty());
         setCellEventHandler(policyNumberColumn, this::handlePolicyNumberClickEvent);
-        indoresmentNumberColumn.setCellValueFactory(cellData -> cellData.getValue().indoresmentNumberProperty());
-        setCellEventHandler(indoresmentNumberColumn, this::handleEndorsementNumberClickEvent);
+        hasEndorsementsColumn.setCellValueFactory(cellData -> cellData.getValue().hasEndorsementProperty());
+        hasEndorsementsColumn.setCellFactory(param -> {
+            final TableCell<PolicyMapper, Boolean> cell = new TableCell<PolicyMapper, Boolean>() {
+                @Override
+                protected void updateItem(Boolean item, boolean empty) {
+                    if (empty || item == null)
+                        setText(null);
+                    else if (item)
+                        setText("Yes");
+                    else setText("No");
+                }
+
+            };
+            cell.addEventHandler(MouseEvent.MOUSE_PRESSED, (MouseEvent event) -> {
+                if (event.getClickCount() == 2) {
+                    PolicyMapper mapper = (PolicyMapper) cell.getTableRow().getItem();
+                    handleEndorsementNumberClickEvent(mapper.getPolicy());
+                }
+            });
+            return cell;
+        });
         agentNameColumn.setCellValueFactory(cellData -> cellData.getValue().agentNameProperty());
         insuranceCompanyColumn.setCellValueFactory(cellData -> cellData.getValue().insuranceCompanyProperty());
         insuranceTypeColumn.setCellValueFactory(cellData -> cellData.getValue().insuranceTypeProperty());
@@ -166,17 +185,17 @@ public class PolicyViewController {
     }
 
     private void handlePolicyNumberClickEvent(Policy policy) {
-        managePolicy(policyMapperTableView.getSelectionModel().getSelectedItem().getPolicy(),true,"Views/policyImageViewer.fxml","View policy");
+        managePolicy(policyMapperTableView.getSelectionModel().getSelectedItem().getPolicy(), true, "Views/policyImageViewer.fxml", "View policy");
 
 
     }
 
     private void handleEndorsementNumberClickEvent(Policy policy) {
-        try{
+        try {
             FXMLLoader endorsementViewLoader = new FXMLLoader();
             endorsementViewLoader.setLocation(Main.class.getResource("Views/endorsementView.fxml"));
             BorderPane endorsementBorderPane = endorsementViewLoader.load();
-            ((EndorsementViewController)endorsementViewLoader.getController()).setPolicyNumber(policy.getPolicyNumber());
+            ((EndorsementViewController) endorsementViewLoader.getController()).setPolicyNumber(policy.getPolicyNumber());
             Stage endorsementStage = new Stage();
             endorsementStage.setTitle("Endorsements");
             endorsementStage.initModality(Modality.WINDOW_MODAL);
@@ -189,17 +208,17 @@ public class PolicyViewController {
             endorsementStage.setHeight(bounds.getHeight());
             endorsementStage.setMaximized(true);
             endorsementStage.showAndWait();
-        }
-        catch (IOException exception){
+            generatePolicyMappers();
+        } catch (IOException exception) {
             System.err.println("Can't load Endorsement view");
-            System.err.println("Exception " +exception.getMessage());
+            System.err.println("Exception " + exception.getMessage());
 
         }
     }
 
     @FXML
     protected void handleNewButtonMoussePress(MouseEvent event) {
-        managePolicy(null,false,"Views/detailedPolicyView.fxml","Add new policy");
+        managePolicy(null, false, "Views/detailedPolicyView.fxml", "Add new policy");
     }
 
     @FXML
@@ -211,7 +230,7 @@ public class PolicyViewController {
 
     @FXML
     protected void handleEditPolicyButton(MouseEvent event) {
-        managePolicy(policyMapperTableView.getSelectionModel().getSelectedItem().getPolicy(),false,"Views/detailedPolicyView.fxml","Edit policy");
+        managePolicy(policyMapperTableView.getSelectionModel().getSelectedItem().getPolicy(), false, "Views/detailedPolicyView.fxml", "Edit policy");
     }
 
     private void managePolicy(Policy policy, boolean image, String location, String title) {
@@ -219,11 +238,10 @@ public class PolicyViewController {
             FXMLLoader newPolicyLoader = new FXMLLoader();
             newPolicyLoader.setLocation(Main.class.getResource(location));
             BorderPane newPolicyBorderPane = newPolicyLoader.load();
-            if (!image){
+            if (!image) {
                 ((DetailedPolicyViewController) (newPolicyLoader.getController())).setPolicy(policy);
-            }
-            else{
-                ((PolicyImageViewController)(newPolicyLoader.getController())).setPolicy(policy);
+            } else {
+                ((PolicyImageViewController) (newPolicyLoader.getController())).setPolicy(policy);
             }
             Stage newPolicyDialogStage = new Stage();
             newPolicyDialogStage.setTitle(title);

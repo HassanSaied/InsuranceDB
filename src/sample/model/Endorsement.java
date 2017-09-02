@@ -121,7 +121,8 @@ public class Endorsement {
     public void computeValues(){
         if(grossCommission != null && taxes!=null)
             netCommission = grossCommission.subtract(taxes.multiply(grossCommission));
-        if(grossPremium !=null && specialDiscount != null)
-            netPremium = grossPremium.subtract(specialDiscount);
+    }
+    public void setUpdatable(){
+        updatable = true;
     }
 }

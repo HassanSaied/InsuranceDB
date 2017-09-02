@@ -18,9 +18,9 @@
                      <graphic>
                         <Label prefHeight="39.0" prefWidth="74.0" text="Policy Number" textAlignment="CENTER" wrapText="true" />
                      </graphic></TableColumn>
-                  <TableColumn fx:id="indoresmentNumberColumn" minWidth="0.0">
+                  <TableColumn fx:id="hasEndorsementsColumn" minWidth="0.0">
                      <graphic>
-                        <Label prefWidth="100" text="Endoresment Number" textAlignment="CENTER" wrapText="true" />
+                        <Label text="Has Endorsements ?" textAlignment="CENTER" wrapText="true" />
                      </graphic></TableColumn>
                 <TableColumn fx:id="agentNameColumn">
                      <graphic>
