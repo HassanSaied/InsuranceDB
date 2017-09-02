@@ -41,11 +41,10 @@ public class PolicyConnector {
                 currentPolicy.setCollectiveImagePath(resultSet.getString(17));
                 currentPolicy.setPolicyStatus(resultSet.getString(18));
                 currentPolicy.setPaidClaims(resultSet.getBigDecimal(19));
-                currentPolicy.setIndoresmentNumber(resultSet.getString(20));
                 currentPolicy.setClaimImagePath(getClaimImagesPath(currentPolicy.getPolicyNumber()));
                 currentPolicy.setPolicyImagePath(getPolicyImagesPath(currentPolicy.getPolicyNumber()));
-                currentPolicy.setIssuanceDate(resultSet.getDate(21)==null?null:resultSet.getDate(21).toLocalDate());
-                currentPolicy.setHasEndorsements(resultSet.getBoolean(22));
+                currentPolicy.setIssuanceDate(resultSet.getDate(20)==null?null:resultSet.getDate(21).toLocalDate());
+                currentPolicy.setHasEndorsements(resultSet.getBoolean(21));
                 currentPolicy.setUpdatable();
                 policies.add(currentPolicy);
             }
@@ -113,7 +112,7 @@ public class PolicyConnector {
                 " clientID = ? ," + " grossPremuim = ? ," + " specialDiscount = ? ," + " netPremuim = ? ," +
                 " grossCommission = ? ," + " taxes = ? ," + " netCommission = ? ," + " expiryDate = ? ," +
                 " sumInssured = ? ," + " currency = ? ," + " collective = ? ," + " collectiveImagePath = ?," +
-                " policyStatus = ?," + " paidClaims = ? ," + " indoresmentNumber = ?, "+"issuanceDate = ? " + "WHERE policyNumber = ?; ";
+                " policyStatus = ?," + " paidClaims = ? ," + "issuanceDate = ? " + "WHERE policyNumber = ?; ";
         try (PreparedStatement statement = DatabaseConnector.getDatabaseConnection().prepareStatement(updateSQL)) {
             statement.setString(fillStatement(statement, policy), policy.getPolicyNumber());
             try {
@@ -195,7 +194,7 @@ public class PolicyConnector {
                 "  ,clientID,grossPremuim,specialDiscount,netPremuim" +
                 "  ,grossCommission,taxes,netCommission,expiryDate" +
                 "  ,sumInssured,currency,collective,collectiveImagePath" +
-                "  ,policyStatus,paidClaims,indoresmentNumber,issuanceDate,policyNumber)" +
+                "  ,policyStatus,paidClaims,issuanceDate,policyNumber)" +
                 "VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?);";
 
         try (PreparedStatement statement = DatabaseConnector.getDatabaseConnection().prepareStatement(insertSQL)) {
@@ -286,7 +285,6 @@ public class PolicyConnector {
         statement.setString(++columnCounter, policy.getCollectiveImagePath());
         statement.setString(++columnCounter, policy.getPolicyStatus());
         statement.setBigDecimal(++columnCounter, policy.getPaidClaims());
-        statement.setString(++columnCounter, policy.getIndoresmentNumber());
         statement.setDate(++columnCounter,policy.getIssuanceDate()!=null?Date.valueOf(policy.getIssuanceDate()):null);
         return ++columnCounter;
     }

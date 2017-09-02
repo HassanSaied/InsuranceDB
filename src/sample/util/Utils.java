@@ -1,9 +1,14 @@
 package sample.util;
 
 
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
+import javafx.scene.layout.VBox;
 import sample.model.Client;
 import sample.model.Policy;
 
+import java.io.File;
+import java.io.IOException;
 import java.math.BigDecimal;
 import java.math.MathContext;
 import java.time.LocalDate;
@@ -109,6 +114,27 @@ public class Utils {
             return null;
         else return Utils.toBigDecimal(tax.trim().replace("%", "")).
                 divide(BigDecimal.valueOf(100.0));
+    }
+    public static void addImageToVBox(String imagePath,VBox vBox) throws IOException {
+        File file = new File(imagePath);
+        Image image = new Image(file.toURI().toURL().toExternalForm());
+        ImageView view = new ImageView();
+        view.setImage(image);
+        vBox.getChildren().add(view);
+    }
+
+    public static void loadImages(VBox vBox, List<String> list) {
+        if (list != null) {
+            try {
+                for (String imagePath : list) {
+                    addImageToVBox(imagePath, vBox);
+                }
+            } catch (IOException exception) {
+                System.err.println("Can't load Image");
+                System.err.println("Exception " + exception.getMessage());
+            }
+
+        }
     }
 
 }

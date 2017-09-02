@@ -2,15 +2,20 @@ package sample.Controllers;
 
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.event.EventType;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
+import javafx.geometry.Rectangle2D;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
+import javafx.scene.control.TableCell;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.input.MouseEvent;
+import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.BorderPane;
 import javafx.stage.Modality;
+import javafx.stage.Screen;
 import javafx.stage.Stage;
 import sample.Main;
 import sample.Mappers.EndorsementMapper;
@@ -36,19 +41,60 @@ public class EndorsementViewController {
     @FXML
     private TableColumn<EndorsementMapper, String> specialDiscountTableColumn;
     @FXML
-    private Button editEndorsementButton,deleteEndorsementButton;
+    private Button editEndorsementButton, deleteEndorsementButton;
     private String policyNumber;
     public ObservableList<EndorsementMapper> endorsementMappers;
 
-    public EndorsementViewController(){
+    public EndorsementViewController() {
         endorsementMappers = FXCollections.observableArrayList();
     }
+
     private void setColumnContents() {
         endorsementNumberTableColumn.setCellValueFactory(cellData -> cellData.getValue().endorsementNumberProperty());
         issuanceDateTableColumn.setCellValueFactory(cellData -> cellData.getValue().issuanceDateProperty());
         grossPremiumTableColumn.setCellValueFactory(cellData -> cellData.getValue().grossPremiumProperty());
         netPremiumTableColumn.setCellValueFactory(cellData -> cellData.getValue().netPremiumProperty());
         specialDiscountTableColumn.setCellValueFactory(cellData -> cellData.getValue().specialDiscountProperty());
+        endorsementNumberTableColumn.setCellFactory(param -> {
+            final TableCell<EndorsementMapper, String> cell = new TableCell<EndorsementMapper, String>() {
+                @Override
+                protected void updateItem(String item, boolean empty) {
+                    if(item==null || empty)
+                        setText(null);
+                    else setText(item);
+                }
+
+            };
+            cell.addEventHandler(MouseEvent.MOUSE_PRESSED, (MouseEvent event) -> {
+                if (event.getClickCount() == 2) {
+                    FXMLLoader endorsementImageView = new FXMLLoader();
+                    endorsementImageView.setLocation(Main.class.getResource("Views/endorsementImageViewer.fxml"));
+                    try {
+                        AnchorPane endorsementImageViewAnchorPane = endorsementImageView.load();
+                        EndorsementMapper endorsementMapper =(EndorsementMapper) cell.getTableRow().getItem();
+                        ((EndorsementImageViewController) endorsementImageView.getController()).setEndorsement(endorsementMapper.getEndorsement());
+                        Stage newEndorsementStage = new Stage();
+                        newEndorsementStage.setTitle("Endorsement Image");
+                        newEndorsementStage.initModality(Modality.WINDOW_MODAL);
+                        newEndorsementStage.initOwner(Main.primaryStage);
+                        Scene dialog = new Scene(endorsementImageViewAnchorPane);
+                        newEndorsementStage.setScene(dialog);
+                        Screen screen = Screen.getPrimary();
+                        Rectangle2D bounds = screen.getVisualBounds();
+                        newEndorsementStage.setWidth(bounds.getWidth());
+                        newEndorsementStage.setHeight(bounds.getHeight());
+                        newEndorsementStage.setMaximized(true);
+                        newEndorsementStage.showAndWait();
+                        newEndorsementStage.showAndWait();
+                        generateEndorsementMappers();
+                    } catch (IOException exception) {
+                        System.err.println("Couldn't Load Endorsement Image View");
+                        System.err.println("Exception " + exception.getMessage());
+                    }
+                }
+            });
+            return cell;
+        });
     }
 
     @FXML
@@ -78,13 +124,18 @@ public class EndorsementViewController {
         try {
             BorderPane detailedEndorsementViewBorderPane = detailedEndorsementViewLoader.load();
             ((DetailedEndorsementViewController) detailedEndorsementViewLoader.getController()).setPolicyNumber(policyNumber);
-            Stage newEndorsementStage = new Stage();
-            newEndorsementStage.setTitle("New Endorsement");
-            newEndorsementStage.initModality(Modality.WINDOW_MODAL);
-            newEndorsementStage.initOwner(Main.primaryStage);
+            Stage detailedEndorsementViewStage = new Stage();
+            detailedEndorsementViewStage.setTitle("New Endorsement");
+            detailedEndorsementViewStage.initModality(Modality.WINDOW_MODAL);
+            detailedEndorsementViewStage.initOwner(Main.primaryStage);
             Scene dialog = new Scene(detailedEndorsementViewBorderPane);
-            newEndorsementStage.setScene(dialog);
-            newEndorsementStage.showAndWait();
+            detailedEndorsementViewStage.setScene(dialog);
+            Screen screen = Screen.getPrimary();
+            Rectangle2D bounds = screen.getVisualBounds();
+            detailedEndorsementViewStage.setWidth(bounds.getWidth());
+            detailedEndorsementViewStage.setHeight(bounds.getHeight());
+            detailedEndorsementViewStage.setMaximized(true);
+            detailedEndorsementViewStage.showAndWait();
             generateEndorsementMappers();
         } catch (IOException exception) {
             System.err.println("Couldn't Load detailed Endorsement View");
@@ -93,7 +144,8 @@ public class EndorsementViewController {
     }
 
 
-    @FXML protected void handleEditButton(MouseEvent event){
+    @FXML
+    protected void handleEditButton(MouseEvent event) {
         FXMLLoader detailedEndorsementViewLoader = new FXMLLoader();
         detailedEndorsementViewLoader.setLocation(Main.class.getResource("Views/detailedEndorsementView.fxml"));
         try {
@@ -114,11 +166,15 @@ public class EndorsementViewController {
         }
 
     }
-    @FXML protected void handleCloseButton(MouseEvent event){
-        Stage currentStage = (Stage)editEndorsementButton.getScene().getWindow();
+
+    @FXML
+    protected void handleCloseButton(MouseEvent event) {
+        Stage currentStage = (Stage) editEndorsementButton.getScene().getWindow();
         currentStage.close();
     }
-    @FXML protected void handleDeleteButton(MouseEvent event){
+
+    @FXML
+    protected void handleDeleteButton(MouseEvent event) {
         endorsementTableView.getSelectionModel().getSelectedItem().delete();
         generateEndorsementMappers();
     }
