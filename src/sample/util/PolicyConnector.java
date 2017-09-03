@@ -379,4 +379,34 @@ public class PolicyConnector {
         }
     }
 
+    public static List<String> getAgents(){
+        List<String> agents = new Vector<String>();
+        try(Statement statement = DatabaseConnector.getDatabaseConnection().createStatement();
+            ResultSet resultSet = statement.executeQuery("SELECT * FROM Agents;")){
+            while (resultSet.next()){
+                agents.add(resultSet.getString(1));
+            }
+        }
+        catch (SQLException exception){
+            System.err.println("Can't get Agents");
+            System.err.println("Exception "+exception.getMessage());
+            return null;
+        }
+        return agents;
+    }
+    public static boolean insertAgent(String agentName){
+        String insertSQL = "INSERT INTO Agents (agentName) VALUES (?);";
+        try(PreparedStatement statement = DatabaseConnector.getDatabaseConnection().prepareStatement(insertSQL)){
+            statement.setString(1,agentName);
+            statement.executeUpdate();
+        }
+        catch (SQLException exception){
+            System.err.println("Can't Insert Agent");
+            System.err.println("Exception "+exception.getMessage());
+            return false;
+        }
+        return true;
+
+    }
+
 }

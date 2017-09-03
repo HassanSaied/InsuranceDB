@@ -33,7 +33,7 @@ public class DetailedPolicyViewController {
     @FXML
     private TextField policyNumberTextField;
     @FXML
-    private TextField agentNameTextField;
+    private ComboBox<String> agentNameComboBox;
     @FXML
     private TextField insuranceCompanyTextField;
     @FXML
@@ -80,7 +80,8 @@ public class DetailedPolicyViewController {
     private ComboBox<String> imageTypeComboBox;
     @FXML
     private ListView<String> imagePathListView;
-    @FXML private TextField netPremiumTextField;
+    @FXML
+    private TextField netPremiumTextField;
     @FXML
     private TextField paidClaimsTextField;
 
@@ -94,6 +95,7 @@ public class DetailedPolicyViewController {
     private ObservableList<String> policyStatus;
     private ObservableList<String> policyImagePath, claimImagePath, collectiveImagePath;
     private ObservableList<String> selectedImageList;
+    private ObservableList<String> agentList;
     private List<Client> clientList;
 
     public DetailedPolicyViewController() {
@@ -103,11 +105,14 @@ public class DetailedPolicyViewController {
         this.clients = FXCollections.observableArrayList();
         generateClient();
         generateInsuranceTypes();
+
         policyStatus = FXCollections.observableArrayList();
         policyStatus.addAll(PolicyConnector.getPolicyStatus());
         policyImagePath = FXCollections.observableArrayList();
         claimImagePath = FXCollections.observableArrayList();
         collectiveImagePath = FXCollections.observableArrayList();
+        agentList = FXCollections.observableArrayList();
+        generateAgents();
     }
 
     private void generateClient() {
@@ -125,6 +130,12 @@ public class DetailedPolicyViewController {
         List<String> insuranceTypesList = PolicyConnector.getInsuranceTypes();
         if (insuranceTypesList != null)
             insuranceTypes.addAll(insuranceTypesList);
+    }
+    private void generateAgents(){
+        agentList.clear();
+        List<String> agents = PolicyConnector.getAgents();
+        if(agents != null)
+            agentList.addAll(agents);
     }
 
     public void setPolicy(Policy policy) {
@@ -166,7 +177,7 @@ public class DetailedPolicyViewController {
 
     private void setBindings() {
         policyNumberTextField.textProperty().bindBidirectional(currentPolicyMapper.policyNumberProperty());
-        agentNameTextField.textProperty().bindBidirectional(currentPolicyMapper.agentNameProperty());
+        agentNameComboBox.valueProperty().bindBidirectional(currentPolicyMapper.agentNameProperty());
         insuranceCompanyTextField.textProperty().bindBidirectional(currentPolicyMapper.insuranceCompanyProperty());
         insuranceTypeComboBox.valueProperty().bindBidirectional(currentPolicyMapper.insuranceTypeProperty());
         beneficiaryTextField.textProperty().bindBidirectional(currentPolicyMapper.beneficiaryProperty());
@@ -188,7 +199,7 @@ public class DetailedPolicyViewController {
         netPremiumTextField.textProperty().bindBidirectional(currentPolicyMapper.netPremiumProperty());
         editClientButton.disableProperty().bind(clientComboBox.getSelectionModel().selectedItemProperty().isNull());
         paidClaimsTextField.textProperty().bindBidirectional(currentPolicyMapper.paidClaimsProperty());
-   }
+    }
 
     private void setComboBoxItems() {
         insuranceTypeComboBox.setItems(insuranceTypes);
@@ -198,7 +209,8 @@ public class DetailedPolicyViewController {
         policyStatusComboBox.setItems(policyStatus);
         taxesComboBox.setItems(Definitions.taxes);
         imageTypeComboBox.setItems(Definitions.imageTypes);
-     }
+        agentNameComboBox.setItems(agentList);
+    }
 
     private FileChooser getFileChooser(String title) {
         FileChooser fileChooser = new FileChooser();
@@ -287,17 +299,24 @@ public class DetailedPolicyViewController {
         dialog.setHeaderText("Input new Insurance Type");
         dialog.setContentText("Insurance Type");
         Optional<String> result = dialog.showAndWait();
-        result.ifPresent(insuranceType -> PolicyConnector.insertInsuranceType(insuranceType));
+        result.ifPresent(PolicyConnector::insertInsuranceType);
         generateInsuranceTypes();
-
-
+    }
+    @FXML protected void handleAddAgentButton(MouseEvent event){
+        TextInputDialog dialog = new TextInputDialog();
+        dialog.setTitle("Agent Dialog");
+        dialog.setHeaderText("Input new Agent");
+        dialog.setContentText("Agent Name");
+        Optional<String> result = dialog.showAndWait();
+        result.ifPresent(PolicyConnector::insertAgent);
+        generateAgents();
     }
 
     private boolean isValid() {
         if (currentPolicyMapper.policyNumberProperty().getValue() == null || !currentPolicyMapper.policyNumberProperty().getValue().matches("[0-9]*"))
             return false;
-                if (!Utils.isDouble(currentPolicyMapper.grossCommissionProperty().getValue()))
-                    return false;
+        if (!Utils.isDouble(currentPolicyMapper.grossCommissionProperty().getValue()))
+            return false;
         if (!Utils.isDouble(currentPolicyMapper.grossPremuimProperty().getValue()))
             return false;
         if (!Utils.isDouble(currentPolicyMapper.sumInsuredProperty().getValue()))

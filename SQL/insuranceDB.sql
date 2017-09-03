@@ -27,7 +27,7 @@ CREATE TABLE Clients
 
 CREATE TABLE Agents
 (
-  agentName            VARCHAR(80) PRIMARY KEY NOT NULL
+  agentName VARCHAR(80) PRIMARY KEY NOT NULL
 );
 INSERT INTO Agents (agentName) VALUES ('Hassan');
 
@@ -54,6 +54,9 @@ CREATE TABLE Policy
   paidClaims          FLOAT, /*checks we kda*/
   issuanceDate        DATE,
   hasEndoresments     BOOLEAN DEFAULT FALSE,
+  chassisNumber       VARCHAR(20),
+  motorNumber         VARCHAR(20),
+  plateNumber         VARCHAR(20),
   FOREIGN KEY (agentName) REFERENCES Agents (agentName),
   FOREIGN KEY (policyStatus) REFERENCES PolicyStatus (policyStatus),
   FOREIGN KEY (insuranceType) REFERENCES InsuranceType (insuranceType),
@@ -106,7 +109,7 @@ FOR EACH ROW
     DELETE FROM PolicyImagePath
     WHERE PolicyImagePath.policyNumber = NEW.policyNumber;
     DELETE FROM ClaimImagePath
-    WHERE ClaimImagePath.policyNumber = NEW.policyNumber
+    WHERE ClaimImagePath.policyNumber = NEW.policyNumber;
   END;
 DELIMITER ;
 
@@ -201,3 +204,4 @@ INSERT INTO Policy VALUES
   ('Hassan', 'AIG', 'Car', 'Egypt', 1, '209725', 3047.5, 1234.5, 1234.5, 1234.5, 0.2, 1572, CURDATE(), 12345, 'EGP',
                                                                                       'Cache', 'asdadasd', 'Collected',
                                                                                       1234, NULL, FALSE);
+
