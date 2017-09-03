@@ -43,7 +43,7 @@ public class PolicyConnector {
                 currentPolicy.setPaidClaims(resultSet.getBigDecimal(19));
                 currentPolicy.setClaimImagePath(getClaimImagesPath(currentPolicy.getPolicyNumber()));
                 currentPolicy.setPolicyImagePath(getPolicyImagesPath(currentPolicy.getPolicyNumber()));
-                currentPolicy.setIssuanceDate(resultSet.getDate(20)==null?null:resultSet.getDate(21).toLocalDate());
+                currentPolicy.setIssuanceDate(resultSet.getDate(20)==null?null:resultSet.getDate(20).toLocalDate());
                 currentPolicy.setHasEndorsements(resultSet.getBoolean(21));
                 currentPolicy.setUpdatable();
                 policies.add(currentPolicy);
@@ -195,7 +195,7 @@ public class PolicyConnector {
                 "  ,grossCommission,taxes,netCommission,expiryDate" +
                 "  ,sumInssured,currency,collective,collectiveImagePath" +
                 "  ,policyStatus,paidClaims,issuanceDate,policyNumber)" +
-                "VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?);";
+                "VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?);";
 
         try (PreparedStatement statement = DatabaseConnector.getDatabaseConnection().prepareStatement(insertSQL)) {
             statement.setString(fillStatement(statement, policy), policy.getPolicyNumber());
@@ -377,6 +377,6 @@ public class PolicyConnector {
             System.err.println("Can't prepare the insert insurance type statement");
             System.err.println("Exception "+exception.getMessage());
         }
-
     }
+
 }

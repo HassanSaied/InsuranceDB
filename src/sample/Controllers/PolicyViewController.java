@@ -58,8 +58,6 @@ public class PolicyViewController {
     private TableColumn<PolicyMapper, String> specialDiscountColumn;
     @FXML
     private TableColumn<PolicyMapper, String> netPremiumColumn;
-    //@FXML
-    //private TableColumn<PolicyMapper, String> expiryDateColumn;
     @FXML
     private TableColumn<PolicyMapper, LocalDate> expiryDateColumn;
     @FXML

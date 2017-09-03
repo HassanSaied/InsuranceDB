@@ -25,6 +25,12 @@ CREATE TABLE Clients
   clientNumber VARCHAR(80)
 );
 
+CREATE TABLE Agents
+(
+  agentName            VARCHAR(80) PRIMARY KEY NOT NULL
+);
+INSERT INTO Agents (agentName) VALUES ('Hassan');
+
 CREATE TABLE Policy
 (
   agentName           VARCHAR(80),
@@ -46,13 +52,12 @@ CREATE TABLE Policy
   collectiveImagePath VARCHAR(255),
   policyStatus        VARCHAR(80),
   paidClaims          FLOAT, /*checks we kda*/
-  indoresmentNumber   VARCHAR(80),
   issuanceDate        DATE,
+  hasEndoresments     BOOLEAN DEFAULT FALSE,
+  FOREIGN KEY (agentName) REFERENCES Agents (agentName),
   FOREIGN KEY (policyStatus) REFERENCES PolicyStatus (policyStatus),
   FOREIGN KEY (insuranceType) REFERENCES InsuranceType (insuranceType),
-  FOREIGN KEY (clientID) REFERENCES Clients (clientID),
-  FOREIGN KEY (indoresmentNumber) REFERENCES Policy (policyNumber)
-    ON DELETE SET NULL
+  FOREIGN KEY (clientID) REFERENCES Clients (clientID)
 
 );
 
@@ -91,8 +96,9 @@ FOR EACH ROW
     END IF;
   END;
 DELIMITER ;
-
 DELIMITER &&;
+
+
 CREATE TRIGGER pathAutoDelete
 BEFORE UPDATE ON Policy
 FOR EACH ROW
@@ -100,7 +106,7 @@ FOR EACH ROW
     DELETE FROM PolicyImagePath
     WHERE PolicyImagePath.policyNumber = NEW.policyNumber;
     DELETE FROM ClaimImagePath
-    WHERE ClaimImagePath.policyNumber = NEW.policyNumber;
+    WHERE ClaimImagePath.policyNumber = NEW.policyNumber
   END;
 DELIMITER ;
 
@@ -144,28 +150,54 @@ FOR EACH ROW
   END;
 DELIMITER ;
 
+DELIMITER &&;
+CREATE TRIGGER hasEndorsementsUpdate
+AFTER INSERT ON Endorsement
+FOR EACH ROW
+  BEGIN
+    UPDATE Policy
+    SET hasEndoresments = TRUE
+    WHERE policyNumber = NEW.policyNumber;
+  END &&;
+DELIMITER ;
+
+DELIMITER &&
+CREATE TRIGGER hasEndorsementsDelete
+AFTER DELETE ON Endorsement
+FOR EACH ROW
+  BEGIN
+    DECLARE endorsementsCount INTEGER;
+    SELECT count(*)
+    FROM Endorsement
+    WHERE policyNumber = OLD.policyNumber
+    INTO endorsementsCount;
+    IF (endorsementsCount = 0)
+    THEN
+      UPDATE Policy
+      SET hasEndoresments = FALSE
+      WHERE policyNumber = OLD.policyNumber;
+    END IF;
+  END &&
+
 INSERT INTO Clients (InsuranceDB.Clients.clientName, InsuranceDB.Clients.clientNumber)
 VALUES ('Ramy Emad Malek', '01226140201'), ('Walid Hassan', '01113438653');
 
 INSERT INTO Policy VALUES
   ('Hassan', 'AIG', 'Car', 'Egypt', 1, '209728', 3047.5, 1234.5, 1234.5, 1234.5, 0.2, 1572, CURDATE(), 12345, 'EGP',
                                                                                       'Cache', 'asdadasd', 'Collected',
-                                                                                      1234, NULL, NULL),
+                                                                                      1234, NULL, FALSE),
   ('Hassan', 'AIG', 'Car', 'Egypt', 1, '209729', 3047.5, 1234.5, 1234.5, 1234.5, 0.2, 1572, CURDATE(), 12345, 'EGP',
                                                                                       'Cache', 'asdadasd', 'Collected',
-                                                                                      1234, NULL, NULL),
+                                                                                      1234, NULL, FALSE),
   ('Hassan', 'AIG', 'Car', 'Egypt', 1, '209780', 3047.5, 1234.5, 1234.5, 1234.5, 0.2, 1572, CURDATE(), 12345, 'EGP',
                                                                                       'Cache', 'asdadasd', 'Collected',
-                                                                                      1234, NULL, NULL)
+                                                                                      1234, NULL, FALSE)
   , ('Hassan', 'AIG', 'Car', 'Egypt', 1, '209724', 3047.5, 1234.5, 1234.5, 1234.5, 0.2, 1572, CURDATE(), 12345, 'EGP',
                                                                                         'Cache', 'asdadasd',
-                                                                                        'Collected', 1234, NULL, NULL),
+                                                                                        'Collected', 1234, NULL, FALSE),
   ('Hassan', 'AIG', 'Car', 'Egypt', 1, '209723', 3047.5, 1234.5, 1234.5, 1234.5, 0.2, 1572, CURDATE(), 12345, 'EGP',
                                                                                       'Cache', 'asdadasd', 'Collected',
-                                                                                      1234, NULL, NULL),
+                                                                                      1234, NULL, FALSE),
   ('Hassan', 'AIG', 'Car', 'Egypt', 1, '209725', 3047.5, 1234.5, 1234.5, 1234.5, 0.2, 1572, CURDATE(), 12345, 'EGP',
                                                                                       'Cache', 'asdadasd', 'Collected',
-                                                                                      1234, NULL, NULL);
-INSERT INTO Policy (InsuranceDB.Policy.policyNumber) VALUES ('12345');
-
-
+                                                                                      1234, NULL, FALSE);
